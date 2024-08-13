@@ -1,15 +1,8 @@
-
-
-import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.tsx'
 import './index.css'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-import User from './Pages/User/MainUser.tsx'
 import Login from './Pages/Auth/Login/Login.tsx'
-import LayoutAdmin from './Pages/Admin/layoutAdmin.tsx'
-
-
 
 
 const router = createBrowserRouter([
@@ -18,12 +11,22 @@ const router = createBrowserRouter([
     element: <App />,
     children: [
       {
-        path: "/",
-        element: <User />
+        index: true,
+        element: <Login />
+      },
+      {
+        path: 'user',
+        async lazy () {
+          const LayoutApp = (await import('./Pages/User/MainUser.tsx')).default
+          return {Component: LayoutApp}
+        }
       },
       {
         path: "admin",
-        element: <LayoutAdmin />,
+        async lazy () {
+          const LayoutAdmin = (await import('./Pages/Admin/layoutAdmin.tsx')).default
+          return {Component: LayoutAdmin}
+        }
       }
     ]
   }

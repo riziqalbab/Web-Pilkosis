@@ -1,14 +1,13 @@
 import { Outlet } from 'react-router-dom'
-import './App.css'
-import Auth from './Middleware/Auth'
+// import Auth from './Middleware/Auth'
+import { domAnimation, LazyMotion } from 'framer-motion'
 
 function App() {
-  // const [count, setCount] = useState(0)
-  Auth("/user")
+  // Auth("/user")
   return (
-    <>
+    <LazyMotion features={domAnimation} strict>
       <Outlet />
-    </>
+    </LazyMotion>
   )
 }
 
