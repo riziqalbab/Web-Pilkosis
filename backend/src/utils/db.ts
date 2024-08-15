@@ -1,12 +1,14 @@
-import pg from 'pg'
-const { Client } = pg
+// db.js
+import mysql from 'mysql2/promise';
 
-const client = new Client({
-    user: process.env.DB_USER || '',
-    password: process.env.DB_PASWD || '',
-    host: process.env.DB_HOST || 'localhost',
-    port: parseInt(process.env.DB_PORT) || 5432,
-    database: process.env.DB_NAME || 'pilkosis',
-})
+const pool = mysql.createPool({
+  host: process.env.DB_HOST || 'localhost',
+  user: process.env.DB_USER || 'root',
+  password: process.env.DB_PASWD || '',
+  database: process.env.DB_NAME || 'pilkosis',
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0
+});
 
-export default client;
+export default pool;
