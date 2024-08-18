@@ -15,5 +15,6 @@ module.exports = {
       { allowConstantExport: true },
     ],
     "no-unused-vars": "off",
+    "react-hook/exhaustive-deps": "no",   
   },
 };
