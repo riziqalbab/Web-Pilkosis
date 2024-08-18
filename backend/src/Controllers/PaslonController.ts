@@ -1,85 +1,66 @@
-// /* eslint-disable @typescript-eslint/no-unused-vars */
-import express, { Request, Response, } from "express";
-import AdminMiddleware from '../Middleware/AdminMiddleware'
-import cookieParser from 'cookie-parser'
-import multer from 'multer'
-import UploadMiddleware from "../Middleware/UploadMiddleware";
-import fs from 'fs'
-import uploadFile from "../utils/upload";
-import PaslonModel from "../Models/PaslonModel";
-import AuthorizationMiddleware from "../Middleware/AuthorizationMiddleware";
+import express, { Request, Response } from 'express';
+import multer from 'multer';
+import UploadMiddleware from '../Middleware/UploadMiddleware';
+import AdminMiddleware from '../Middleware/AdminMiddleware';
+import AuthorizationMiddleware from '../Middleware/AuthorizationMiddleware';
+import PaslonModel from '../Models/PaslonModel';
+import fs from 'fs';
 
-const router = express.Router()
-router.use(cookieParser())
+const router = express.Router();
+const upload = multer({ storage: UploadMiddleware.storage, fileFilter: UploadMiddleware.fileFilter });
+const paslon = new PaslonModel();
 
-const paslon = new PaslonModel()
+router.post('/paslon', [AdminMiddleware, upload.single('img')], async (req: Request, res: Response) => {
+    const { nomor_urut, nama, caksis, cawaksis, visi, misi } = req.body;
+    const img = req.file?.filename;
 
-router.get("/paslon", AuthorizationMiddleware, async (req: Request, res: Response) => {
-    const result = await paslon.All();
-
-    res.status(200).json({
-        message: "success",
-        data: result
-    })
-})
-
-router.post("/paslon", [AdminMiddleware, multer({ storage: UploadMiddleware.storage, fileFilter: UploadMiddleware.fileFilter }).single("img")], (req: Request, res: Response) => {
-
-
-    const nomor_urut = req.body.nomor_urut
-    const nama = req.body.nama
-    const caksis = req.body.caksis
-    const cawaksis = req.body.cawaksis
-    const visi = req.body.visi
-    const misi = req.body.misi
-    const img = req.file.filename
-
-    fs.readFile(req.file.path, async (err, data) => {
-        try {
-            if (err) throw err
-            const result = await uploadFile(data, img)
-            try {
-                const data = await paslon.insert({ nomor_urut, nama, caksis, cawaksis, visi, misi, img: result })
-                console.log(res);
-
-                res.status(200).json({
-                    message: "success",
-                    data: data
-                })
-
-            } catch (err) {
-                console.log(err);
-
-                res.status(400).json({ message: "sd" })
-            }
-        } catch {
-            res.status(400).json({
-                message: "Only image files are allowed!"
-            })
-        }
-    })
-})
-router.delete("/paslon", AdminMiddleware, (req, res) => {
-
-    const idPaslon = Number(req.query.idPaslon);
-    try {
-
-        console.log(idPaslon);
-
-        const result = paslon.dropById(idPaslon)
-
-        res.status(200).json({
-            message: "success",
-            data: result
-        })
-    } catch {
-        res.status(400).json({
-            message: "failed"
-        })
+    if (!img) {
+        return res.status(400).json({ message: 'Image file is required' });
     }
 
+    try {
+        const insertResult = await paslon.insert({ nomor_urut, nama, caksis, cawaksis, visi, misi, img });
+        res.status(200).json({
+            message: 'success',
+            data: insertResult
+        });
+    } catch (err: any) {
+        res.status(500).json({
+            message: 'Failed to insert data',
+            error: err.message
+        });
+    }
+});
+router.get('/paslon',  async (req: Request, res: Response) => {
+    try {
+        const result = await paslon.All();
+        res.status(200).json({
+            message: 'success',
+            data: result
+        });
+    } catch (err: any) {
+        res.status(500).json({
+            message: 'Failed to fetch data',
+            error: err.message
+        });
+    }
+});
+router.delete('/paslon/:id', AdminMiddleware, async (req: Request, res: Response) => {
+    const id = parseInt(req.params.id);
 
-})
+    if (isNaN(id)) {
+        return res.status(400).json({ message: 'Invalid ID' });
+    }
+    try {
+        const result = await paslon.dropById(id);
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ message: 'Paslon not found' });
+        }
+        res.status(200).json({ message: 'Paslon deleted successfully' });
+    } catch (err: any) {
+        res.status(500).json({ message: 'Failed to delete paslon', error: err.message });
+    }
+});
 
 
-export default router 
+export default router;
