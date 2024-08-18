@@ -5,7 +5,7 @@ import UserModel from '../Models/User';
 
 dotenv.config();
 
-async function AuthorizationMiddleware(req: Request, res: Response, next: NextFunction): Promise<Response> {
+async function AuthorizationMiddleware(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
     const token = req.headers.authorization?.split(" ")[1];
     
     if (!token) {
@@ -13,19 +13,21 @@ async function AuthorizationMiddleware(req: Request, res: Response, next: NextFu
     }
 
     try {
-        const verify = jwt.verify(token, process.env.SECRET_KEY as string, { algorithms: ["HS256"] });
-        const username = (verify as any)["username"];
-        
+        const decoded = jwt.verify(token, process.env.SECRET_KEY as string, { algorithms: ["HS256"] });
+        const username = (decoded as any)["username"];
+    
         const user = new UserModel();
-        const userDetail = await user.Find({ username: username });
-
+        const userDetail = await user.Find({ nama: username});
+        
+        // cek role ,mbok udu admin
         if (userDetail.length > 0 && userDetail[0].role_user === "admin") {
             next();
         } else {
-            res.status(401).json({ message: "UNAUTHORIZED" });
+            return res.status(401).json({ message: "UNAUTHORIZED" });
         }
-    } catch {
-        res.status(401).json({ message: "UNAUTHORIZED" });
+    } catch (error) {
+        console.error("Token verification error:", error);
+        return res.status(401).json({ message: "UNAUTHORIZED" });
     }
 }
 

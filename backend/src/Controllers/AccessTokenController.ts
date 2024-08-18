@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-
 import express, { Request, Response } from "express";
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import dotenv from 'dotenv';
@@ -29,16 +27,25 @@ router.get("/token", async (req: Request, res: Response) => {
     try {
         const verify = jwt.verify(token, process.env.SECRET_KEY as string, { algorithms: ["HS256"] }) as JwtPayload;
         const username = verify.username;
-        const user = await usermodel.Find({ username });
+
+        const user = await usermodel.Find({ nama: username });
 
         if (user.length === 0) {
             return res.status(401).json({ message: "Unauthorized" });
         }
 
         const userData = user[0];
+        if (!userData || !userData.id) {
+            return res.status(500).json({ message: "User data is incomplete" });
+        }
 
-        const accessToken = jwt.sign({ username: username }, process.env.SECRET_KEY as string, { expiresIn: "20m", algorithm: "HS256" });
+        const accessToken = jwt.sign({
+            username: username,
+            id: userData.id, 
+            role: userData.role_user 
+        }, process.env.SECRET_KEY as string, { expiresIn: "20m", algorithm: "HS256" });
 
+       
         res.send({
             accessToken: accessToken,
             data: {
@@ -48,7 +55,7 @@ router.get("/token", async (req: Request, res: Response) => {
             }
         });
     } catch (err) {
-        console.error(err);
+        console.error('Error:', err);
         res.status(401).json({ message: "Unauthorized" });
     }
 });

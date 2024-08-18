@@ -1,8 +1,8 @@
 // BaseModel.ts
-import pool from '../../utils/db';  // Pastikan pathnya sesuai
+import pool from '../../utils/db';  
 
 class BaseModel {
-    protected client = pool;  // Menggunakan pool untuk koneksi
+    protected client = pool;  
     protected tableName: string = "siswa";
     protected primaryKey: string = "id";
 
@@ -108,6 +108,8 @@ class BaseModel {
             return err;
         }
     }
+    
 }
+
 
 export default BaseModel;

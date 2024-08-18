@@ -13,7 +13,13 @@ const user = new UserModel();
 const tokenModel = new TokenModel();
 const expire = 1000 * 60 * 60 * 24 * 30;
 
-const generateRefreshToken = (payload: object): string => {
+interface Payload {
+    username: string;
+    id: number;
+    role_user: string;
+}
+
+const generateRefreshToken = (payload: Payload): string => {
     const token = jwt.sign(payload, process.env.SECRET_KEY as string, {
         expiresIn: `${expire}ms`,
         algorithm: "HS256"
@@ -23,17 +29,20 @@ const generateRefreshToken = (payload: object): string => {
 };
 
 router.get("/login", async (req: Request, res: Response) => {
-    const { username, password } = req.query;
+    const { username, password } = req.body;
 
     if (typeof username !== 'string' || typeof password !== 'string') {
         return res.status(400).json({ message: "Invalid request" });
     }
 
     try {
-        const result: Array<any> = await user.Find({ username, paswd: password });
+        const result: Array<any> = await user.Find({ nama: username, paswd: password });
 
         if (result.length > 0) {
-            const refreshToken = generateRefreshToken({ username });
+            // Ambil ID dan role_user dari hasil pencarian
+            const userId = result[0].id; // Sesuaikan dengan kolom ID yang ada di tabel pengguna
+            const roleUser = result[0].role_user; // Ambil role_user dari hasil pencarian
+            const refreshToken = generateRefreshToken({ username, id: userId, role_user: roleUser });
             res.cookie("rfrsh", refreshToken, { httpOnly: true, maxAge: expire });
             res.json({ message: "Login berhasil" });
         } else {
