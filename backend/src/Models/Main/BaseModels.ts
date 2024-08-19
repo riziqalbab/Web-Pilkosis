@@ -1,7 +1,5 @@
 // BaseModel.ts
-import { QueryResult } from '@supabase/supabase-js';
 import pool from '../../utils/db';  
-import { FieldPacket, OkPacketParams } from 'mysql2';
 
 class BaseModel {
     protected client = pool;  
@@ -31,7 +29,7 @@ class BaseModel {
         }
     }
 
-    public async Find(condition: { [key: string]: string }): Promise<any> {
+    public async Find(condition: { [key: string]: any }): Promise<any> { 
         try {
             let query = `SELECT * FROM ${this.tableName} WHERE `;
             const values = [];
@@ -52,7 +50,7 @@ class BaseModel {
         }
     }
 
-    public async insert(data: {[key: string] : string }) {
+    public async insert(data: {[key: string] : any }): Promise<any> { 
         try {
             let query = `INSERT INTO ${this.tableName} (`;
             let placeholders = "VALUES (";
@@ -90,7 +88,7 @@ class BaseModel {
         }
     }
 
-    public async drop(condition: {[key: string] : string}) {
+    public async drop(condition: {[key: string] : any}) { 
         try {
             let query = `DELETE FROM ${this.tableName} WHERE `;
             const values = [];
@@ -110,8 +108,6 @@ class BaseModel {
             return err;
         }
     }
-    
 }
-
 
 export default BaseModel;

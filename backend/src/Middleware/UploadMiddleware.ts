@@ -1,34 +1,31 @@
-import multer from 'multer';
+import multer, { StorageEngine } from 'multer';
 import fs from 'fs';
 import path from 'path';
-import { fileURLToPath } from 'url';
+import { Request } from 'express';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+// Determine the upload directory
+const uploadsDir = path.resolve(__dirname, '../uploads');
+if (!fs.existsSync(uploadsDir)) {
+    fs.mkdirSync(uploadsDir, { recursive: true });
+}
 
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        const uploadsDir = path.join(__dirname, '/../uploads/');
-        fs.mkdirSync(uploadsDir, { recursive: true });
-        cb(null, uploadsDir);
+// Define custom StorageEngine type
+const storage: StorageEngine = {
+    _handleFile: (req: Request, file: Express.Multer.File, cb: (error: Error | null, info?: Partial<Express.Multer.File>) => void) => {
+        const uniqueFilename = `${Date.now()}-${file.originalname}`;
+        const filePath = path.join(uploadsDir, uniqueFilename);
+
+        const writeStream = fs.createWriteStream(filePath);
+
+        file.stream.pipe(writeStream)
+            .on('error', (error) => cb(error))
+            .on('finish', () => cb(null, { filename: uniqueFilename, path: filePath })); 
     },
-    filename: function (req, file, cb) {
-        const uniqueFilename = `${Date.now()}${file.originalname}`;
-        cb(null, uniqueFilename);
-    }
-});
-
-const fileFilter = (req, file, cb) => {
-    if (file.mimetype.startsWith('image/')) {
-        cb(null, true);
-    } else {
-        cb(new Error('Only image files are allowed!'), false);
+    _removeFile: (req: Request, file: Express.Multer.File, cb: (error: Error | null) => void) => {
+        fs.unlink(file.path, (err) => cb(err));
     }
 };
 
-const UploadMiddleware = {
-    storage: storage,
-    fileFilter: fileFilter
-};
+const uploadMiddleware = multer({ storage });
 
-export default UploadMiddleware;
+export default uploadMiddleware;
