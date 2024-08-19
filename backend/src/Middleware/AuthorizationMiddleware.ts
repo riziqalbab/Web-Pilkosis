@@ -4,7 +4,14 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-function AuthorizationMiddleware(req: Request, res: Response, next: NextFunction): void {
+interface CustomRequest extends Request {
+    user: {
+        id: string;
+        username: string;
+    };
+}
+
+function AuthorizationMiddleware(req: CustomRequest, res: Response, next: NextFunction): Response<any, Record<string, any>>|void {
     const authHeader = req.headers.authorization;
     if (!authHeader) {
         return res.status(401).json({ message: "UNAUTHORIZED" });
