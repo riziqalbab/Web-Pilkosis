@@ -1,5 +1,7 @@
 // BaseModel.ts
+import { QueryResult } from '@supabase/supabase-js';
 import pool from '../../utils/db';  
+import { FieldPacket, OkPacketParams } from 'mysql2';
 
 class BaseModel {
     protected client = pool;  
@@ -29,10 +31,10 @@ class BaseModel {
         }
     }
 
-    public async Find(condition: object) {
+    public async Find(condition: { [key: string]: string }): Promise<any> {
         try {
             let query = `SELECT * FROM ${this.tableName} WHERE `;
-            let values = [];
+            const values = [];
             let i = 0;
             for (const key in condition) {
                 if (i > 0) {
@@ -42,19 +44,19 @@ class BaseModel {
                 values.push(condition[key]);
                 i++;
             }
-
-            const [rows] = await this.client.query(query, values);
+    
+            const [ rows ] = await this.client.query(query, values);
             return rows;
         } catch (err) {
             return err;
         }
     }
 
-    public async insert(data: object) {
+    public async insert(data: {[key: string] : string }) {
         try {
             let query = `INSERT INTO ${this.tableName} (`;
             let placeholders = "VALUES (";
-            let values = [];
+            const values = [];
             let i = 0;
 
             for (const key in data) {
@@ -88,10 +90,10 @@ class BaseModel {
         }
     }
 
-    public async drop(condition: object) {
+    public async drop(condition: {[key: string] : string}) {
         try {
             let query = `DELETE FROM ${this.tableName} WHERE `;
-            let values = [];
+            const values = [];
             let i = 0;
             for (const key in condition) {
                 if (i > 0) {
