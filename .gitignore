@@ -13,10 +13,6 @@ dist
 uploads/*
 dist-ssr
 *.local
-*jpg
-*svg
-
-
 
 # Editor directories and files
 .vscode/*

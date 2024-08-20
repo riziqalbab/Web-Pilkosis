@@ -15,5 +15,20 @@ module.exports = {
       { allowConstantExport: true },
     ],
     "no-unused-vars": "off",
+    "react-hook/exhaustive-deps": "no",   
   },
+  settings: {
+    'import/resolver': {
+      alias: {
+        map: [
+          ['@assets', './src/assets'],
+          ['@components', './src/Components'],
+          ['@pages', './src/pages'],
+          ['@utils', './src/utils'],
+          ['@toastifyCss', './node_modules/react-toastify/dist/ReactToastify.css']
+        ],
+        extensions: ['.ts', '.tsx']
+      }
+    }
+  }
 };

@@ -1,6 +1,6 @@
 import { Outlet } from "react-router-dom";
 
-function LayoutAdmin() {
+export default function LayoutAdmin () {
     return (
         <>
             <p>THIS IS ADMIN PAGE</p>
@@ -8,5 +8,3 @@ function LayoutAdmin() {
         </>
     );
 }
-
-export default LayoutAdmin;
