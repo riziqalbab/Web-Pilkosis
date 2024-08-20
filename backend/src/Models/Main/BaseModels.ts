@@ -32,7 +32,7 @@ class BaseModel {
     public async Find(condition: { [key: string]: any }): Promise<any> { 
         try {
             let query = `SELECT * FROM ${this.tableName} WHERE `;
-            const values = [];
+            const values: any[] = [];
             let i = 0;
             for (const key in condition) {
                 if (i > 0) {
@@ -43,13 +43,18 @@ class BaseModel {
                 i++;
             }
     
+            console.log('Executing query:', query); // Debugging line
+            console.log('With values:', values);    // Debugging line
+            
             const [ rows ] = await this.client.query(query, values);
+            
             return rows;
         } catch (err) {
-            return err;
+            console.error('Error executing query:', err); // Debugging line
+            throw new Error('Database query failed'); // Consider rethrowing or handling the error properly
         }
     }
-
+    
     public async insert(data: {[key: string] : any }): Promise<any> { 
         try {
             let query = `INSERT INTO ${this.tableName} (`;

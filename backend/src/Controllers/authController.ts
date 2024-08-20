@@ -28,20 +28,17 @@ const generateRefreshToken = (payload: Payload): string => {
     return token;
 };
 
-router.get("/login", async (req: Request, res: Response) => {
+router.get("/login", async (req, res) => {
+    console.log(req.body); // Untuk debugging
     const { username, password } = req.body;
-
     if (typeof username !== 'string' || typeof password !== 'string') {
         return res.status(400).json({ message: "Invalid request" });
     }
-
     try {
-        const result: Array<any> = await user.Find({ nama: username, paswd: password });
-
+        const result = await user.Find({ nama: username, paswd: password });
         if (result.length > 0) {
-            // Ambil ID dan role_user dari hasil pencarian
-            const userId = result[0].id; // Sesuaikan dengan kolom ID yang ada di tabel pengguna
-            const roleUser = result[0].role_user; // Ambil role_user dari hasil pencarian
+            const userId = result[0].id;
+            const roleUser = result[0].role_user;
             const refreshToken = generateRefreshToken({ username, id: userId, role_user: roleUser });
             res.cookie("rfrsh", refreshToken, { httpOnly: true, maxAge: expire });
             res.json({ message: "Login berhasil" });
@@ -53,6 +50,7 @@ router.get("/login", async (req: Request, res: Response) => {
         res.status(500).json({ message: "Internal server error" });
     }
 });
+
 
 router.post('/logout', async (req: Request, res: Response) => {
     const token = req.cookies.rfrsh;

@@ -17,10 +17,10 @@ interface PaslonData {
     img: string;
 }
 
+// Endpoint POST /paslon
 router.post('/paslon', [AdminMiddleware, uploadMiddleware.single('img')], async (req: Request, res: Response) => {
-
     const { nomor_urut, nama, caksis, cawaksis, visi, misi } = req.body;
-    const img = req.file?.filename; 
+    const img = req.file?.filename;
 
     if (!img) {
         return res.status(400).json({ message: 'Image file is required' });
@@ -40,8 +40,23 @@ router.post('/paslon', [AdminMiddleware, uploadMiddleware.single('img')], async 
     }
 });
 
+// Endpoint GET /paslon (Get all Paslon)
+router.get('/paslon', async (req: Request, res: Response) => {
+    try {
+        const paslons = await paslon.All() as PaslonData[];
+        res.status(200).json({
+            message: 'success',
+            data: paslons
+        });
+    } catch (err: any) {
+        res.status(500).json({
+            message: 'Failed to retrieve paslon data',
+            error: err.message
+        });
+    }
+});
 
-
+// Endpoint DELETE /paslon/:id
 router.delete('/paslon/:id', AdminMiddleware, async (req: Request, res: Response) => {
     const id = parseInt(req.params.id, 10);
 
