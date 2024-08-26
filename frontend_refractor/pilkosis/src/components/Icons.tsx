@@ -42,7 +42,7 @@ export const ILoading = ({
 							<path
 								fill="currentColor"
 								d="M12 4.5a7.5 7.5 0 1 0 0 15a7.5 7.5 0 0 0 0-15ZM1.5 12C1.5 6.201 6.201 1.5 12 1.5S22.5 6.201 22.5 12S17.799 22.5 12 22.5S1.5 17.799 1.5 12Z"
-								opacity=".5"
+								opacity=".4"
 							/>
 							<path
 								fill="currentColor"
@@ -60,7 +60,6 @@ export const IPerson = ({
 	color = "currentColor",
 	width = "20",
 	height = "20",
-	className,
 	...props
 }: IconProps) => {
 	return (
@@ -70,7 +69,6 @@ export const IPerson = ({
 			viewBox="0 0 20 20"
 			fill="none"
 			xmlns="http://www.w3.org/2000/svg"
-			className={className}
 			{...props}
 		>
 			<path
@@ -90,7 +88,6 @@ export const IAbout = ({
 	color = "currentColor",
 	width = "20",
 	height = "20",
-	className,
 	...props
 }: IconProps) => {
 	return (
@@ -100,7 +97,6 @@ export const IAbout = ({
 			viewBox="0 0 20 20"
 			fill="none"
 			xmlns="http://www.w3.org/2000/svg"
-			className={className}
 			{...props}
 		>
 			<path
@@ -115,7 +111,6 @@ export const IFeedback = ({
 	color = "currentColor",
 	width = "20",
 	height = "20",
-	className,
 	...props
 }: IconProps) => {
 	return (
@@ -125,7 +120,6 @@ export const IFeedback = ({
 			viewBox="0 0 20 20"
 			fill="none"
 			xmlns="http://www.w3.org/2000/svg"
-			className={className}
 			{...props}
 		>
 			<path
@@ -140,7 +134,6 @@ export const ILogout = ({
 	color = "currentColor",
 	width = "20",
 	height = "20",
-	className,
 	...props
 }: IconProps) => {
 	return (
@@ -150,7 +143,6 @@ export const ILogout = ({
 			viewBox="0 0 20 22"
 			fill="none"
 			xmlns="http://www.w3.org/2000/svg"
-			className={className}
 			{...props}
 		>
 			<path
@@ -160,6 +152,71 @@ export const ILogout = ({
 				strokeLinecap="round"
 				strokeLinejoin="round"
 			/>
+		</svg>
+	);
+};
+
+export const IThumbsUp = ({
+	color = "currentColor",
+	width = "20",
+	height = "20",
+	...props
+}: IconProps) => {
+	return (
+		<svg
+			width={width}
+			height={height}
+			{...props}
+			viewBox="0 0 24 24"
+			fill="none"
+			xmlns="http://www.w3.org/2000/svg"
+		>
+			<g id="SVGRepo_bgCarrier" strokeWidth="0" />
+			<g
+				id="SVGRepo_tracerCarrier"
+				strokeLinecap="round"
+				strokeLinejoin="round"
+			/>
+			<g id="SVGRepo_iconCarrier">
+				<path
+					d="M20.22 9.55C19.79 9.04 19.17 8.75 18.5 8.75H14.47V6C14.47 4.48 13.24 3.25 11.64 3.25C10.94 3.25 10.31 3.67 10.03 4.32L7.49 10.25H5.62C4.31 10.25 3.25 11.31 3.25 12.62V18.39C3.25 19.69 4.32 20.75 5.62 20.75H17.18C18.27 20.75 19.2 19.97 19.39 18.89L20.71 11.39C20.82 10.73 20.64 10.06 20.21 9.55H20.22ZM5.62 19.25C5.14 19.25 4.75 18.86 4.75 18.39V12.62C4.75 12.14 5.14 11.75 5.62 11.75H7.23V19.25H5.62ZM17.92 18.63C17.86 18.99 17.55 19.25 17.18 19.25H8.74V11.15L11.41 4.9C11.45 4.81 11.54 4.74 11.73 4.74C12.42 4.74 12.97 5.3 12.97 5.99V10.24H18.5C18.73 10.24 18.93 10.33 19.07 10.5C19.21 10.67 19.27 10.89 19.23 11.12L17.91 18.62L17.92 18.63Z"
+					fill={color}
+				/>
+			</g>
+		</svg>
+	);
+};
+
+export const IInfo = ({
+	color = "currentColor",
+	width = "20",
+	height = "20",
+	...props
+}: IconProps) => {
+	return (
+		<svg width={width} height={height} {...props} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+			<g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+			<g
+				id="SVGRepo_tracerCarrier"
+				strokeLinecap="round"
+				strokeLinejoin="round"
+			></g>
+			<g id="SVGRepo_iconCarrier">
+				<path
+					d="M12 17.75C12.4142 17.75 12.75 17.4142 12.75 17V11C12.75 10.5858 12.4142 10.25 12 10.25C11.5858 10.25 11.25 10.5858 11.25 11V17C11.25 17.4142 11.5858 17.75 12 17.75Z"
+					fill={color}
+				></path>
+				<path
+					d="M12 7C12.5523 7 13 7.44772 13 8C13 8.55228 12.5523 9 12 9C11.4477 9 11 8.55228 11 8C11 7.44772 11.4477 7 12 7Z"
+					fill={color}
+				></path>
+				<path
+					fillRule="evenodd"
+					clipRule="evenodd"
+					d="M1.25 12C1.25 6.06294 6.06294 1.25 12 1.25C17.9371 1.25 22.75 6.06294 22.75 12C22.75 17.9371 17.9371 22.75 12 22.75C6.06294 22.75 1.25 17.9371 1.25 12ZM12 2.75C6.89137 2.75 2.75 6.89137 2.75 12C2.75 17.1086 6.89137 21.25 12 21.25C17.1086 21.25 21.25 17.1086 21.25 12C21.25 6.89137 17.1086 2.75 12 2.75Z"
+					fill={color}
+				></path>
+			</g>
 		</svg>
 	);
 };

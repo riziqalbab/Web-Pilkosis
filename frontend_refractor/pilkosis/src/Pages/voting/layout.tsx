@@ -1,8 +1,8 @@
 import decorations from "@assets/svg/decorations.svg";
-import { IAbout, IFeedback, ILogout, IPerson } from "@components/icons";
+import { IAbout, IFeedback, ILogout, IThumbsUp } from "@components/icons";
 import { AnimatePresence, m } from "framer-motion";
-import { useEffect, useRef, useState } from "react";
-import { Link, Outlet, useLocation } from "react-router-dom";
+import { cloneElement, useEffect, useRef, useState } from "react";
+import { Link, useLoaderData, useLocation, useOutlet } from "react-router-dom";
 
 function Sidebar() {
 	const [menuYPosition, setMenuYPotion] = useState<number>();
@@ -25,15 +25,15 @@ function Sidebar() {
 		setCurrentUrl(__currentUrl);
 
 		switch (__currentUrl) {
-			case "/vote":
-				setMenuYPotion(menu1.current?.getBoundingClientRect().y);
+			case "/voting":
+				setMenuYPotion(menu1.current?.getBoundingClientRect().y)
 				document.title = "Web Pilkosis - Daftar Paslon"
 				break
-			case "/vote/tentang":
+			case "/voting/tentang":
 				setMenuYPotion(menu2.current?.getBoundingClientRect().y)
 				document.title = "Web Pilkosis - Tentang"
 				break
-			case "/vote/umpan-balik":
+			case "/voting/umpan-balik":
 				setMenuYPotion(menu3.current?.getBoundingClientRect().y)
 				document.title = "Web Pilkosis - Umpan Balik"
 				break
@@ -44,10 +44,10 @@ function Sidebar() {
 	}, [rawCurrentUrl]);
 
 	return (
-		<aside className="fixed top-0 left-0 h-screen w-96 bg-thirdtiary">
+		<aside className="fixed top-0 left-0 h-screen w-80 bg-thirdtiary">
 			<div className="relative w-full h-full p-8">
 				{/*//? TITLE  */}
-				<h1 className="text-accent-primary font-bold text-3xl">
+				<h1 className="text-accent-primary font-bold text-2xl">
 					E-Voting Pilkosis
 				</h1>
 				<hr className="border-accent-primary my-4 border-[1.5px]" />
@@ -55,9 +55,9 @@ function Sidebar() {
 				{/*//? MENUS POINTER */}
 				<div
 					style={{ top: menuYPosition + "px" }}
-					className="absolute top-[7.9rem] h-16 w-[calc(100%-2rem)] transition-[top] duration-300 pointer-events-none -z-10"
+					className="absolute top-[7.9rem] h-[3.3rem] w-full left-0 pl-8 transition-[top] duration-300 pointer-events-none -z-10"
 				>
-					<div className="relative w-full h-16 bg-white rounded-l-full">
+					<div className="relative w-full h-full bg-white rounded-l-full">
 						{/*//? TOP-RIGHT ROUNDED */}
 						<div className="absolute w-8 h-8 -top-8 right-0 bg-white" />
 						<div className="absolute w-8 h-8 -top-8 right-0 bg-thirdtiary rounded-br-full" />
@@ -69,7 +69,7 @@ function Sidebar() {
 				</div>
 
 				{/*//? MENUS  */}
-				<ul className="text-xl mt-10">
+				<ul className="text-md mt-10">
 					<li
 						ref={menu1}
 						onClick={handdleMenuClick}
@@ -77,14 +77,14 @@ function Sidebar() {
 					>
 						<Link
 							className={`${
-								currentUrl == "/vote"
+								currentUrl == "/voting"
 									? "pl-4 pointer-events-none"
 									: "hover:pl-4 cursor-pointer"
-							} block w-full h-full py-4 transition-[padding] duration-200`}
-							to="/vote"
+							} block w-full h-full py-3 transition-[padding] duration-200`}
+							to="/voting"
 						>
-							<IPerson width="30" height="30" className="inline mr-4" />
-							<span>Daftar Paslon</span>
+							<IThumbsUp width="30" height="30" className="inline mr-4" />
+							<span>Voting</span>
 						</Link>
 					</li>
 					<li
@@ -94,13 +94,13 @@ function Sidebar() {
 					>
 						<Link
 							className={`${
-								currentUrl == "/vote/tentang"
+								currentUrl == "/voting/tentang"
 									? "pl-4 pointer-events-none"
 									: "hover:pl-4 cursor-pointer"
-							} block w-full h-full py-4 transition-[padding] duration-200`}
-							to="/vote/tentang"
+							} block w-full h-full py-3 transition-[padding] duration-200`}
+							to="/voting/tentang"
 						>
-							<IAbout width="30" height="30" className="inline mr-4" />
+							<IAbout width="25" height="25" className="inline mr-4" />
 							<span>Tentang</span>
 						</Link>
 					</li>
@@ -111,32 +111,19 @@ function Sidebar() {
 					>
 						<Link
 							className={`${
-								currentUrl == "/vote/umpan-balik"
+								currentUrl == "/voting/umpan-balik"
 									? "pl-4 pointer-events-none"
 									: "hover:pl-4 cursor-pointer"
-							} block w-full h-full py-4 transition-[padding] duration-200`}
-							to="/vote/umpan-balik"
+							} block w-full h-full py-3 transition-[padding] duration-200`}
+							to="/voting/umpan-balik"
 						>
-							<IFeedback
-								width="30"
-								height="30"
-								className="inline mr-4"
-							/>
+							<IFeedback width="25" height="25" className="inline mr-4" />
 							<span>Umpan Balik</span>
 						</Link>
 					</li>
-					<li className="text-red-500 mb-4">
-						<Link
-							className={`${
-								currentUrl == "/vote"
-									? "pl-4 pointer-events-none"
-									: "hover:pl-4 cursor-pointer"
-							} block w-full h-full py-4 transition-[padding] duration-200`}
-							to="#"
-						>
-							<ILogout width="30" height="30" className="inline mr-4" />
-							<span>Keluar</span>
-						</Link>
+					<li className="text-red-500 mb-4 hover:pl-4 cursor-pointer block w-full h-full py-3 transition-[padding] duration-200">
+						<ILogout width="25" height="25" className="inline mr-4" />
+						<span>Keluar</span>
 					</li>
 				</ul>
 
@@ -152,26 +139,34 @@ function Sidebar() {
 
 export default function LayoutVote() {
 	const { pathname } = useLocation();
+	const loginData = useLoaderData();
+	const element = useOutlet(loginData);
 
 	return (
-		<div className="pl-96">
+		<div className="pl-80">
 			<Sidebar />
-			<div className="w-full h-screen">
-				<AnimatePresence mode="popLayout" initial={true}>
-					<m.div 
-						onAnimationStart={() => document.body.style.overflowY = 'hidden'}
-						onAnimationComplete={() => document.body.style.overflowY = 'auto'}
-						key={pathname}
-						initial={{ opacity: 0, y: 200 }}
-						animate={{ opacity: 1, y: 0 }}
-						exit={{ opacity: 0, y: 200 }}
-						transition={{ duration: 0.5 }}
-						className="w-full h-full"
-					>
-						<Outlet />
-					</m.div>
-				</AnimatePresence>
-					{/* {previousEl && cloneElement(previousEl, { key: pathname + 'previous' })} */}
+			<div className="flex justify-center p-7">
+				<div className="container">
+					<AnimatePresence mode="popLayout" initial={true}>
+						<m.div 
+							key={pathname}
+							onAnimationStart={() => {
+								document.body.style.overflowY = 'hidden'
+								document.body.style.pointerEvents = 'none'
+							}}
+							onAnimationComplete={() => {
+								document.body.style.overflowY = 'auto'
+								document.body.style.pointerEvents = 'auto'
+							}}
+							initial={{ opacity: 0, y: 200 }}
+							animate={{ opacity: 1, y: 0 }}
+							exit={{ opacity: 0, y: -200 }}
+							transition={{ duration: 0.5, ease: 'circInOut' }}
+						>
+							{ element && cloneElement(element, { key: pathname }) }
+						</m.div>
+					</AnimatePresence>
+				</div>
 			</div>
 		</div>
 	);

@@ -33,7 +33,7 @@ const Input = ({ type = 'text', name, placeholder = 'input', className = '', ...
             animate={{
                y: ( onFocus || onFill) ? -40 : 0,
                x: ( onFocus || onFill) ? -10 : 10,
-               color: ( onFocus || onFill) ? "#B56000" : "#ffffff",
+               color: ( onFocus || onFill) ? "#B56000" : "#00000080",
                scale: ( onFocus || onFill) ? .9 : 1,
             }}
             transition={{
@@ -41,11 +41,11 @@ const Input = ({ type = 'text', name, placeholder = 'input', className = '', ...
                ease: "circInOut"
             }}
 
-            className="absolute text-sm left-2"
+            className="absolute text-base left-2"
          >
             <label htmlFor={name}>{ placeholder }</label>
          </m.div>
-         <input onChange={handdleChange} className="focus-visible:outline-none text-sm border-accent-secondary text-white focus:border-2 px-4 py-3 shadow-md bg-primary rounded-full w-full" onBlur={handdleBlur} onFocus={handdleFocus} type={type} name={name} id={name} {...props} />
+         <input onChange={handdleChange} className="focus-visible:outline-none text-base border-accent-secondary text-black focus:border-2 px-4 py-3 shadow-md bg-primary rounded-full w-full" onBlur={handdleBlur} onFocus={handdleFocus} type={type} name={name} id={name} {...props} />
       </div>
    )
 }
