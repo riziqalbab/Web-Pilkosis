@@ -28,8 +28,8 @@ const generateRefreshToken = (payload: Payload): string => {
     return token;
 };
 
-router.get("/login", async (req, res) => {
-    console.log(req.body); // Untuk debugging
+router.post("/login", async (req, res) => {
+
     const { username, password } = req.body;
     if (typeof username !== 'string' || typeof password !== 'string') {
         return res.status(400).json({ message: "Invalid request" });
