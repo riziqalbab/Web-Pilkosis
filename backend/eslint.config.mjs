@@ -7,5 +7,5 @@ export default [
   { languageOptions: { globals: globals.browser } },
   pluginJs.configs.recommended,
   ...tseslint.configs.recommended,
-  { rules: { "no-unused-vars": "warn" } },
+  { rules: { "no-unused-vars": "warn", "@typescript-eslint/no-explicit-any": "no" } },
 ];

@@ -29,10 +29,10 @@ class BaseModel {
         }
     }
 
-    public async Find(condition: object) {
+    public async Find(condition: { [key: string]: any }): Promise<any> { 
         try {
             let query = `SELECT * FROM ${this.tableName} WHERE `;
-            let values = [];
+            const values: any[] = [];
             let i = 0;
             for (const key in condition) {
                 if (i > 0) {
@@ -42,19 +42,24 @@ class BaseModel {
                 values.push(condition[key]);
                 i++;
             }
-
-            const [rows] = await this.client.query(query, values);
+    
+            console.log('Executing query:', query); // Debugging line
+            console.log('With values:', values);    // Debugging line
+            
+            const [ rows ] = await this.client.query(query, values);
+            
             return rows;
         } catch (err) {
-            return err;
+            console.error('Error executing query:', err); // Debugging line
+            throw new Error('Database query failed'); // Consider rethrowing or handling the error properly
         }
     }
-
-    public async insert(data: object) {
+    
+    public async insert(data: {[key: string] : any }): Promise<any> { 
         try {
             let query = `INSERT INTO ${this.tableName} (`;
             let placeholders = "VALUES (";
-            let values = [];
+            const values = [];
             let i = 0;
 
             for (const key in data) {
@@ -88,10 +93,10 @@ class BaseModel {
         }
     }
 
-    public async drop(condition: object) {
+    public async drop(condition: {[key: string] : any}) { 
         try {
             let query = `DELETE FROM ${this.tableName} WHERE `;
-            let values = [];
+            const values = [];
             let i = 0;
             for (const key in condition) {
                 if (i > 0) {
@@ -108,8 +113,6 @@ class BaseModel {
             return err;
         }
     }
-    
 }
-
 
 export default BaseModel;
