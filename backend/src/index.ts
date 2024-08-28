@@ -10,7 +10,7 @@ import login from "./Controllers/authController";
 import tokenController from './Controllers/AccessTokenController'
 import voteController from './Controllers/voteController'
 import paslonController from './Controllers/PaslonController'
-
+import feedback from './Controllers/feedbackController'
 const port = process.env.PORT || 3000;
 const app = express();
 const router = express.Router()
@@ -33,6 +33,7 @@ app.use("/api", login)
 app.use("/api", tokenController)
 app.use("/api", voteController)
 app.use("/api", paslonController)
+app.use("/api", feedback)
 
 
 app.listen(port, () => {

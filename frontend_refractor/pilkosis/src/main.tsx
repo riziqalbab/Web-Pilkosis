@@ -51,7 +51,9 @@ const router = createBrowserRouter([
 						path: "umpan-balik",
 						async lazy() {
 							const FeedbackVote = (await import("./pages/voting/feedback.tsx")).default;
-							return { Component: FeedbackVote };
+							const feedbcack = (await import("./utils/action/feedback.ts")).default;
+							return { Component: FeedbackVote, action: feedbcack};
+							
 						},
 					},
 				],
