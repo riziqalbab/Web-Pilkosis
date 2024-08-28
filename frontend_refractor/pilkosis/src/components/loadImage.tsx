@@ -22,7 +22,7 @@ export interface CImageProps extends ImgHTMLAttributes<HTMLImageElement> {
    className?: string,
 }
 
-const LoadImage = ({ src, alt = 'image', className = '', ...other }: CImageProps) => {
+const CImage = ({ src, alt = 'image', className = '', ...other }: CImageProps) => {
    const [isLoaded, setIsLoaded] = useState(false)
    const [isError, setIsError] = useState(false)
 
@@ -47,4 +47,4 @@ const LoadImage = ({ src, alt = 'image', className = '', ...other }: CImageProps
    ) : isError ? <ErrorFallback className={className} /> : <LoadingFallback className={className} />
 }
 
-export default LoadImage
+export default CImage

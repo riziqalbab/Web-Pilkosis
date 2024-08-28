@@ -33,8 +33,8 @@ export default async function authorizer (type: ('user' | 'admin') = 'user', onP
 
 			return [cache.get('accessToken'), cache.get('userData')]
 		})
-		.catch((err) => { //? this section will be called if the user is not logged in or the refresh token is expired
-			console.log(err)
+		.catch((err: Error) => { //? this section will be called if the user is not logged in or the refresh token is expired
+			console.log(err.message)
 			if (onPageLogin) return false
 			return redirect('/')
 		})

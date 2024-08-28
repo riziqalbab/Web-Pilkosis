@@ -2,62 +2,89 @@ import decorations from "@assets/svg/decorations.svg";
 import { IAbout, IFeedback, ILogout, IThumbsUp } from "@components/icons";
 import { AnimatePresence, m } from "framer-motion";
 import { cloneElement, useEffect, useRef, useState } from "react";
-import { Link, useLoaderData, useLocation, useOutlet } from "react-router-dom";
+import { Link, useLoaderData, useLocation, useNavigate, useOutlet } from "react-router-dom";
+import { Bounce, toast, ToastContainer } from "react-toastify";
+import '@toastifyCss'
+import axios from "axios";
+import cache from "@utils/cache";
+import Popup from "@components/popup";
+
+const origin = import.meta.env.VITE_HOST_BACKEND;
+
+//? this list will be show with the same ordered
+const allSidebarMenu: { [key: string]: { name: string; icon: JSX.Element } } = {
+	'/voting': {
+		name: 'Voting',
+		icon: <IThumbsUp width="30" height="30" className="inline lg:mr-4" />
+	},
+	'/voting/tentang' : {
+		name: 'Tentang',
+		icon: <IAbout width="25" height="25" className="inline lg:mr-4" />
+	},
+	'/voting/umpan-balik' : {
+		name: 'Umpan Balik',
+		icon: <IFeedback width="25" height="25" className="inline lg:mr-4" />
+	},
+}
 
 function Sidebar() {
+	const navigate = useNavigate();
 	const [menuYPosition, setMenuYPotion] = useState<number>();
-	const handdleMenuClick = (
-		ev: React.MouseEvent<HTMLLIElement, MouseEvent>
-	) => [setMenuYPotion(ev.currentTarget.getBoundingClientRect().y)];
+	const handdleMenuClick = (ev: React.MouseEvent<HTMLLIElement, MouseEvent>) => [setMenuYPotion(ev.currentTarget.getBoundingClientRect().y)];
 
-	const menu1 = useRef<HTMLLIElement>(null);
-	const menu2 = useRef<HTMLLIElement>(null);
-	const menu3 = useRef<HTMLLIElement>(null);
 
+	const parentMenu = useRef<HTMLUListElement>(null);
 	const rawCurrentUrl = useLocation().pathname;
 	const [currentUrl, setCurrentUrl] = useState<string>();
 	useEffect(() => {
+		//? clean up current url
 		let __currentUrl = "";
 		if (rawCurrentUrl.endsWith("/"))
 			__currentUrl = rawCurrentUrl.slice(0, -1);
-		else __currentUrl = rawCurrentUrl;
+		else
+			__currentUrl = rawCurrentUrl;
 
+
+		Object.keys(allSidebarMenu).forEach((menu, index) => {
+			if (menu === __currentUrl)
+				setMenuYPotion(parentMenu.current?.children.item(index)?.getBoundingClientRect().y)
+			document.title = `Web Pilkosis - ${allSidebarMenu[__currentUrl].name}`
+		})
 		setCurrentUrl(__currentUrl);
-
-		switch (__currentUrl) {
-			case "/voting":
-				setMenuYPotion(menu1.current?.getBoundingClientRect().y)
-				document.title = "Web Pilkosis - Daftar Paslon"
-				break
-			case "/voting/tentang":
-				setMenuYPotion(menu2.current?.getBoundingClientRect().y)
-				document.title = "Web Pilkosis - Tentang"
-				break
-			case "/voting/umpan-balik":
-				setMenuYPotion(menu3.current?.getBoundingClientRect().y)
-				document.title = "Web Pilkosis - Umpan Balik"
-				break
-			default:
-				document.title = "Web Pilkosis"
-				break
-		}
 	}, [rawCurrentUrl]);
 
+	
+	const [CPopup, triggerPopup] = Popup()
+	const handdleConfirmLogout = () => {
+		toast.promise(
+			axios(`${origin}/api/logout`, { withCredentials: true, method: 'post', validateStatus: status => status <= 200 })
+			.then(() => {
+				cache.delete('accessToken')
+				return navigate('/')
+			})
+			,{
+				error: 'Logout gagal, silahkan coba lagi',
+				pending: 'Sedang logout, mohon tunggu',
+			}
+		)
+	}
+
 	return (
-		<aside className="fixed top-0 left-0 h-screen w-80 bg-thirdtiary">
-			<div className="relative w-full h-full p-8">
+		<aside className="fixed lg:top-0 lg:bottom-auto bottom-0 left-0 lg:h-screen h-16 lg:w-80 w-full bg-thirdtiary z-50">
+			<CPopup title="Logout?" message="Apakah anda yakin akan logout" onConfirm={handdleConfirmLogout} />
+			<div className="relative w-full h-full lg:p-8">
 				{/*//? TITLE  */}
-				<h1 className="text-accent-primary font-bold text-2xl">
+				<h1 className="text-accent-primary font-bold text-2xl lg:block hidden">
 					E-Voting Pilkosis
 				</h1>
-				<hr className="border-accent-primary my-4 border-[1.5px]" />
+				<hr className="border-accent-primary my-4 border-[1.5px] lg:block hidden" />
 
 				{/*//? MENUS POINTER */}
 				<div
 					style={{ top: menuYPosition + "px" }}
 					className="absolute top-[7.9rem] h-[3.3rem] w-full left-0 pl-8 transition-[top] duration-300 pointer-events-none -z-10"
 				>
-					<div className="relative w-full h-full bg-white rounded-l-full">
+					<div className="relative w-full h-full bg-white rounded-l-full lg:block hidden">
 						{/*//? TOP-RIGHT ROUNDED */}
 						<div className="absolute w-8 h-8 -top-8 right-0 bg-white" />
 						<div className="absolute w-8 h-8 -top-8 right-0 bg-thirdtiary rounded-br-full" />
@@ -69,70 +96,52 @@ function Sidebar() {
 				</div>
 
 				{/*//? MENUS  */}
-				<ul className="text-md mt-10">
-					<li
-						ref={menu1}
-						onClick={handdleMenuClick}
-						className="text-accent-primary mb-4"
-					>
-						<Link
-							className={`${
-								currentUrl == "/voting"
-									? "pl-4 pointer-events-none"
-									: "hover:pl-4 cursor-pointer"
-							} block w-full h-full py-3 transition-[padding] duration-200`}
-							to="/voting"
+				<ul ref={parentMenu} className="text-md lg:mt-10 lg:block mt-2 flex items-center w-full h-full justify-center sm:gap-24 xs:gap-16 gap-10">
+					{Object.entries(allSidebarMenu).map(([menu, { name, icon }], index) => (
+						<li
+							key={index}
+							onClick={handdleMenuClick}
+							className="text-accent-primary mb-4"
 						>
-							<IThumbsUp width="30" height="30" className="inline mr-4" />
-							<span>Voting</span>
-						</Link>
-					</li>
-					<li
-						ref={menu2}
-						onClick={handdleMenuClick}
-						className="text-accent-primary mb-4"
-					>
-						<Link
-							className={`${
-								currentUrl == "/voting/tentang"
-									? "pl-4 pointer-events-none"
-									: "hover:pl-4 cursor-pointer"
-							} block w-full h-full py-3 transition-[padding] duration-200`}
-							to="/voting/tentang"
-						>
-							<IAbout width="25" height="25" className="inline mr-4" />
-							<span>Tentang</span>
-						</Link>
-					</li>
-					<li
-						ref={menu3}
-						onClick={handdleMenuClick}
-						className="text-accent-primary mb-4"
-					>
-						<Link
-							className={`${
-								currentUrl == "/voting/umpan-balik"
-									? "pl-4 pointer-events-none"
-									: "hover:pl-4 cursor-pointer"
-							} block w-full h-full py-3 transition-[padding] duration-200`}
-							to="/voting/umpan-balik"
-						>
-							<IFeedback width="25" height="25" className="inline mr-4" />
-							<span>Umpan Balik</span>
-						</Link>
-					</li>
-					<li className="text-red-500 mb-4 hover:pl-4 cursor-pointer block w-full h-full py-3 transition-[padding] duration-200">
-						<ILogout width="25" height="25" className="inline mr-4" />
-						<span>Keluar</span>
+							<Link
+								className={`${
+									currentUrl == menu
+										? "lg:pl-4 pointer-events-none"
+										: "lg:hover:pl-4 cursor-pointer"
+								} block w-full h-full lg:py-3 transition-[padding] duration-200`}
+								to={menu}
+							>
+								{icon}
+								<span className="lg:inline hidden">{name}</span>
+							</Link>
+						</li>
+					))}
+					<li onClick={() => triggerPopup()} className="text-red-500 mb-4 lg:hover:pl-4 cursor-pointer block lg:w-full lg:h-full lg:py-3 transition-[padding] duration-200">
+						<ILogout width="25" height="25" className="inline lg:mr-4" />
+						<span className="lg:inline hidden">Keluar</span>
 					</li>
 				</ul>
 
 				{/*//? DECORATIONS  */}
 				<img
 					src={decorations}
-					className="absolute bottom-0 left-0 pointer-events-none mt-auto"
+					className="absolute bottom-0 left-0 pointer-events-none mt-auto hidden lg:block"
 				/>
 			</div>
+
+			<ToastContainer
+				position="top-center"
+				autoClose={5000}
+				hideProgressBar={false}
+				newestOnTop={false}
+				closeOnClick
+				rtl={false}
+				pauseOnFocusLoss
+				draggable
+				pauseOnHover
+				theme="light"
+				transition={Bounce}
+			/>
 		</aside>
 	);
 }
@@ -140,10 +149,10 @@ function Sidebar() {
 export default function LayoutVote() {
 	const { pathname } = useLocation();
 	const loginData = useLoaderData();
-	const element = useOutlet(loginData);
+	const element = useOutlet({loginData});
 
 	return (
-		<div className="pl-80">
+		<div className="lg:pl-80 lg:mb-0 mb-16">
 			<Sidebar />
 			<div className="flex justify-center p-7">
 				<div className="container">
@@ -153,6 +162,7 @@ export default function LayoutVote() {
 							onAnimationStart={() => {
 								document.body.style.overflowY = 'hidden'
 								document.body.style.pointerEvents = 'none'
+								toast.dismiss()
 							}}
 							onAnimationComplete={() => {
 								document.body.style.overflowY = 'auto'

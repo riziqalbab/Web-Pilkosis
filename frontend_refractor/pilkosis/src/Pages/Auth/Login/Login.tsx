@@ -11,13 +11,22 @@ import { Bounce, ToastContainer, toast } from "react-toastify";
 import "@toastifyCss";
 
 import { useEffect, useState } from "react";
-import { Form, useActionData } from "react-router-dom";
-import { CButton, CInput } from "@components/component";
+import { Form, useActionData, useLoaderData, useNavigate } from "react-router-dom";
+import CInput from "@components/input";
+import CButton from "@components/button";
+import Popup from "@components/popup";
 
+
+const noWa = '+628895869590'; //? chatbot
 
 export default function LoginPage () {
+	const navigate = useNavigate();
+	const authResult = (useLoaderData() as {auth: Promise<any>}).auth;
 	const actionData = useActionData();
 	useEffect(() => {
+		authResult.then(() => {
+			navigate('/voting')
+		})
 		document.title = "Web Pilkosis - Login";
 	}, []);
 
@@ -31,8 +40,31 @@ export default function LoginPage () {
 		}
 	}, [actionData])
 
+	const [CPopup, triggerPopup] = Popup()
+
+	
+	const handdleGetPass = (ev: React.FormEvent<HTMLFormElement>) => {
+		ev.preventDefault()
+		const form = new FormData((ev.target as HTMLFormElement));
+		const data = []
+		for (const [_,value] of form) {
+			data.push(value.toString().toLowerCase().replace(/\s/g, '_'))
+		}
+
+		const url = `https://wa.me/${noWa}?text=/${data[0]}-${data[1]}`
+		window.open(url, '_blank')
+	}
+
 	return (
 		<div className="flex items-center justify-center flex-col lg:flex-row h-screen lg:justify-between px-[5%]">
+			<CPopup>
+				<form onSubmit={handdleGetPass}>
+					<h1 className="text-center text-xl">Ambil Password</h1>
+					<CInput required type="number" name="nis" placeholder="nomor NIS mu" className="lg:w-[30vw] w-[80vw] max" />
+					<CInput required name="nama_ibu" placeholder="nama ibu mu" className="lg:w-[30vw] w-[80vw] max" />
+					<CButton type="submit" className="self-end px-10 mt-10">Kirim</CButton>
+				</form>
+			</CPopup>
 			{/*//? BACKGROUNDS */}
 			<img src={primaryBg} className="w-full h-screen -z-10 absolute top-0 left-0 object-cover pointer-events-none" loading="lazy" />
 			<img src={secondaryBg} className="w-full h-screen -z-10 absolute top-0 left-0 object-cover pointer-events-none" />
@@ -49,7 +81,13 @@ export default function LoginPage () {
 				<CInput name="username" placeholder="nomor NIS mu" className="lg:w-[30vw] w-[80vw] max" />
 				<CInput name="password" placeholder="password" type="password" className="lg:w-[30vw] w-[80vw] mb-10" />
 
-				<CButton type="submit" isLoading={loading} className="self-end px-10">Login</CButton>
+				<div className="flex items-center justify-between">
+					<div className="">
+						<span>Belum punya password?</span>
+						<CButton onClick={() => triggerPopup()} className="mt-4" type="button">Ambil Password</CButton>
+					</div>
+					<CButton type="submit" isLoading={loading} className="self-end px-10">Login</CButton>
+				</div>
 			</Form>
 
 			{/*//? TITLE */}

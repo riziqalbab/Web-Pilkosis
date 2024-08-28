@@ -1,5 +1,5 @@
-import { CTitle } from "@components/component";
 import { IFeedback } from "@components/icons";
+import CTitle from "@components/title";
 
 export default function FeedbackVote() {
 	return (
