@@ -94,10 +94,10 @@ export default function IndexVote () {
                            {data?.map((paslon: DataPaslon, index: number) => (
                               <div key={index} className="flex md:gap-4 gap-0 md:flex-row flex-col">
 
-                                 <div className="min-w-fit h-auto bg-thirdtiary-light overflow-hidden md:rounded-xl rounded-t-xl shadow-md flex flex-col">
-                                    <CImage src={paslon.img} alt={paslon.nama} className="aspect-square w-72 object-cover" />
-                                    <div className="w-full-2xl p-4 relative z-20 h-fit">
-                                       <div className="bg-thirdtiary-light absolute w-[180%] h-[150%] -top-4 rounded-t-[5rem] -left-[65%] -z-10 -rotate-12" />
+                                 <div className="min-w-fit h-auto bg-thirdtiary-light overflow-hidden md:rounded-xl rounded-t-xl shadow-md flex flex-col sm:flex-row md:flex-col ">
+                                    <CImage src={paslon.img} alt={paslon.nama} className="aspect-square sm:w-72 w-full object-cover" />
+                                    <div className="w-full-2xl p-4 relative z-20 h-fit md:h-fit sm:h-72">
+                                       <div className="bg-thirdtiary-light absolute w-[180%] h-[150%] -top-4 rounded-t-[5rem] -left-[65%] -z-10 -rotate-12 md:block block sm:hidden" />
                                        <div>
                                           <h1 className="font-bold text-xl mb-4">
                                              <span className="text-accent-primary">#0{ paslon.nomor_urut } </span>
@@ -114,8 +114,9 @@ export default function IndexVote () {
                                              </li>
                                           </ul>
                                        </div>
+                                       <CButton isLoading={loadingVote} onClick={() => triggerPopup({onConfirm: () => handdleVote(paslon.id)})} type="submit" className="py-2 mt-auto w-40 absolute bottom-0 hidden md:hidden sm:block">Vote!</CButton>
                                     </div>
-                                    <CButton isLoading={loadingVote} onClick={() => triggerPopup({onConfirm: () => handdleVote(paslon.id)})} type="submit" className="py-2 mt-auto m-4 mb-4 z-30">Vote!</CButton>
+                                    <CButton isLoading={loadingVote} onClick={() => triggerPopup({onConfirm: () => handdleVote(paslon.id)})} type="submit" className="py-2 mt-auto m-4 mb-4 z-30 block md:block sm:hidden">Vote!</CButton>
                                  </div>
 
                                  <div className="grow flex flex-col md:gap-4 gap-0 h-full">

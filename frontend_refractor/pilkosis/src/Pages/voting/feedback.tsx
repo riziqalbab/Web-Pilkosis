@@ -3,7 +3,7 @@ import { Form, useActionData } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Bounce, ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import axios from "axios";
+import CTitle from "@components/title";
 
 export default function FeedbackVote() {
     const actionData = useActionData();
@@ -31,7 +31,6 @@ export default function FeedbackVote() {
                         method="post"
                         encType="multipart/form-data"
                         className="mt-6"
-                       
                     >
                         <div className="mb-4">
                             <label

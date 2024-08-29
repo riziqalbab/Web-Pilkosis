@@ -44,7 +44,8 @@ const router = createBrowserRouter([
 						path: "tentang",
 						async lazy() {
 							const AboutVote = (await import("./pages/voting/about.tsx")).default;
-							return { Component: AboutVote };
+							const getGithubProfiles = (await import("./utils/loader/githubProfiles.ts")).default;
+							return { Component: AboutVote, loader: getGithubProfiles };
 						},
 					},
 					{

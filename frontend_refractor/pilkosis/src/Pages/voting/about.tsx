@@ -1,353 +1,272 @@
+import FallbackErrorContent from "@components/contentErrorFallback";
+import FallbackLoadContent from "@components/contentLoadFallback";
 import { IAbout } from "@components/icons";
+import CImage from "@components/loadImage";
 import CTitle from "@components/title";
+import { useEffect, useState } from "react";
+import { useLoaderData } from "react-router-dom";
+import { m } from "framer-motion";
+
+//? Logos
+import typescriptLogo 	from "@assets/logo/typescript.svg";
+import reactLogo 		 	from "@assets/logo/react.svg";
+import viteLogo 			from "@assets/logo/vite.svg";
+import tailwindLogo 		from "@assets/logo/tailwind.svg";
+import framerMotionLogo from "@assets/logo/framer-motion.svg";
+import expressLogo 		from "@assets/logo/express.svg";
+import nodeJsLogo 		from "@assets/logo/node.svg";
+import mysqlLogo 			from "@assets/logo/mysql.svg";
+import jwtLogo 			from "@assets/logo/jwt.svg";
+import waWebJs 			from "@assets/logo/wa-web-js.png";
+import reactRouterLogo 	from "@assets/logo/react-router-dom.svg";
+import decoration 		from "@assets/svg/decorations.svg";
+import decoration2 		from "@assets/svg/decorations-2.svg";
+import socketIO 			from "@assets/logo/socket-io.svg";
+
+interface GithubApiResponse {
+	login: string;
+	id: number;
+	node_id: string;
+	avatar_url: string;
+	gravatar_id: string;
+	url: string;
+	html_url: string;
+	followers_url: string;
+	following_url: string;
+	gists_url: string;
+	starred_url: string;
+	subscriptions_url: string;
+	organizations_url: string;
+	repos_url: string;
+	events_url: string;
+	received_events_url: string;
+	type: string;
+	site_admin: boolean;
+	name: string;
+	company?: string;
+	blog: string;
+	location: string;
+	email?: string;
+	hireable: string;
+	bio: string;
+	twitter_username: string;
+	public_repos: number;
+	public_gists: number;
+	followers: number;
+	following: number;
+	created_at: string;
+	updated_at: string;
+}
+
+const LineDecoration = ({ title, reverse = false }: { title: string, reverse?: boolean }) => (
+	<div className="relative h-28 w-2">
+		<div className={`${reverse ? '-translate-x-full left-2' : 'origin-left'} absolute`}>
+			<div className="relative h-28 w-96">
+				<h2 className={`${reverse ? 'left-0' : 'right-0'} absolute text-center text-2xl font-light mb-6 bottom-0`}>{ title }</h2>
+				<div className={`${reverse ? 'right-0' : 'left-0'} absolute top-0 w-4 h-4 rounded-full bg-primary`} />
+				<div className={`${reverse ? 'rotate-[-55deg] origin-right right-1.5' : 'rotate-[55deg] origin-left left-1.5'} absolute top-1 w-32 h-1 rounded-full bg-primary`} />
+				<div className={`${reverse ? 'right-[4.8rem] origin-right' : 'left-[4.8rem] origin-left'} absolute bottom-0 w-80 h-1 rounded-full bg-primary`} />
+			</div>
+		</div>
+	</div>
+)
 
 export default function AboutVote() {
+	const githubProfiles = useLoaderData() as Promise<GithubApiResponse>[];
+
+	const [profiles, setProfiles] = useState<GithubApiResponse[]>([]);
+	const [isError, setIsError] = useState(false);
+	const [profilesCount, setProfilesCount] = useState(0);
+
+	useEffect(() => {
+		if (githubProfiles) {
+			if (profilesCount === 0) {
+				githubProfiles.forEach((profile) => {
+					profile.then((res) => {
+						setProfiles((prev) => [...prev, res]);
+					});
+				});
+			}
+			setProfilesCount(githubProfiles.length)
+		}
+	}, [githubProfiles]);
+
+	useEffect(() => {
+		console.log(profiles);
+	}, [profiles]);
+
 	return (
 		<div>
 			<CTitle text="Tentang" logo={<IAbout width="27" height="27" />} />
 
-			<h1 className="text-2xl mb-5">Website Ini di Buat Dengan...</h1>
+			<div className="mb-20">
+				<h1 className="text-3xl text-center mb-10">Kontributor Sistem E-Voting <sub className="text-base italic">src: api.github.com</sub></h1>
+				<div className="grid gap-4 grid-cols-3">
+					{(!isError && profiles) &&
+						profiles.map((profile, index) => (
+							<div key={index} className="border border-thirdtiary-light flex flex-col items-stretch rounded-2xl relative min-h-[30rem] shadow-md">
+								<div className="bg-thirdtiary-light w-full h-56 rounded-t-2xl relative overflow-hidden">
+									<m.div className="absolute" animate={{x: Math.random() * 200, rotate: Math.random() * 360}} transition={{duration: 1, ease: 'circInOut'}}>
+										<CImage src={decoration} />
+									</m.div>
+									<m.div className="absolute" animate={{x: Math.random() * 200, rotate: Math.random() * 360}} transition={{duration: 1, ease: 'circInOut'}}>
+										<CImage src={decoration2} />
+									</m.div>
+								</div>
+								<div className="self-center top-56 -translate-y-1/2 bg-white absolute p-2 rounded-full border-2 border-thirdtiary-light w-fit">
+									<CImage
+										src={profile.avatar_url}
+										alt={profile.login}
+										className="w-40 h-40 rounded-full object-cover"
+									/>
+								</div>
 
-			<h2 className="text-center text-2xl mb-6">Bahasa Pemrograman</h2>
-			<div className="flex gap-10 justify-center pb-4 mb-20">
-				{/* //? Typescript Logo */}
-				<div>
-					<a href="https://www.typescriptlang.org/" target="_blank">
-						<svg
-							width={100}
-							height={100}
-							viewBox="0 0 256 256"
-							version="1.1"
-							xmlns="http://www.w3.org/2000/svg"
-							xmlnsXlink="http://www.w3.org/1999/xlink"
-							preserveAspectRatio="xMidYMid"
-							fill="#000000"
-						>
-							<g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-							<g
-								id="SVGRepo_tracerCarrier"
-								strokeLinecap="round"
-								strokeLinejoin="round"
-							></g>
-							<g id="SVGRepo_iconCarrier">
-								<g>
-									<polygon
-										fill="#007ACC"
-										transform="translate(128.000000, 128.000000) scale(1, -1) translate(-128.000000, -128.000000) "
-										points="0 128 0 0 128 0 256 0 256 128 256 256 128 256 0 256"
-									>
-									</polygon>
-									<path
-										d="M146.658132,223.436863 L146.739401,212.953054 L130.079084,212.953054 L113.418767,212.953054 L113.418767,165.613371 L113.418767,118.273689 L101.63464,118.273689 L89.8505126,118.273689 L89.8505126,165.613371 L89.8505126,212.953054 L73.1901951,212.953054 L56.5298776,212.953054 L56.5298776,223.233689 C56.5298776,228.922577 56.6517824,233.676863 56.8143221,233.798768 C56.9362269,233.961308 77.2130522,234.042577 101.797179,234.001943 L146.536227,233.880038 L146.658132,223.436863 Z"
-										fill="#FFFFFF"
-										transform="translate(101.634640, 176.142993) rotate(-180.000000) translate(-101.634640, -176.142993) "
-									>
-									</path>
-									<path
-										d="M206.566631,234.272145 C213.068219,232.646748 218.025679,229.761668 222.57679,225.048018 C224.933616,222.528653 228.428219,217.936907 228.712663,216.839764 C228.793933,216.514684 217.659965,209.037859 210.914568,204.852462 C210.670758,204.689922 209.69552,205.74643 208.598377,207.371827 C205.306949,212.166748 201.852981,214.239129 196.570441,214.604843 C188.809171,215.133097 183.811076,211.069605 183.851711,204.283573 C183.851711,202.292462 184.136155,201.114049 184.948854,199.488653 C186.65552,195.953414 189.825044,193.840399 199.7806,189.533097 C218.106949,181.649922 225.949489,176.448653 230.825679,169.053097 C236.270758,160.804208 237.489806,147.638494 233.792028,137.845478 C229.728536,127.199129 219.651076,119.966113 205.469489,117.568653 C201.080917,116.796589 190.678377,116.918494 185.964727,117.771827 C175.684092,119.600399 165.931711,124.679764 159.917743,131.343891 C157.560917,133.944526 152.969171,140.730557 153.253616,141.218176 C153.37552,141.380716 154.432028,142.030875 155.610441,142.721668 C156.748219,143.371827 161.05552,145.850557 165.119012,148.207383 L172.473933,152.474049 L174.01806,150.198494 C176.171711,146.907065 180.885362,142.396589 183.729806,140.893097 C191.897425,136.585795 203.112663,137.195319 208.639012,142.15278 C210.995838,144.30643 211.971076,146.541351 211.971076,149.83278 C211.971076,152.799129 211.605362,154.099446 210.061235,156.334367 C208.070123,159.178811 204.006631,161.576272 192.466314,166.574367 C179.259965,172.263256 173.571076,175.798494 168.369806,181.406113 C165.362822,184.656907 162.518377,189.858176 161.339965,194.206113 C160.364727,197.822621 160.120917,206.884208 160.892981,210.541351 C163.61552,223.300716 173.245996,232.199764 187.143139,234.841034 C191.653616,235.694367 202.137425,235.369287 206.566631,234.272145 Z"
-										fill="#FFFFFF"
-										transform="translate(194.578507, 176.190240) scale(1, -1) translate(-194.578507, -176.190240) "
-									>
-									</path>
-								</g>
-							</g>
-						</svg>
-					</a>
-					<p className="text-center mt-3 italic">Typescript</p>
+								<a href={profile.html_url} target="_blank" title="klik Melihat Profilnya di Github.com" className="self-center text-accent-secondary underline underline-offset-4 font-bold mt-24">@{profile.login}</a>
+								<p className="self-center px-4 py-1 rounded-full border border-accent-primary mt-2">{profile.name}</p>
+								
+								<p className="px-6 mt-5">
+									Bergabung ke Github pada
+									<strong> {new Date(profile.created_at).toLocaleDateString('ID', {dateStyle: 'full'})}</strong>
+								</p>
+								
+								<p className="px-6">
+									dan telah membuat
+									<strong> {profile.public_repos} </strong>
+									Repositori publik
+								</p>
+
+								<p className="px-6 pb-6 mt-3">
+									<strong>Tentang Saya : </strong>
+									<code className="mt-2 block">"{profile.bio}"</code>
+								</p>
+							</div>
+						))}
 				</div>
 			</div>
 
-			<h2 className="text-center text-2xl mb-6">Teknologi Sisi Klien</h2>
-			<div className="flex gap-10 justify-center pb-4 mb-20">
-				{/* //? React Logo */}
-				<div>
-					<a href="https://react.dev/" target="_blank">
-						<svg
-							width={100}
-							height={100}
-							viewBox="0 -13 256 256"
-							xmlns="http://www.w3.org/2000/svg"
-							preserveAspectRatio="xMinYMin meet"
-							fill="#000000"
-						>
-							<g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
-							<g
-								id="SVGRepo_tracerCarrier"
-								strokeLinecap="round"
-								strokeLinejoin="round"
-							></g>
-							<g id="SVGRepo_iconCarrier">
-								<path
-									d="M.754 114.75c0 19.215 18.763 37.152 48.343 47.263-5.907 29.737-1.058 53.706 15.136 63.045 16.645 9.6 41.443 2.955 64.98-17.62 22.943 19.744 46.13 27.514 62.31 18.148 16.63-9.627 21.687-35.221 15.617-65.887 30.81-10.186 48.044-25.481 48.044-44.949 0-18.769-18.797-35.006-47.979-45.052 6.535-31.933.998-55.32-15.867-65.045-16.259-9.376-39.716-1.204-62.996 19.056C104.122 2.205 80.897-4.36 64.05 5.392 47.806 14.795 43.171 39.2 49.097 69.487 20.515 79.452.754 96.057.754 114.75z"
-									fill="#FFF"
-								></path>
-								<path
-									d="M201.025 79.674a151.364 151.364 0 0 0-7.274-2.292 137.5 137.5 0 0 0 1.124-4.961c5.506-26.728 1.906-48.26-10.388-55.348-11.787-6.798-31.065.29-50.535 17.233a151.136 151.136 0 0 0-5.626 5.163 137.573 137.573 0 0 0-3.744-3.458c-20.405-18.118-40.858-25.752-53.139-18.643-11.776 6.817-15.264 27.06-10.307 52.39a150.91 150.91 0 0 0 1.67 7.484c-2.894.822-5.689 1.698-8.363 2.63-23.922 8.34-39.2 21.412-39.2 34.97 0 14.004 16.4 28.05 41.318 36.566a128.44 128.44 0 0 0 6.11 1.91 147.813 147.813 0 0 0-1.775 8.067c-4.726 24.89-1.035 44.653 10.71 51.428 12.131 6.995 32.491-.195 52.317-17.525 1.567-1.37 3.14-2.823 4.715-4.346a148.34 148.34 0 0 0 6.108 5.573c19.204 16.525 38.17 23.198 49.905 16.405 12.12-7.016 16.058-28.247 10.944-54.078-.39-1.973-.845-3.988-1.355-6.04 1.43-.422 2.833-.858 4.202-1.312 25.904-8.582 42.757-22.457 42.757-36.648 0-13.607-15.77-26.767-40.174-35.168z"
-									fill="#53C1DE"
-								></path>
-								<path
-									d="M195.406 142.328c-1.235.409-2.503.804-3.795 1.187-2.86-9.053-6.72-18.68-11.442-28.625 4.507-9.71 8.217-19.213 10.997-28.208 2.311.67 4.555 1.375 6.717 2.12 20.91 7.197 33.664 17.84 33.664 26.04 0 8.735-13.775 20.075-36.14 27.486zm-9.28 18.389c2.261 11.422 2.584 21.749 1.086 29.822-1.346 7.254-4.052 12.09-7.398 14.027-7.121 4.122-22.35-1.236-38.772-15.368-1.883-1.62-3.78-3.35-5.682-5.18 6.367-6.964 12.73-15.06 18.94-24.05 10.924-.969 21.244-2.554 30.603-4.717.46 1.86.87 3.683 1.223 5.466zm-93.85 43.137c-6.957 2.457-12.498 2.527-15.847.596-7.128-4.11-10.09-19.98-6.049-41.265a138.507 138.507 0 0 1 1.65-7.502c9.255 2.047 19.5 3.52 30.45 4.408 6.251 8.797 12.798 16.883 19.396 23.964a118.863 118.863 0 0 1-4.305 3.964c-8.767 7.664-17.552 13.1-25.294 15.835zm-32.593-61.58c-11.018-3.766-20.117-8.66-26.354-14-5.604-4.8-8.434-9.565-8.434-13.432 0-8.227 12.267-18.722 32.726-25.855a139.276 139.276 0 0 1 7.777-2.447c2.828 9.197 6.537 18.813 11.013 28.537-4.534 9.869-8.296 19.638-11.15 28.943a118.908 118.908 0 0 1-5.578-1.746zm10.926-74.37c-4.247-21.703-1.427-38.074 5.67-42.182 7.56-4.376 24.275 1.864 41.893 17.507 1.126 1 2.257 2.047 3.39 3.13-6.564 7.049-13.051 15.074-19.248 23.82-10.627.985-20.8 2.567-30.152 4.686a141.525 141.525 0 0 1-1.553-6.962zm97.467 24.067a306.982 306.982 0 0 0-6.871-11.3c7.21.91 14.117 2.12 20.603 3.601-1.947 6.241-4.374 12.767-7.232 19.457a336.42 336.42 0 0 0-6.5-11.758zm-39.747-38.714c4.452 4.823 8.911 10.209 13.297 16.052a284.245 284.245 0 0 0-26.706-.006c4.39-5.789 8.887-11.167 13.409-16.046zm-40.002 38.78a285.24 285.24 0 0 0-6.378 11.685c-2.811-6.667-5.216-13.222-7.18-19.552 6.447-1.443 13.322-2.622 20.485-3.517a283.79 283.79 0 0 0-6.927 11.384zm7.133 57.683c-7.4-.826-14.379-1.945-20.824-3.348 1.995-6.442 4.453-13.138 7.324-19.948a283.494 283.494 0 0 0 6.406 11.692 285.27 285.27 0 0 0 7.094 11.604zm33.136 27.389c-4.575-4.937-9.138-10.397-13.595-16.27 4.326.17 8.737.256 13.22.256 4.606 0 9.159-.103 13.64-.303-4.4 5.98-8.843 11.448-13.265 16.317zm46.072-51.032c3.02 6.884 5.566 13.544 7.588 19.877-6.552 1.495-13.625 2.699-21.078 3.593a337.537 337.537 0 0 0 6.937-11.498 306.632 306.632 0 0 0 6.553-11.972zm-14.915 7.15a316.478 316.478 0 0 1-10.84 17.49c-6.704.479-13.632.726-20.692.726-7.031 0-13.871-.219-20.458-.646A273.798 273.798 0 0 1 96.72 133.28a271.334 271.334 0 0 1-9.64-18.206 273.864 273.864 0 0 1 9.611-18.216v.002a271.252 271.252 0 0 1 10.956-17.442c6.72-.508 13.61-.774 20.575-.774 6.996 0 13.895.268 20.613.78a290.704 290.704 0 0 1 10.887 17.383 316.418 316.418 0 0 1 9.741 18.13 290.806 290.806 0 0 1-9.709 18.29zm19.913-107.792c7.566 4.364 10.509 21.961 5.755 45.038a127.525 127.525 0 0 1-1.016 4.492c-9.374-2.163-19.554-3.773-30.212-4.773-6.209-8.841-12.642-16.88-19.1-23.838a141.92 141.92 0 0 1 5.196-4.766c16.682-14.518 32.273-20.25 39.377-16.153z"
-									fill="#FFF"
-								></path>
-								<path
-									d="M128.221 94.665c11.144 0 20.177 9.034 20.177 20.177 0 11.144-9.033 20.178-20.177 20.178-11.143 0-20.177-9.034-20.177-20.178 0-11.143 9.034-20.177 20.177-20.177"
-									fill="#53C1DE"
-								></path>
-							</g>
-						</svg>
-					</a>
-					<p className="text-center mt-3 italic">React</p>
+			{/* //? TECHNOLOGY */}
+			<div className="2xl:px-5">
+				<h1 className="text-3xl mb-10 text-center">Sistem E-Voting Ini di Buat Dengan...</h1>
+
+				<div className="flex justify-between">
+					{/* //? Programming Language */}
+					<div className="flex flex-col items-center w-fit">
+						<div className="mb-5">
+							{/* //? Typescript Logo */}
+							<div className="w-fit">
+								<a href="https://www.typescriptlang.org/" target="_blank">
+									<CImage className="w-28 h-28 object-cover" src={typescriptLogo} alt="Typescript Logo" />
+								</a>
+								<p className="text-center mt-3 italic">Typescript</p>
+							</div>
+						</div>
+						<LineDecoration title="Bahasa Pemrograman" />
+					</div>
+
+					{/* //?Frontend Technology */}
+					<div className="flex flex-col items-center w-fit mt-20">
+						<div className="w-fit flex justify-center gap-16 mb-5">
+							{/* //? React Logo */}
+							<div className="w-fit">
+								<a href="https://vitejs.dev/" target="_blank" className="relative">
+									<CImage className="w-28 h-28 object-cover" src={reactLogo} alt="React Logo" />
+									<CImage className="w-14 h-14 object-cover absolute bottom-0 right-0" src={viteLogo} alt="Vite Logo" />
+								</a>
+								<p className="text-center mt-3 italic">Vite + React</p>
+							</div>
+
+							{/* //? Vite Logo */}
+							<div className="w-fit">
+								<a href="https://reactrouter.com/" target="_blank">
+									<CImage className="w-28 h-28 object-cover" src={reactRouterLogo} alt="React Router DOM Logo" />
+								</a>
+								<p className="text-center mt-3 italic">React Router DOM</p>
+							</div>
+
+							{/* //? Tailwind Logo */}
+							<div className="w-fit">
+								<a href="https://tailwindcss.com/" target="_blank">
+									<CImage className="w-28 h-28 object-cover" src={tailwindLogo} alt="Tailwind Logo" />
+								</a>
+								<p className="text-center mt-3 italic">Tailwind Css</p>
+							</div>
+
+							{/* //?Framer Motion Logo */}
+							<div className="w-fit">
+								<a href="https://www.framer.com/motion/" target="_blank">
+									<CImage className="w-28 h-28 object-cover" src={framerMotionLogo} alt="Framer Motion Logo" />
+								</a>
+								<p className="text-center mt-3 italic">Framer Motion</p>
+							</div>
+						</div>
+						<LineDecoration title="Teknologi Sisi Klien" reverse />
+					</div>
 				</div>
 
-				{/* //? Vite Logo */}
-				<div>
-					<a href="https://vitejs.dev/" target="_blank">
-						<svg
-							width={100}
-							height={100}
-							viewBox="0 0 32 32"
-							xmlns="http://www.w3.org/2000/svg"
-							fill="none"
-						>
-							<g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
-							<g
-								id="SVGRepo_tracerCarrier"
-								strokeLinecap="round"
-								strokeLinejoin="round"
-							></g>
-							<g id="SVGRepo_iconCarrier">
-								<title>file_type_vite</title>
-								<path
-									d="M29.8836 6.146L16.7418 29.6457c-.2714.4851-.9684.488-1.2439.0052L2.0956 6.1482c-.3-.5262.1498-1.1635.746-1.057l13.156 2.3516a.7144.7144 0 00.2537-.0004l12.8808-2.3478c.5942-.1083 1.0463.5241.7515 1.0513z"
-									fill="url(#paint0_linear)"
-								></path>
-								<path
-									d="M22.2644 2.0069l-9.7253 1.9056a.3571.3571 0 00-.2879.3294l-.5982 10.1038c-.014.238.2045.4227.4367.3691l2.7077-.6248c.2534-.0585.4823.1647.4302.4194l-.8044 3.9393c-.0542.265.1947.4918.4536.4132l1.6724-.5082c.2593-.0787.5084.1487.4536.414l-1.2784 6.1877c-.08.387.4348.598.6495.2662L16.5173 25 24.442 9.1848c.1327-.2648-.096-.5667-.387-.5106l-2.787.5379c-.262.0505-.4848-.1934-.4109-.4497l1.8191-6.306c.074-.2568-.1496-.5009-.4118-.4495z"
-									fill="url(#paint1_linear)"
-								></path>
-								<defs id="defs50">
-									<linearGradient
-										id="paint0_linear"
-										x1="6.0002"
-										y1="32.9999"
-										x2="235"
-										y2="344"
-										gradientUnits="userSpaceOnUse"
-										gradientTransform="matrix(.07142 0 0 .07142 1.3398 1.8944)"
-									>
-										<stop stopColor="#41D1FF" id="stop38"></stop>
-										<stop offset="1" stopColor="#BD34FE" id="stop40"></stop>
-									</linearGradient>
-									<linearGradient
-										id="paint1_linear"
-										x1="194.651"
-										y1="8.8182"
-										x2="236.076"
-										y2="292.989"
-										gradientUnits="userSpaceOnUse"
-										gradientTransform="matrix(.07142 0 0 .07142 1.3398 1.8944)"
-									>
-										<stop stopColor="#FFEA83" id="stop43"></stop>
-										<stop
-											offset=".0833"
-											stopColor="#FFDD35"
-											id="stop45"
-										></stop>
-										<stop offset="1" stopColor="#FFA800" id="stop47"></stop>
-									</linearGradient>
-								</defs>
-							</g>
-						</svg>
-					</a>
-					<p className="text-center mt-3 italic">Vite</p>
+				<div className="flex justify-between">
+					{/* //? Backend Technology */}
+					<div className="flex flex-col w-fit items-center">
+						<div className="flex gap-16 justify-center pb-4 mb-5">
+							{/* //? Express Js Logo */}
+							<div>
+								<a href="https://expressjs.com/" target="_blank">
+									<CImage className="w-28 h-28 object-cover" src={expressLogo} alt="Express Logo" />
+								</a>
+								<p className="text-center mt-3 italic">Express</p>
+							</div>
+
+							{/* //? Node Js Logo */}
+							<div>
+								<a href="https://nodejs.org/en" target="_blank">
+									<CImage className="w-28 h-28 object-cover" src={nodeJsLogo} alt="Node Js Logo" />
+								</a>
+								<p className="text-center mt-3 italic">Node Js</p>
+							</div>
+
+							{/* //? JWT Logo */}
+							<div>
+								<a href="https://jwt.io/" target="_blank">
+									<CImage className="w-28 h-28 object-cover" src={jwtLogo} alt="JWT Logo" />
+								</a>
+								<p className="text-center mt-3 italic">JSON Web Token</p>
+							</div>
+							
+							{/* //? SOCKET IO Logo */}
+							<div>
+								<a href="https://socket.io/" target="_blank">
+									<CImage className="w-28 h-28 object-cover" src={socketIO} alt="Socket Io Logo" />
+								</a>
+								<p className="text-center mt-3 italic">Socket.Io</p>
+							</div>
+						</div>
+						
+						<LineDecoration title="Teknologi Sisi Server" />
+					</div>
+
+					{/* //? Database */}
+					<div className="flex flex-col items-center w-fit mt-20">
+						{/* //? MySql Logo */}
+						<div className="mb-5">
+							<a href="https://www.mysql.com/" target="_blank">
+								<CImage className="w-28 h-28 object-cover" src={mysqlLogo} alt="MySql Logo" />
+							</a>
+							<p className="text-center mt-3 italic">MySql</p>
+						</div>
+						<LineDecoration title="Basis Data" reverse />
+					</div>
 				</div>
 
-				{/* //? Tailwind Logo */}
-				<div>
-					<a href="https://tailwindcss.com/" target="_blank">
-						<svg
-							width={100}
-							height={100}
-							viewBox="0 -51 256 256"
-							version="1.1"
-							xmlns="http://www.w3.org/2000/svg"
-							xmlnsXlink="http://www.w3.org/1999/xlink"
-							preserveAspectRatio="xMidYMid"
-							fill="#000000"
-						>
-							<g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
-							<g
-								id="SVGRepo_tracerCarrier"
-								strokeLinecap="round"
-								strokeLinejoin="round"
-							></g>
-							<g id="SVGRepo_iconCarrier">
-								<defs>
-									<linearGradient
-										x1="-2.77777778%"
-										y1="32%"
-										x2="100%"
-										y2="67.5555556%"
-										id="linearGradient-1"
-									>
-										<stop stopColor="#2298BD" offset="0%"></stop>
-										<stop stopColor="#0ED7B5" offset="100%"></stop>
-									</linearGradient>
-								</defs>
-								<g>
-									<path
-										d="M128,-1.0658141e-14 C93.8666667,-1.0658141e-14 72.5333333,17.0666667 64,51.2 C76.8,34.1333333 91.7333333,27.7333333 108.8,32 C118.537481,34.4343704 125.497363,41.4985481 133.201067,49.3184 C145.750756,62.0567704 160.275437,76.8 192,76.8 C226.133333,76.8 247.466667,59.7333333 256,25.6 C243.2,42.6666667 228.266667,49.0666667 211.2,44.8 C201.462519,42.3656296 194.502637,35.3014519 186.798933,27.4816 C174.249244,14.7432296 159.724563,-1.0658141e-14 128,-1.0658141e-14 Z M64,76.8 C29.8666667,76.8 8.53333333,93.8666667 0,128 C12.8,110.933333 27.7333333,104.533333 44.8,108.8 C54.5374815,111.23437 61.497363,118.298548 69.2010667,126.1184 C81.7507556,138.85677 96.275437,153.6 128,153.6 C162.133333,153.6 183.466667,136.533333 192,102.4 C179.2,119.466667 164.266667,125.866667 147.2,121.6 C137.462519,119.16563 130.502637,112.101452 122.798933,104.2816 C110.249244,91.5432296 95.724563,76.8 64,76.8 Z"
-										fill="url(#linearGradient-1)"
-									></path>
-								</g>
-							</g>
-						</svg>
-					</a>
-					<p className="text-center mt-3 italic">TailwindCss</p>
-				</div>
 
-				{/* //?Framer Motion Logo */}
-				<div>
-					<a href="https://www.framer.com/motion/" target="_blank">
-						<svg
-							width={100}
-							height={100}
-							fill="#000000"
-							viewBox="0 0 32 32"
-							xmlns="http://www.w3.org/2000/svg"
-						>
-							<g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
-							<g
-								id="SVGRepo_tracerCarrier"
-								strokeLinecap="round"
-								strokeLinejoin="round"
-							></g>
-							<g id="SVGRepo_iconCarrier">
-								<path d="M5.333 0h21.333v10.667h-10.667zM5.333 10.667h10.667l10.667 10.667h-21.333zM5.333 21.333h10.667v10.667z"></path>
-							</g>
-						</svg>
-					</a>
-					<p className="text-center mt-3 italic">Framer Motion</p>
-				</div>
-			</div>
+				<div className="flex flex-col items-center w-fit">
+					<div className="mb-5">
+						<a href="https://wwebjs.dev/" target="_blank">
+							<CImage className="w-28 h-28 object-cover" src={waWebJs} alt="WaWebJs Logo" />
+						</a>
+						<p className="text-center mt-3 italic">WhatsApp Web Js</p>
+					</div>
 
-			<h2 className="text-center text-2xl mb-6">Teknologi Sisi Server</h2>
-			<div className="flex gap-10 justify-center pb-4 mb-20">
-				{/* //? Express Js Logo */}
-				<div>
-					<a href="https://expressjs.com/" target="_blank">
-						<svg
-							width={100}
-							height={100}
-							fill="#000000"
-							viewBox="0 0 24 24"
-							role="img"
-							xmlns="http://www.w3.org/2000/svg"
-						>
-							<g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
-							<g
-								id="SVGRepo_tracerCarrier"
-								strokeLinecap="round"
-								strokeLinejoin="round"
-							></g>
-							<g id="SVGRepo_iconCarrier">
-								<path d="M24 18.588a1.529 1.529 0 0 1-1.895-.72l-3.45-4.771-.5-.667-4.003 5.444a1.466 1.466 0 0 1-1.802.708l5.158-6.92-4.798-6.251a1.595 1.595 0 0 1 1.9.666l3.576 4.83 3.596-4.81a1.435 1.435 0 0 1 1.788-.668L21.708 7.9l-2.522 3.283a.666.666 0 0 0 0 .994l4.804 6.412zM.002 11.576l.42-2.075c1.154-4.103 5.858-5.81 9.094-3.27 1.895 1.489 2.368 3.597 2.275 5.973H1.116C.943 16.447 4.005 19.009 7.92 17.7a4.078 4.078 0 0 0 2.582-2.876c.207-.666.548-.78 1.174-.588a5.417 5.417 0 0 1-2.589 3.957 6.272 6.272 0 0 1-7.306-.933 6.575 6.575 0 0 1-1.64-3.858c0-.235-.08-.455-.134-.666A88.33 88.33 0 0 1 0 11.577zm1.127-.286h9.654c-.06-3.076-2.001-5.258-4.59-5.278-2.882-.04-4.944 2.094-5.071 5.264z"></path>
-							</g>
-						</svg>
-					</a>
-					<p className="text-center mt-3 italic">Express</p>
+					<LineDecoration title="Bot Obrolan" />
 				</div>
-
-				{/* //? Node Js Logo */}
-				<div>
-					<a href="https://nodejs.org/en" target="_blank">
-						<svg
-							width={100}
-							height={100}
-							viewBox="0 0 64 64"
-							fill="none"
-							xmlns="http://www.w3.org/2000/svg"
-							xmlnsXlink="http://www.w3.org/1999/xlink"
-						>
-							<g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
-							<g
-								id="SVGRepo_tracerCarrier"
-								strokeLinecap="round"
-								strokeLinejoin="round"
-							></g>
-							<g id="SVGRepo_iconCarrier">
-								<path fill="url(#a)" d="M0 0h64v64H0z"></path>
-								<defs>
-									<pattern
-										id="a"
-										patternContentUnits="objectBoundingBox"
-										width="1"
-										height="1"
-									>
-										<use xlinkHref="#b" transform="scale(.002)"></use>
-									</pattern>
-									<image
-										id="b"
-										width="500"
-										height="500"
-										xlinkHref="data:image/png;base64,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"
-									></image>
-								</defs>
-							</g>
-						</svg>
-					</a>
-					<p className="text-center mt-3 italic">Node Js</p>
-				</div>
-			</div>
-
-			<h2 className="text-center text-2xl mb-6">Database</h2>
-			<div className="flex gap-10 justify-center pb-4">
-				{/* //? MySql Logo */}
-				<div>
-					<a href="https://www.mysql.com/" target="_blank">
-						<svg
-							width={100}
-							height={100}
-							viewBox="-18.458 -22.75 191.151 191.151"
-							xmlns="http://www.w3.org/2000/svg"
-							fill="#000000"
-						>
-							<g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
-							<g
-								id="SVGRepo_tracerCarrier"
-								strokeLinecap="round"
-								strokeLinejoin="round"
-							></g>
-							<g id="SVGRepo_iconCarrier">
-								<path
-									d="M-18.458 6.58h191.151v132.49H-18.458V6.58z"
-									fill="none"
-								></path>
-								<path
-									d="M40.054 113.583h-5.175c-.183-8.735-.687-16.947-1.511-24.642h-.046l-7.879 24.642h-3.94l-7.832-24.642h-.045c-.581 7.388-.947 15.602-1.099 24.642H7.81c.304-10.993 1.068-21.299 2.289-30.919h6.414l7.465 22.719h.046l7.511-22.719h6.137c1.344 11.268 2.138 21.575 2.382 30.919M62.497 90.771c-2.107 11.434-4.887 19.742-8.337 24.928-2.688 3.992-5.633 5.99-8.84 5.99-.855 0-1.91-.258-3.16-.77v-2.757c.611.088 1.328.138 2.152.138 1.498 0 2.702-.412 3.62-1.238 1.098-1.006 1.647-2.137 1.647-3.388 0-.858-.428-2.612-1.282-5.268L42.618 90.77h5.084l4.076 13.19c.916 2.995 1.298 5.086 1.145 6.277 2.229-5.953 3.786-12.444 4.673-19.468h4.901v.002z"
-									fill="#5d87a1"
-								></path>
-								<path
-									d="M131.382 113.583h-14.7V82.664h4.945v27.113h9.755v3.806zM112.834 114.33l-5.684-2.805c.504-.414.986-.862 1.42-1.381 2.416-2.838 3.621-7.035 3.621-12.594 0-10.229-4.014-15.346-12.045-15.346-3.938 0-7.01 1.298-9.207 3.895-2.414 2.84-3.619 7.022-3.619 12.551 0 5.435 1.068 9.422 3.205 11.951 1.955 2.291 4.902 3.438 8.843 3.438 1.47 0 2.819-.18 4.048-.543l7.4 4.308 2.018-3.474zm-18.413-6.934c-1.252-2.014-1.878-5.248-1.878-9.707 0-7.785 2.365-11.682 7.1-11.682 2.475 0 4.289.932 5.449 2.792 1.25 2.017 1.879 5.222 1.879 9.619 0 7.849-2.367 11.774-7.099 11.774-2.476.001-4.29-.928-5.451-2.796M85.165 105.013c0 2.622-.962 4.773-2.884 6.458-1.924 1.678-4.504 2.519-7.737 2.519-3.024 0-5.956-.966-8.794-2.888l1.329-2.655c2.442 1.223 4.653 1.831 6.638 1.831 1.863 0 3.319-.413 4.375-1.232 1.055-.822 1.684-1.975 1.684-3.433 0-1.837-1.281-3.407-3.631-4.722-2.167-1.19-6.501-3.678-6.501-3.678-2.349-1.712-3.525-3.55-3.525-6.578 0-2.506.877-4.529 2.632-6.068 1.757-1.545 4.024-2.315 6.803-2.315 2.87 0 5.479.769 7.829 2.291l-1.192 2.656c-2.01-.854-3.994-1.281-5.951-1.281-1.585 0-2.809.381-3.66 1.146-.858.762-1.387 1.737-1.387 2.933 0 1.828 1.308 3.418 3.722 4.759 2.196 1.192 6.638 3.723 6.638 3.723 2.409 1.709 3.612 3.53 3.612 6.534"
-									fill="#f8981d"
-								></path>
-								<path
-									d="M137.59 72.308c-2.99-.076-5.305.225-7.248 1.047-.561.224-1.453.224-1.531.933.303.3.338.784.601 1.198.448.747 1.229 1.752 1.942 2.276.783.6 1.569 1.194 2.393 1.717 1.453.899 3.1 1.422 4.516 2.318.825.521 1.645 1.195 2.471 1.756.406.299.666.784 1.193.971v-.114c-.264-.336-.339-.822-.598-1.196l-1.122-1.082c-1.084-1.456-2.431-2.727-3.884-3.771-1.196-.824-3.812-1.944-4.297-3.322l-.076-.076c.822-.077 1.797-.375 2.578-.604 1.271-.335 2.43-.259 3.734-.594.6-.15 1.195-.338 1.797-.523v-.337c-.676-.673-1.158-1.567-1.869-2.203-1.902-1.643-3.998-3.25-6.164-4.595-1.16-.749-2.652-1.231-3.887-1.868-.445-.225-1.195-.336-1.457-.71-.67-.822-1.047-1.904-1.533-2.877-1.08-2.053-2.129-4.331-3.061-6.502-.674-1.456-1.084-2.91-1.906-4.257-3.85-6.35-8.031-10.196-14.457-13.971-1.381-.786-3.024-1.121-4.779-1.533l-2.803-.148c-.598-.262-1.197-.973-1.719-1.309-2.132-1.344-7.621-4.257-9.189-.411-1.01 2.431 1.494 4.821 2.354 6.054.635.856 1.458 1.83 1.902 2.802.263.635.337 1.309.6 1.98.598 1.644 1.157 3.473 1.943 5.007.41.782.857 1.604 1.381 2.312.3.414.822.597.936 1.272-.521.744-.562 1.867-.861 2.801-1.344 4.221-.819 9.45 1.086 12.552.596.934 2.018 2.99 3.92 2.202 1.684-.672 1.311-2.801 1.795-4.668.111-.451.038-.747.262-1.043v.073c.521 1.045 1.047 2.052 1.53 3.1 1.159 1.829 3.177 3.735 4.858 5.002.895.676 1.604 1.832 2.725 2.245V74.1h-.074c-.227-.335-.559-.485-.857-.745-.674-.673-1.42-1.495-1.943-2.241-1.566-2.093-2.952-4.41-4.182-6.801-.602-1.16-1.121-2.428-1.606-3.586-.226-.447-.226-1.121-.601-1.346-.562.821-1.381 1.532-1.791 2.538-.711 1.609-.785 3.588-1.049 5.646l-.147.072c-1.19-.299-1.604-1.53-2.056-2.575-1.119-2.654-1.307-6.914-.336-9.976.26-.783 1.385-3.249.936-3.995-.225-.715-.973-1.122-1.383-1.685-.482-.708-1.01-1.604-1.346-2.39-.896-2.091-1.347-4.408-2.312-6.498-.451-.974-1.234-1.982-1.868-2.879-.712-1.008-1.495-1.718-2.058-2.913-.186-.411-.447-1.083-.148-1.53.073-.3.225-.412.523-.487.484-.409 1.867.111 2.352.336 1.385.56 2.543 1.083 3.699 1.867.523.375 1.084 1.085 1.755 1.272h.786c1.193.26 2.538.072 3.661.41 1.979.636 3.772 1.569 5.38 2.576 4.893 3.103 8.928 7.512 11.652 12.778.447.858.637 1.644 1.045 2.539.787 1.832 1.76 3.7 2.541 5.493.785 1.755 1.533 3.547 2.654 5.005.559.784 2.805 1.195 3.812 1.606.745.335 1.905.633 2.577 1.044 1.271.783 2.537 1.682 3.732 2.543.595.448 2.465 1.382 2.576 2.13M99.484 39.844a5.82 5.82 0 0 0-1.529.188v.075h.072c.301.597.824 1.011 1.197 1.532.301.599.562 1.193.857 1.791l.072-.074c.527-.373.789-.971.789-1.868-.227-.264-.262-.522-.451-.784-.22-.374-.705-.56-1.007-.86"
-									fill="#5d87a1"
-								></path>
-								<path
-									d="M141.148 113.578h.774v-3.788h-1.161l-.947 2.585-1.029-2.585h-1.118v3.788h.731v-2.882h.041l1.078 2.882h.557l1.074-2.882v2.882zm-6.235 0h.819v-3.146h1.072v-.643h-3.008v.643h1.115l.002 3.146z"
-									fill="#f8981d"
-								></path>
-							</g>
-						</svg>
-					</a>
-					<p className="text-center mt-3 italic">MySql</p>
-				</div>
-			</div>
-
-			<div>
-				<h1 className="text-2xl text-center mt-10">Kontributor</h1>
 			</div>
 		</div>
 	);

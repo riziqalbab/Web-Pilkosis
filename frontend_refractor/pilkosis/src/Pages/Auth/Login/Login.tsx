@@ -17,7 +17,7 @@ import CButton from "@components/button";
 import Popup from "@components/popup";
 
 
-const noWa = '+628895869590'; //? chatbot
+const noWa = import.meta.env.VITE_NO_WA_CHATBOT; //? chatbot
 
 export default function LoginPage () {
 	const navigate = useNavigate();

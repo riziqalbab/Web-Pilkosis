@@ -160,12 +160,12 @@ export default function LayoutVote() {
 						<m.div 
 							key={pathname}
 							onAnimationStart={() => {
-								document.body.style.overflowY = 'hidden'
+								// document.body.style.overflowY = 'hidden'
 								document.body.style.pointerEvents = 'none'
 								toast.dismiss()
 							}}
 							onAnimationComplete={() => {
-								document.body.style.overflowY = 'auto'
+								// document.body.style.overflowY = 'auto'
 								document.body.style.pointerEvents = 'auto'
 							}}
 							initial={{ opacity: 0, y: 200 }}
