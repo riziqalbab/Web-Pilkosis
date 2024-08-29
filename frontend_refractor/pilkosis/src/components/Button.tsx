@@ -7,7 +7,7 @@ export interface ButtonProps extends Omit<MotionProps, 'style'>, Omit<React.Butt
    classname?: string,
 }
 
-const Button = ({ children, isLoading, className, ...props }: ButtonProps) => {
+const CButton = ({ children, isLoading, className, ...props }: ButtonProps) => {
    return (
       <m.button
          animate={{ background: isLoading ? '#808080' : '#FFB765'  }}
@@ -24,4 +24,4 @@ const Button = ({ children, isLoading, className, ...props }: ButtonProps) => {
    )
 }
 
-export default Button
+export default CButton

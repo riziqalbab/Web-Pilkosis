@@ -3,6 +3,7 @@ import App from "./App.tsx";
 import "./index.css";
 import {
 	createBrowserRouter,
+	defer,
 	redirect,
 	RouterProvider,
 } from "react-router-dom";
@@ -20,17 +21,15 @@ const router = createBrowserRouter([
 				index: true,
 				element: <Login />,
 				action: requestLogin,
-				loader: async () => { 
-					if (await authorizer('user', 'onLoginPage')) return redirect('/voting')
-						return false
+				loader: () => {
+					return defer({auth: authorizer('user', 'onLoginPage')})
 				},
 			},
 			{
 				path: "voting",
 				async lazy() {
 					const LayoutVote = (await import("./pages/voting/layout.tsx")).default;
-					const vote = (await import("./utils/action/vote.ts")).default;
-					return { Component: LayoutVote, loader: async () => await authorizer('user'), action: vote };
+					return { Component: LayoutVote, loader: async () => await authorizer('user') };
 				},
 				children: [
 					{
@@ -74,7 +73,7 @@ const router = createBrowserRouter([
                         },
                     }
 				]
-			},
+			}
 		],
 	},
 	{

@@ -1,4 +1,3 @@
-import { CTitle } from "@components/component";
 import { IFeedback } from "@components/icons";
 import { Form, useActionData } from "react-router-dom";
 import { useEffect, useState } from "react";

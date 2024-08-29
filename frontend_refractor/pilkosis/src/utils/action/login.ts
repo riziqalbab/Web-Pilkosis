@@ -18,11 +18,14 @@ export default async function requestLogin ({ request }: { request: Request }) {
          headers: {
             "Content-Type": "application/json",
          },
-         validateStatus: (status) => status >= 200 && status < 400
+         validateStatus: (status) => status <= 200 && status < 400
       })
       return redirect('/voting')
-   } catch (error) {
-      response = new Error((error as any).response.data.message || (error as any).message)
+   } catch (err: any) {
+      if (typeof err.response?.data === 'object')
+         response = new Error(err.response.data.message)
+      else 
+         response = new Error(err.message)
    }
 
    return response

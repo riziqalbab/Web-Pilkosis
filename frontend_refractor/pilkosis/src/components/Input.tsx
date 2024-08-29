@@ -8,7 +8,7 @@ export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
    className?: string,
 }
 
-const Input = ({ type = 'text', name, placeholder = 'input', className = '', ...props }: InputProps) => {
+const CInput = ({ type = 'text', name, placeholder = 'input', className = '', ...props }: InputProps) => {
    const [onFocus, setOnFocus] = useState(false)
    const [onFill, setOnFill] = useState(false)
 
@@ -50,4 +50,4 @@ const Input = ({ type = 'text', name, placeholder = 'input', className = '', ...
    )
 }
 
-export default Input
+export default CInput
