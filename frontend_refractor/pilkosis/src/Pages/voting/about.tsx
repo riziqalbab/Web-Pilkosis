@@ -99,7 +99,7 @@ export default function AboutVote() {
 		<div>
 			<CTitle text="Tentang" logo={<IAbout width="27" height="27" />} />
 
-			<div className="mb-20">
+			<div className="mb-20 ">
 				<h1 className="text-3xl text-center mb-10">Kontributor Sistem E-Voting <sub className="text-base italic">src: api.github.com</sub></h1>
 				<div className="grid gap-4 grid-cols-3">
 					{(!isError && profiles) &&
