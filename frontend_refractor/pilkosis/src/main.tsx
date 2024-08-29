@@ -65,6 +65,15 @@ const router = createBrowserRouter([
 					const LayoutAdmin = (await import("./pages/admin/layout.tsx")).default;
 					return { Component: LayoutAdmin };
 				},
+				children:[
+					{
+                        path: "paslon",
+                        async lazy() {
+                            const PaslonList = (await import("./pages/admin/count.tsx")).default;
+                            return { Component: PaslonList };
+                        },
+                    }
+				]
 			},
 		],
 	},
