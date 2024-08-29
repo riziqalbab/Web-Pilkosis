@@ -10,7 +10,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@types/socket.io-client": "^1.4.36",
     "axios": "^1.7.2",
+    "chart.js": "^4.4.4",
     "framer-motion": "^11.3.2",
     "localforage": "^1.10.0",
     "match-sorter": "^6.3.4",
@@ -19,7 +21,10 @@
     "react-router-dom": "^6.24.1",
     "react-rte": "^0.16.5",
     "react-toastify": "^10.0.5",
-    "sort-by": "^0.0.2"
+    "socket.io": "^4.7.5",
+    "socket.io-client": "^4.7.5",
+    "sort-by": "^0.0.2",
+    "typescript-cookie": "^1.0.6"
   },
   "devDependencies": {
     "@types/node": "^22.4.1",

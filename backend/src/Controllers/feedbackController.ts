@@ -1,5 +1,5 @@
-import express, { Request, Response, Router } from 'express';
-import FeedbackModel from '../Models/feedbackModel';
+import express, { Request, Response } from 'express';
+import FeedbackModel from '../Models/FeedbackModel';
 
 
 const router = express.Router();
