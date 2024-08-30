@@ -107,9 +107,15 @@ function Sidebar() {
 						>
 							<Link
 								className={`${
-									currentUrl == menu
+									index == 0 ? (
+										currentUrl?.includes('/voting/caksis') || currentUrl?.includes('/voting/cawaksis') || currentUrl == '/voting'
+										? "lg:pl-4"
+										: "lg:hover:pl-4 cursor-pointer"
+									) : (
+										currentUrl == menu
 										? "lg:pl-4 pointer-events-none"
 										: "lg:hover:pl-4 cursor-pointer"
+									)
 								} block w-full h-full lg:py-3 transition-[padding] duration-200`}
 								to={menu}
 							>

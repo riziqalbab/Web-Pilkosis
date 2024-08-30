@@ -140,7 +140,44 @@ export default function AboutVote() {
 									<code className="mt-2 block">"{profile.bio}"</code>
 								</p>
 							</div>
-						))}
+						))
+					}
+					<div className="border border-thirdtiary-light flex flex-col items-stretch rounded-2xl relative min-h-[30rem] shadow-md">
+						<div className="bg-thirdtiary-light w-full h-56 rounded-t-2xl relative overflow-hidden">
+							<m.div className="absolute" animate={{x: Math.random() * 200, rotate: Math.random() * 360}} transition={{duration: 1, ease: 'circInOut'}}>
+								<CImage src={decoration} />
+							</m.div>
+							<m.div className="absolute" animate={{x: Math.random() * 200, rotate: Math.random() * 360}} transition={{duration: 1, ease: 'circInOut'}}>
+								<CImage src={decoration2} />
+							</m.div>
+						</div>
+						<div className="self-center top-56 -translate-y-1/2 bg-white absolute p-2 rounded-full border-2 border-thirdtiary-light w-fit">
+							<CImage
+								src='https://avatars.githubusercontent.com/u/17940755?v=4'
+								alt='Albab Riziq'
+								className="w-40 h-40 rounded-full object-cover"
+							/>
+						</div>
+
+						<span title="klik Melihat Profilnya di Github.com" className="self-center text-accent-secondary underline underline-offset-4 font-bold mt-24">@AlbabRiziq</span>
+						<p className="self-center px-4 py-1 rounded-full border border-accent-primary mt-2">Riziq Lili Ulil Albab</p>
+						
+						<p className="px-6 mt-5">
+							Bergabung ke Github pada
+							<strong> Selasa, 08 April 2020</strong>
+						</p>
+						
+						<p className="px-6">
+							dan telah membuat
+							<strong> 17 </strong>
+							Repositori publik
+						</p>
+
+						<p className="px-6 pb-6 mt-3">
+							<strong>Tentang Saya : </strong>
+							<code className="mt-2 block">"Student"</code>
+						</p>
+					</div>
 				</div>
 			</div>
 

@@ -20,12 +20,12 @@ export default function IndexVote () {
          </h1>
 
          {/* //? CONTENTS */}
-         <div className="grid grid-cols-2 gap-10">
-            <Link to="/voting/caksis" className="group bg-thirdtiary-light z-0 text-accent-primary p-4 rounded-3xl h-96 text-center relative overflow-hidden">
+         <div className="grid sm:grid-cols-2 grid-cols-1 gap-10">
+            <Link to="/voting/caksis" className="group shadow-sm hover:shadow-lg transition-shadow duration-300 bg-thirdtiary-light z-0 text-accent-primary p-4 rounded-3xl h-96 text-center relative overflow-hidden">
                <h2 className="text-3xl leading-[24rem] group-hover:scale-150 transition-transform duration-300 z-10 font-bold">Caksis</h2>
                <CImage src={decoration} alt="decoration" className="group-hover:opacity-80 group-hover:-translate-y-4 transition-all duration-300 -z-10 opacity-45 absolute top-0 right-0 w-full h-full" />
             </Link>
-            <Link to="/voting/cawaksis" className="group bg-thirdtiary-light z-0 text-accent-primary p-4 rounded-3xl h-96 text-center relative overflow-hidden">
+            <Link to="/voting/cawaksis" className="group shadow-sm hover:shadow-lg transition-shadow duration-300 bg-thirdtiary-light z-0 text-accent-primary p-4 rounded-3xl h-96 text-center relative overflow-hidden">
                <h2 className="text-3xl leading-[24rem] group-hover:scale-150 transition-transform duration-300 z-10 font-bold">Cawaksis</h2>
                <CImage src={decoration} alt="decoration" className="group-hover:opacity-80 group-hover:-translate-y-4 transition-all duration-300 -z-10 opacity-45 absolute top-0 right-0 w-full h-full rotate-45 translate-x-40" />
             </Link>
