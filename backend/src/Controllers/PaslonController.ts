@@ -15,8 +15,7 @@ interface PaslonData {
     id?: number;
     nomor_urut: string;
     nama: string;
-    caksis: string;
-    cawaksis: string;
+    calon_jabatan:string;
     visi: string;
     misi: string;
     program_kerja: string;
@@ -55,8 +54,8 @@ io.on('connection', (socket) => {
 const router = express.Router();
 
 // Endpoint POST /paslon
-router.post('/paslon', [AdminMiddleware, uploadMiddleware.single('img')], async (req: Request, res: Response) => {
-    const { nomor_urut, nama, caksis, cawaksis, visi, misi, program_kerja } = req.body;
+router.post('/calon', [AdminMiddleware, uploadMiddleware.single('img')], async (req: Request, res: Response) => {
+    const { nomor_urut, nama, calon_jabatan, visi, misi, program_kerja } = req.body;
     const img = req.file?.filename;
 
     if (!img) {
@@ -64,7 +63,7 @@ router.post('/paslon', [AdminMiddleware, uploadMiddleware.single('img')], async 
     }
 
     try {
-        const insertResult = await paslon.insert({ nomor_urut, nama, caksis, cawaksis, visi, misi, program_kerja, img }) as PaslonData;
+        const insertResult = await paslon.insert({ nomor_urut, nama, calon_jabatan, visi, misi, program_kerja, img }) as PaslonData;
         
         // Emit data terbaru setelah insert
         const paslons = await paslon.All() as PaslonData[];
@@ -83,26 +82,51 @@ router.post('/paslon', [AdminMiddleware, uploadMiddleware.single('img')], async 
 });
 
 // Endpoint GET /paslon (Get all Paslon)
-router.get('/paslon', async (req: Request, res: Response) => {
+router.get('/caksis', async (req: Request, res: Response) => {
     try {
-        const paslons = await paslon.All() as PaslonData[];
-        res.status(200).json({
-            message: 'success',
-            data: paslons
-        });
-
+        const allPaslons = await paslon.All() as PaslonData[];
+        const filteredPaslons = allPaslons.filter(paslon => paslon.calon_jabatan === 'caksis');
+        
         // Emit data ke semua client yang terhubung
-        io.emit('updatePaslonData', paslons);
+        io.emit('updatePaslonData', filteredPaslons);
+
+        // Kirim respons ke klien
+        return res.status(200).json({
+            message: 'success',
+            data: filteredPaslons
+        });
     } catch (err: any) {
-        res.status(500).json({
+        return res.status(500).json({
             message: 'Failed to retrieve paslon data',
             error: err.message
         });
     }
 });
 
+router.get('/cawaksis', async (req: Request, res: Response) => {
+    try {
+        const allPaslons = await paslon.All() as PaslonData[];
+        const filteredPaslons = allPaslons.filter(paslon => paslon.calon_jabatan === 'cawaksis');
+        
+        // Emit data ke semua client yang terhubung
+        io.emit('updatePaslonData', filteredPaslons);
+
+        // Kirim respons ke klien
+        return res.status(200).json({
+            message: 'success',
+            data: filteredPaslons
+        });
+    } catch (err: any) {
+        return res.status(500).json({
+            message: 'Failed to retrieve paslon data',
+            error: err.message
+        });
+    }
+});
+
+
 // Endpoint DELETE /paslon/:id
-router.delete('/paslon/:id', AdminMiddleware, async (req: Request, res: Response) => {
+router.delete('/calon/:id', AdminMiddleware, async (req: Request, res: Response) => {
     const id = parseInt(req.params.id, 10);
 
     if (isNaN(id)) {
