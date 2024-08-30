@@ -40,7 +40,7 @@ function Sidebar() {
 		//? clean up current url
 		let __currentUrl = "";
 		if (rawCurrentUrl.endsWith("/"))
-			__currentUrl = rawCurrentUrl.slice(0, -1);
+			__currentUrl = rawCurrentUrl.slice(0, -1)
 		else
 			__currentUrl = rawCurrentUrl;
 
@@ -48,7 +48,9 @@ function Sidebar() {
 		Object.keys(allSidebarMenu).forEach((menu, index) => {
 			if (menu === __currentUrl)
 				setMenuYPotion(parentMenu.current?.children.item(index)?.getBoundingClientRect().y)
-			document.title = `Web Pilkosis - ${allSidebarMenu[__currentUrl].name}`
+
+			if(allSidebarMenu[__currentUrl]) 
+				document.title = `Web Pilkosis - ${allSidebarMenu[__currentUrl].name}`
 		})
 		setCurrentUrl(__currentUrl);
 	}, [rawCurrentUrl]);
