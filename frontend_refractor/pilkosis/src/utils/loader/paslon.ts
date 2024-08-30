@@ -7,7 +7,7 @@ const origin = import.meta.env.VITE_HOST_BACKEND
 export default function PaslonLoader(): any {
    if (cache.has('dataPaslon')) return defer({ dataPaslon: Promise.resolve(cache.get('dataPaslon')) })
       
-   const dataPaslon = axios.get(`${origin}/api/paslon`, { validateStatus: (status) => status >= 200 && status < 400, withCredentials: true })
+   const dataPaslon = axios.get(`${origin}/api/caksis`, { validateStatus: (status) => status >= 200 && status < 400, withCredentials: true })
       .then(res => {
          cache.set('dataPaslon', res.data.data)
          return res.data.data
