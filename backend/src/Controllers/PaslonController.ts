@@ -15,6 +15,10 @@ interface PaslonData {
     id?: number;
     nomor_urut: string;
     nama: string;
+    kelas:string;
+    ttl:string;
+    motto: string;
+    alamat: string;
     calon_jabatan:string;
     visi: string;
     misi: string;
@@ -55,7 +59,7 @@ const router = express.Router();
 
 // Endpoint POST /paslon
 router.post('/calon', [AdminMiddleware, uploadMiddleware.single('img')], async (req: Request, res: Response) => {
-    const { nomor_urut, nama, calon_jabatan, visi, misi, program_kerja } = req.body;
+    const { nomor_urut, nama, kelas,ttl,motto, alamat, calon_jabatan, visi, misi, program_kerja } = req.body;
     const img = req.file?.filename;
 
     if (!img) {
@@ -63,7 +67,7 @@ router.post('/calon', [AdminMiddleware, uploadMiddleware.single('img')], async (
     }
 
     try {
-        const insertResult = await paslon.insert({ nomor_urut, nama, calon_jabatan, visi, misi, program_kerja, img }) as PaslonData;
+        const insertResult = await paslon.insert({ nomor_urut, nama, kelas,ttl,motto, alamat ,calon_jabatan, visi, misi, program_kerja, img }) as PaslonData;
         
         // Emit data terbaru setelah insert
         const paslons = await paslon.All() as PaslonData[];

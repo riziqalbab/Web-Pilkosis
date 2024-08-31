@@ -7,7 +7,6 @@ class VotedModel extends BaseModel {
 
     public async insert(data: { user_id: number; voted_caksis?: number; voted_cawaksis?: number }): Promise<any> {
         try {
-            // Menyusun kolom dan nilai untuk query INSERT
             const columns: string[] = ['user_id'];
             const values: any[] = [data.user_id];
             
@@ -21,7 +20,6 @@ class VotedModel extends BaseModel {
                 values.push(data.voted_cawaksis);
             }
 
-            // Menyusun query INSERT
             const query = `INSERT INTO ${this.tableName} (${columns.join(', ')}) VALUES (${columns.map(() => '?').join(', ')})`;
             const [result] = await this.client.query(query, values);
             return result;
@@ -60,6 +58,7 @@ class VotedModel extends BaseModel {
             throw err;
         }
     }
+
     public async getAllVotes(): Promise<RowDataPacket[]> {
         try {
             const query = `SELECT * FROM ${this.tableName}`;
@@ -78,6 +77,28 @@ class VotedModel extends BaseModel {
             return (results[0] as any).count;
         } catch (err) {
             console.error("Error counting votes:", err);
+            throw err;
+        }
+    }
+
+    public async deleteVoteById(id: number): Promise<ResultSetHeader> {
+        try {
+            const query = `DELETE FROM ${this.tableName} WHERE ${this.primaryKey} = ?`;
+            const [result] = await this.client.query<ResultSetHeader>(query, [id]);
+            return result;
+        } catch (err) {
+            console.error("Error deleting vote:", err);
+            throw err;
+        }
+    }
+
+    public async checkUserVote(userId: number): Promise<RowDataPacket[]> {
+        try {
+            const query = `SELECT voted_caksis, voted_cawaksis FROM ${this.tableName} WHERE user_id = ? limit 1`;
+            const [results] = await this.client.query(query, [userId]);
+            return results as RowDataPacket[];
+        } catch (err) {
+            console.error("Error fetching user vote:", err);
             throw err;
         }
     }
