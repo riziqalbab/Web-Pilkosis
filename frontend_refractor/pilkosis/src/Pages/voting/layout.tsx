@@ -40,7 +40,7 @@ function Sidebar() {
 		//? clean up current url
 		let __currentUrl = "";
 		if (rawCurrentUrl.endsWith("/"))
-			__currentUrl = rawCurrentUrl.slice(0, -1);
+			__currentUrl = rawCurrentUrl.slice(0, -1)
 		else
 			__currentUrl = rawCurrentUrl;
 
@@ -48,7 +48,9 @@ function Sidebar() {
 		Object.keys(allSidebarMenu).forEach((menu, index) => {
 			if (menu === __currentUrl)
 				setMenuYPotion(parentMenu.current?.children.item(index)?.getBoundingClientRect().y)
-			document.title = `Web Pilkosis - ${allSidebarMenu[__currentUrl].name}`
+
+			if(allSidebarMenu[__currentUrl]) 
+				document.title = `Web Pilkosis - ${allSidebarMenu[__currentUrl].name}`
 		})
 		setCurrentUrl(__currentUrl);
 	}, [rawCurrentUrl]);
@@ -105,9 +107,15 @@ function Sidebar() {
 						>
 							<Link
 								className={`${
-									currentUrl == menu
+									index == 0 ? (
+										currentUrl?.includes('/voting/caksis') || currentUrl?.includes('/voting/cawaksis') || currentUrl == '/voting'
+										? "lg:pl-4"
+										: "lg:hover:pl-4 cursor-pointer"
+									) : (
+										currentUrl == menu
 										? "lg:pl-4 pointer-events-none"
 										: "lg:hover:pl-4 cursor-pointer"
+									)
 								} block w-full h-full lg:py-3 transition-[padding] duration-200`}
 								to={menu}
 							>

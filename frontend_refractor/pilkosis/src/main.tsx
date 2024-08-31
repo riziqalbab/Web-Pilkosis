@@ -36,8 +36,23 @@ const router = createBrowserRouter([
 						index: true,
 						async lazy() {
 							const IndexVote = (await import("./pages/voting/index.tsx")).default;
-							const getDataPaslon = (await import("./utils/loader/paslon.ts")).default;
-							return { Component: IndexVote, loader: getDataPaslon };
+							return { Component: IndexVote };
+						},
+					},
+					{
+						path: 'caksis',
+						async lazy() {
+							const CaksisVote = (await import("./pages/voting/caksis.tsx")).default;
+							const getCaksis = (await import("./utils/loader/caksis.ts")).default;
+							return { Component: CaksisVote, loader: getCaksis };
+						},
+					},
+					{
+						path: 'cawaksis',
+						async lazy() {
+							const CawaksisVote = (await import("./pages/voting/cawaksis.tsx")).default;
+							const getCawaksis = (await import("./utils/loader/cawaksis.ts")).default;
+							return { Component: CawaksisVote, loader: getCawaksis };
 						},
 					},
 					{
