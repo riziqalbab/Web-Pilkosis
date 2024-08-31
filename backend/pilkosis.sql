@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 18, 2024 at 08:47 PM
+-- Generation Time: Aug 31, 2024 at 03:21 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -31,10 +31,14 @@ CREATE TABLE `calon` (
   `id` int(11) NOT NULL,
   `nomor_urut` int(11) NOT NULL,
   `nama` varchar(255) NOT NULL,
-  `caksis` varchar(255) NOT NULL,
-  `cawaksis` varchar(255) NOT NULL,
+  `kelas` varchar(11) NOT NULL,
+  `ttl` text NOT NULL,
+  `motto` text NOT NULL,
+  `alamat` text NOT NULL,
+  `calon_jabatan` enum('caksis','cawaksis','','') NOT NULL,
   `visi` text DEFAULT NULL,
   `misi` text DEFAULT NULL,
+  `program_kerja` text NOT NULL,
   `img` varchar(255) NOT NULL,
   `total` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -63,7 +67,7 @@ CREATE TABLE `siswa` (
   `nama` varchar(255) NOT NULL,
   `paswd` varchar(255) NOT NULL,
   `pilihan` int(11) DEFAULT NULL,
-  `role_user` enum('admin','user') DEFAULT NULL,
+  `role_user` enum('admin','user','khusus') DEFAULT NULL,
   `ayah` varchar(255) DEFAULT NULL,
   `ibu` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -88,8 +92,10 @@ CREATE TABLE `tokens` (
 CREATE TABLE `voted` (
   `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
-  `paslon_id` int(11) NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+  `paslon_id` int(11) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `voted_caksis` int(11) DEFAULT NULL,
+  `voted_cawaksis` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --

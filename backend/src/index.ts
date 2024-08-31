@@ -20,17 +20,19 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
     cors: {
-        origin: '*', // Replace with your frontend's origin or keep '*' for all origins
+        origin: 'http://localhost:5173', // Replace with your frontend's origin or keep '*' for all origins
         methods: ['GET', 'POST'],
-        allowedHeaders: ['Content-Type']
+        credentials: true,
+        
     }
 });
 
 app.use(bodyParser.json());
 app.use(cors({
-    origin: '*', // Replace with your frontend's origin or keep '*' for all origins
+    origin: 'http://localhost:5173', // Replace with your frontend's origin or keep '*' for all origins
     methods: ['GET', 'POST'],
-    allowedHeaders: ['Content-Type']
+    credentials: true,
+    
 }));
 app.use(cookieParser());
 

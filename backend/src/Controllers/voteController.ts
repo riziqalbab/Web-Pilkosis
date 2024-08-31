@@ -14,7 +14,7 @@ router.use(cookieParser());
 router.post("/vote", AuthorizationMiddleware, async (req: CustomRequest, res: Response) => {
     const paslonId = Number(req.query.id); 
     const userId = Number(req.user?.id);
-    const voteType = req.query.type as string;  // 'caksis' or 'cawaksis'
+    const voteType = req.query.type as string;  
 
     if (!userId || isNaN(paslonId) || !voteType) {
         return res.status(400).json({
@@ -49,10 +49,10 @@ router.post("/vote", AuthorizationMiddleware, async (req: CustomRequest, res: Re
         }
 
         if (existingVote.length > 0) {
-            // Update existing vote record
+            
             await votedModel.update(updateData, userId);
         } else {
-            // Insert new vote record
+ 
             await votedModel.insert({ user_id: userId, ...updateData });
         }
 
@@ -66,7 +66,7 @@ router.post("/vote", AuthorizationMiddleware, async (req: CustomRequest, res: Re
         });
     }
 });
-router.get("/voted", [AuthorizationMiddleware, RoleMiddleware(['admin', 'khusus'])], async (req: CustomRequest, res: Response) => {
+router.get("/voted", [AuthorizationMiddleware, RoleMiddleware(['admin', 'khusus','user'])], async (req: CustomRequest, res: Response) => {
     try {
         const votes = await votedModel.getAllVotes();
         const totalVotes = await votedModel.countVotes();
@@ -82,6 +82,37 @@ router.get("/voted", [AuthorizationMiddleware, RoleMiddleware(['admin', 'khusus'
             error: err.message
         });
     }
+
 });
+router.delete("/voted/:id", [AuthorizationMiddleware, RoleMiddleware(['admin', 'khusus'])], async (req: CustomRequest, res: Response) => {
+    try {
+        const voteId = parseInt(req.params.id, 10); 
+
+        if (isNaN(voteId)) {
+            return res.status(400).json({
+                message: "Invalid vote ID"
+            });
+        }
+
+        const deletedVote = await votedModel.deleteVoteById(voteId);
+
+        if (deletedVote.affectedRows > 0) {
+            return res.status(200).json({
+                message: "Vote deleted successfully"
+            });
+        } else {
+            return res.status(404).json({
+                message: "Vote not found"
+            });
+        }
+    } catch (err: any) {
+        return res.status(500).json({
+            message: "Internal server error",
+            error: err.message
+        });
+    }
+});
+
+
 
 export default router;
