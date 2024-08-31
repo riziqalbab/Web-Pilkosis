@@ -81,6 +81,17 @@ class VotedModel extends BaseModel {
             throw err;
         }
     }
+
+    public async checkUserVote(userId: number): Promise<RowDataPacket[]> {
+        try {
+            const query = `SELECT voted_caksis, voted_cawaksis FROM ${this.tableName} WHERE user_id = ? limit 1`;
+            const [results] = await this.client.query(query, [userId]);
+            return results as RowDataPacket[];
+        } catch (err) {
+            console.error("Error fetching user vote:", err);
+            throw err;
+        }
+    }
 }
 
 export default VotedModel;

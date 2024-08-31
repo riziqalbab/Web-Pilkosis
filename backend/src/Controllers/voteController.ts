@@ -84,4 +84,27 @@ router.get("/voted", [AuthorizationMiddleware, RoleMiddleware(['admin', 'khusus'
     }
 });
 
+router.get('/checkUserVote', AuthorizationMiddleware, async (req: CustomRequest, res: Response) => {
+    const userId = Number(req.user?.id);
+
+    if (!userId) {
+        return res.status(400).json({
+            message: "User not authenticated"
+        });
+    }
+
+    try {
+        const userVote = await votedModel.checkUserVote(userId);
+        return res.status(200).json({
+            message: "Success",
+            data: userVote.length != 0 ? userVote[0] : {voted_caksis: undefined, voted_cawaksis: undefined}
+        });
+    } catch (err: any) {
+        return res.status(500).json({
+            message: "Internal server error",
+            error: err.message
+        });
+    }
+});
+
 export default router;
