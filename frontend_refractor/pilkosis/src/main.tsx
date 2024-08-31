@@ -29,7 +29,8 @@ const router = createBrowserRouter([
 				path: "voting",
 				async lazy() {
 					const LayoutVote = (await import("./pages/voting/layout.tsx")).default;
-					return { Component: LayoutVote, loader: async () => await authorizer('user') };
+					const checkUserVote = (await import("./utils/loader/isAlreadyVote.ts")).default;
+					return { Component: LayoutVote, loader: checkUserVote };
 				},
 				children: [
 					{

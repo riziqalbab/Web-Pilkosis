@@ -10,12 +10,11 @@ export default function FeedbackVote() {
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-		console.log(actionData)
         if (actionData) {
             if (actionData instanceof Error) {
-                toast.error(actionData.message);
+                toast.error(actionData.message, { containerId: 'feedback' });
             } else {
-                toast.success("Umpan balik berhasil dikirim!")
+                toast.success("Umpan balik berhasil dikirim!", { containerId: 'feedback' })
             }
             setLoading(false);
         }
@@ -88,6 +87,8 @@ export default function FeedbackVote() {
                 </div>
             </div>
             <ToastContainer
+                containerId='feedback'
+                key='feedback'
                 position="top-center"
                 autoClose={5000}
                 hideProgressBar={false}

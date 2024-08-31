@@ -40,7 +40,7 @@ export default function Popup (): [React.FC<PopupProps>, (options?: PopupProps) 
                initial={{ y: -100, opacity: 0 }}
                animate={{ y: _options._open ? 0 : -100, opacity: _options._open ? 1 : 0 }}
                transition={{ duration: 0.3, ease: 'anticipate' }}
-               className="p-6 bg-thirdtiary z-50 shadow-xl rounded-xl min-w-96 max-w-[40rem]"
+               className="p-6 bg-thirdtiary z-50 shadow-xl rounded-xl lg:min-w-96 max-w-[40rem]"
             >
                {_options.children ? _options.children : (
                   <>

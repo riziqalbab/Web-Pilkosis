@@ -1,7 +1,7 @@
 import { m, MotionProps } from "framer-motion"
 import { ILoading } from "@components/icons"
 
-export interface ButtonProps extends Omit<MotionProps, 'style'>, Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'onDrag' | 'onDragEnd' | 'onDragStart' | 'style' | 'onAnimationStart'> {
+export interface ButtonProps extends MotionProps, Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'onDrag' | 'onDragEnd' | 'onDragStart' | 'style' | 'onAnimationStart'> {
    children: React.ReactNode,
    isLoading?: boolean,
    classname?: string,

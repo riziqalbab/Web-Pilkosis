@@ -59,10 +59,10 @@ interface GithubApiResponse {
 }
 
 const LineDecoration = ({ title, reverse = false }: { title: string, reverse?: boolean }) => (
-	<div className="relative h-28 w-2">
+	<div className="relative h-28 w-2 lg:block hidden">
 		<div className={`${reverse ? '-translate-x-full left-2' : 'origin-left'} absolute`}>
-			<div className="relative h-28 w-96">
-				<h2 className={`${reverse ? 'left-0' : 'right-0'} absolute text-center text-2xl font-light mb-6 bottom-0`}>{ title }</h2>
+			<div className="relative h-28 xl:w-96 w-72">
+				<h2 className={`${reverse ? 'left-0' : 'right-0'} absolute text-center xl:text-2xl text-lg font-light mb-6 bottom-0`}>{ title }</h2>
 				<div className={`${reverse ? 'right-0' : 'left-0'} absolute top-0 w-4 h-4 rounded-full bg-primary`} />
 				<div className={`${reverse ? 'rotate-[-55deg] origin-right right-1.5' : 'rotate-[55deg] origin-left left-1.5'} absolute top-1 w-32 h-1 rounded-full bg-primary`} />
 				<div className={`${reverse ? 'right-[4.8rem] origin-right' : 'left-[4.8rem] origin-left'} absolute bottom-0 w-80 h-1 rounded-full bg-primary`} />
@@ -83,17 +83,18 @@ export default function AboutVote() {
 			if (profilesCount === 0) {
 				githubProfiles.forEach((profile) => {
 					profile.then((res) => {
-						setProfiles((prev) => [...prev, res]);
-					});
-				});
+						if (res instanceof Error) {
+							setIsError(true)
+							setProfiles([])
+						} else {
+							setProfiles((prev) => [...prev, res]);
+						}
+					})
+				})
 			}
 			setProfilesCount(githubProfiles.length)
 		}
 	}, [githubProfiles]);
-
-	useEffect(() => {
-		console.log(profiles);
-	}, [profiles]);
 
 	return (
 		<div>
@@ -101,9 +102,9 @@ export default function AboutVote() {
 
 			<div className="mb-20 ">
 				<h1 className="text-3xl text-center mb-10">Kontributor Sistem E-Voting <sub className="text-base italic">src: api.github.com</sub></h1>
-				<div className="grid gap-4 grid-cols-3">
-					{(!isError && profiles) &&
-						profiles.map((profile, index) => (
+				<div className="grid gap-4 2xl:grid-cols-3 xl:grid-cols-2 grid-col-1">
+					{profiles ? (
+						!isError ? profiles.map((profile, index) => (
 							<div key={index} className="border border-thirdtiary-light flex flex-col items-stretch rounded-2xl relative min-h-[30rem] shadow-md">
 								<div className="bg-thirdtiary-light w-full h-56 rounded-t-2xl relative overflow-hidden">
 									<m.div className="absolute" animate={{x: Math.random() * 200, rotate: Math.random() * 360}} transition={{duration: 1, ease: 'circInOut'}}>
@@ -140,7 +141,11 @@ export default function AboutVote() {
 									<code className="mt-2 block">"{profile.bio}"</code>
 								</p>
 							</div>
-						))
+						)) : (
+							<FallbackErrorContent message="Gagal memuat profile" />
+						)) : (
+							<FallbackLoadContent />
+						)
 					}
 					<div className="border border-thirdtiary-light flex flex-col items-stretch rounded-2xl relative min-h-[30rem] shadow-md">
 						<div className="bg-thirdtiary-light w-full h-56 rounded-t-2xl relative overflow-hidden">
@@ -185,95 +190,98 @@ export default function AboutVote() {
 			<div className="2xl:px-5">
 				<h1 className="text-3xl mb-10 text-center">Sistem E-Voting Ini di Buat Dengan...</h1>
 
-				<div className="flex justify-between">
+				<div className="flex flex-col lg:items-stretch items-center mb-10">
 					{/* //? Programming Language */}
 					<div className="flex flex-col items-center w-fit">
+						<h2 className="text-center text-xl mb-8 mt-4 block lg:hidden">Bahasa Pemrograman</h2>
 						<div className="mb-5">
 							{/* //? Typescript Logo */}
 							<div className="w-fit">
 								<a href="https://www.typescriptlang.org/" target="_blank">
-									<CImage className="w-28 h-28 object-cover" src={typescriptLogo} alt="Typescript Logo" />
+									<CImage className="xl:w-28 xl:h-28 w-20 h-20 object-cover" src={typescriptLogo} alt="Typescript Logo" />
 								</a>
-								<p className="text-center mt-3 italic">Typescript</p>
+								<p className="text-center mt-3 xl:text-base text-sm italic">Typescript</p>
 							</div>
 						</div>
 						<LineDecoration title="Bahasa Pemrograman" />
 					</div>
 
 					{/* //?Frontend Technology */}
-					<div className="flex flex-col items-center w-fit mt-20">
-						<div className="w-fit flex justify-center gap-16 mb-5">
+					<div className="flex flex-col items-center w-fit mt-10 lg:ml-auto">
+						<h2 className="text-center text-xl mb-8 mt-4 block lg:hidden">Teknologi Sisi Klien</h2>
+						<div className="w-fit flex justify-center gap-16 mb-5 flex-wrap">
 							{/* //? React Logo */}
 							<div className="w-fit">
 								<a href="https://vitejs.dev/" target="_blank" className="relative">
-									<CImage className="w-28 h-28 object-cover" src={reactLogo} alt="React Logo" />
-									<CImage className="w-14 h-14 object-cover absolute bottom-0 right-0" src={viteLogo} alt="Vite Logo" />
+									<CImage className="xl:w-28 xl:h-28 w-20 h-20 object-cover" src={reactLogo} alt="React Logo" />
+									<CImage className="xl:w-14 xl:h-14 w-10 h-10 object-cover absolute bottom-0 right-0" src={viteLogo} alt="Vite Logo" />
 								</a>
-								<p className="text-center mt-3 italic">Vite + React</p>
+								<p className="text-center mt-3 xl:text-base text-sm italic">Vite + React</p>
 							</div>
 
 							{/* //? Vite Logo */}
 							<div className="w-fit">
 								<a href="https://reactrouter.com/" target="_blank">
-									<CImage className="w-28 h-28 object-cover" src={reactRouterLogo} alt="React Router DOM Logo" />
+									<CImage className="xl:w-28 xl:h-28 w-20 h-20 object-cover" src={reactRouterLogo} alt="React Router DOM Logo" />
 								</a>
-								<p className="text-center mt-3 italic">React Router DOM</p>
+								<p className="text-center mt-3 xl:text-base text-sm italic">React Router <br /> DOM</p>
 							</div>
 
 							{/* //? Tailwind Logo */}
 							<div className="w-fit">
 								<a href="https://tailwindcss.com/" target="_blank">
-									<CImage className="w-28 h-28 object-cover" src={tailwindLogo} alt="Tailwind Logo" />
+									<CImage className="xl:w-28 xl:h-28 w-20 h-20 object-cover" src={tailwindLogo} alt="Tailwind Logo" />
 								</a>
-								<p className="text-center mt-3 italic">Tailwind Css</p>
+								<p className="text-center mt-3 xl:text-base text-sm italic">Tailwind Css</p>
 							</div>
 
 							{/* //?Framer Motion Logo */}
 							<div className="w-fit">
 								<a href="https://www.framer.com/motion/" target="_blank">
-									<CImage className="w-28 h-28 object-cover" src={framerMotionLogo} alt="Framer Motion Logo" />
+									<CImage className="xl:w-28 xl:h-28 w-20 h-20 object-cover" src={framerMotionLogo} alt="Framer Motion Logo" />
 								</a>
-								<p className="text-center mt-3 italic">Framer Motion</p>
+								<p className="text-center mt-3 xl:text-base text-sm italic">Framer Motion</p>
 							</div>
 						</div>
 						<LineDecoration title="Teknologi Sisi Klien" reverse />
 					</div>
 				</div>
 
-				<div className="flex justify-between">
+				<div className="flex flex-col lg:items-stretch items-center mb-10">
 					{/* //? Backend Technology */}
 					<div className="flex flex-col w-fit items-center">
-						<div className="flex gap-16 justify-center pb-4 mb-5">
+						<h2 className="text-center text-xl mb-8 mt-4 block lg:hidden">Teknologi Sisi Server</h2>
+						<div className="flex gap-16 justify-center pb-4 mb-5 flex-wrap">
 							{/* //? Express Js Logo */}
 							<div>
 								<a href="https://expressjs.com/" target="_blank">
-									<CImage className="w-28 h-28 object-cover" src={expressLogo} alt="Express Logo" />
+									<CImage className="xl:w-28 xl:h-28 w-20 h-20 object-cover" src={expressLogo} alt="Express Logo" />
 								</a>
-								<p className="text-center mt-3 italic">Express</p>
+								<p className="text-center mt-3 xl:text-base text-sm italic">Express</p>
 							</div>
 
 							{/* //? Node Js Logo */}
 							<div>
 								<a href="https://nodejs.org/en" target="_blank">
-									<CImage className="w-28 h-28 object-cover" src={nodeJsLogo} alt="Node Js Logo" />
+									<CImage className="xl:w-28 xl:h-28 w-20 h-20 object-cover" src={nodeJsLogo} alt="Node Js Logo" />
 								</a>
-								<p className="text-center mt-3 italic">Node Js</p>
+								<p className="text-center mt-3 xl:text-base text-sm italic">Node Js</p>
 							</div>
 
 							{/* //? JWT Logo */}
 							<div>
 								<a href="https://jwt.io/" target="_blank">
-									<CImage className="w-28 h-28 object-cover" src={jwtLogo} alt="JWT Logo" />
+									<CImage className="xl:w-28 xl:h-28 w-20 h-20 object-cover" src={jwtLogo} alt="JWT Logo" />
 								</a>
-								<p className="text-center mt-3 italic">JSON Web Token</p>
+								<p className="text-center mt-3 xl:text-base text-sm italic">JSON Web <br /> Token</p>
 							</div>
 							
 							{/* //? SOCKET IO Logo */}
 							<div>
 								<a href="https://socket.io/" target="_blank">
-									<CImage className="w-28 h-28 object-cover" src={socketIO} alt="Socket Io Logo" />
+									<CImage className="xl:w-28 xl:h-28 w-20 h-20 object-cover" src={socketIO} alt="Socket Io Logo" />
 								</a>
-								<p className="text-center mt-3 italic">Socket.Io</p>
+								<p className="text-center mt-3 xl:text-base text-sm italic">Socket.Io</p>
 							</div>
 						</div>
 						
@@ -281,25 +289,27 @@ export default function AboutVote() {
 					</div>
 
 					{/* //? Database */}
-					<div className="flex flex-col items-center w-fit mt-20">
+					<div className="flex flex-col items-center w-fit mt-5 lg:ml-auto">
 						{/* //? MySql Logo */}
+						<h2 className="text-center text-xl mb-8 mt-4 block lg:hidden">Basis Data</h2>
 						<div className="mb-5">
 							<a href="https://www.mysql.com/" target="_blank">
-								<CImage className="w-28 h-28 object-cover" src={mysqlLogo} alt="MySql Logo" />
+								<CImage className="xl:w-28 xl:h-28 w-20 h-20 object-cover" src={mysqlLogo} alt="MySql Logo" />
 							</a>
-							<p className="text-center mt-3 italic">MySql</p>
+							<p className="text-center mt-3 xl:text-base text-sm italic">MySql</p>
 						</div>
 						<LineDecoration title="Basis Data" reverse />
 					</div>
 				</div>
 
 
-				<div className="flex flex-col items-center w-fit">
+				<div className="flex flex-col items-center lg:w-fit mb-10">
+					<h2 className="text-center text-xl mb-8 mt-4 block lg:hidden">Bot Obrolan</h2>
 					<div className="mb-5">
 						<a href="https://wwebjs.dev/" target="_blank">
-							<CImage className="w-28 h-28 object-cover" src={waWebJs} alt="WaWebJs Logo" />
+							<CImage className="xl:w-28 xl:h-28 w-20 h-20 object-cover" src={waWebJs} alt="WaWebJs Logo" />
 						</a>
-						<p className="text-center mt-3 italic">WhatsApp Web Js</p>
+						<p className="text-center mt-3 xl:text-base text-sm italic">WhatsApp <br /> Web Js</p>
 					</div>
 
 					<LineDecoration title="Bot Obrolan" />

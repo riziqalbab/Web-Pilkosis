@@ -5,3 +5,17 @@
 body {
    overflow-x: hidden;
 }
+
+#displayer * {
+   appearance: initial;
+   inset: initial;
+   margin: initial;
+   padding: initial;   
+}
+
+#displayer ol, 
+#displayer ul { 
+   list-style-type: lower-latin; 
+   list-style-position: inside; 
+   margin-left: 15px; 
+}

@@ -5,7 +5,7 @@ const githubAccessToken = import.meta.env.VITE_GITHUB_ACCESS_TOKEN
 
 //? list github username
 const contributors = [
-   'Eathen0', 'tegaradit'
+   'tegaradit', 'Eathen0'
 ]
 export default function GetGithubProfiles () {
    if (!cache.get('githubProfiles')) {

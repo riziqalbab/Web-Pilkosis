@@ -2,7 +2,7 @@ import decorations from "@assets/svg/decorations.svg";
 import { IAbout, IFeedback, ILogout, IThumbsUp } from "@components/icons";
 import { AnimatePresence, m } from "framer-motion";
 import { cloneElement, useEffect, useRef, useState } from "react";
-import { Link, useLoaderData, useLocation, useNavigate, useOutlet } from "react-router-dom";
+import { Link, useLocation, useNavigate, useOutlet } from "react-router-dom";
 import { Bounce, toast, ToastContainer } from "react-toastify";
 import '@toastifyCss'
 import axios from "axios";
@@ -67,6 +67,9 @@ function Sidebar() {
 			,{
 				error: 'Logout gagal, silahkan coba lagi',
 				pending: 'Sedang logout, mohon tunggu',
+			},
+			{
+				containerId: 'layout'
 			}
 		)
 	}
@@ -138,6 +141,9 @@ function Sidebar() {
 			</div>
 
 			<ToastContainer
+				containerId='layout'
+				key='layout'
+				className='z-10'
 				position="top-center"
 				autoClose={5000}
 				hideProgressBar={false}
@@ -156,8 +162,7 @@ function Sidebar() {
 
 export default function LayoutVote() {
 	const { pathname } = useLocation();
-	const loginData = useLoaderData();
-	const element = useOutlet({loginData});
+	const element = useOutlet();
 
 	return (
 		<div className="lg:pl-80 lg:mb-0 mb-16">
@@ -170,7 +175,7 @@ export default function LayoutVote() {
 							onAnimationStart={() => {
 								// document.body.style.overflowY = 'hidden'
 								document.body.style.pointerEvents = 'none'
-								toast.dismiss()
+								// toast.dismiss()
 							}}
 							onAnimationComplete={() => {
 								// document.body.style.overflowY = 'auto'
