@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { Chart, BarElement, CategoryScale, LinearScale, Title, Tooltip, Legend, BarController } from 'chart.js';
-import { io } from 'socket.io-client';
+import io from 'socket.io-client';
 
 
 Chart.register(BarElement, BarController, CategoryScale, LinearScale, Title, Tooltip, Legend);

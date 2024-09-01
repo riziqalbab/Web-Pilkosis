@@ -1,5 +1,4 @@
 import { Outlet } from "react-router-dom";
-// import Auth from './Middleware/Auth'
 import { domAnimation, LazyMotion } from "framer-motion";
 
 function App() {

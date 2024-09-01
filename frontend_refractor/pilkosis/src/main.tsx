@@ -7,22 +7,25 @@ import {
 	redirect,
 	RouterProvider,
 } from "react-router-dom";
-import Login from "./pages/auth/login/login.tsx";
-import requestLogin from "@utils/action/login.ts";
 import NotFound from "@pages/notFound.tsx";
 import authorizer from "@utils/authorizer.ts";
+import PageErrorFallback from "@components/pageErrorFallback.tsx";
 
 const router = createBrowserRouter([
 	{
 		path: "/",
 		element: <App />,
+		errorElement: <PageErrorFallback />,
 		children: [
 			{
 				index: true,
-				element: <Login />,
-				action: requestLogin,
-				loader: () => {
-					return defer({auth: authorizer('user', 'onLoginPage')})
+				async lazy () {
+					const Index = (await import("./pages/auth/login/login.tsx")).default;
+					const action = (await import("@utils/action/login.ts")).default;
+					const loader = () => {
+						return defer({auth: authorizer('*', 'onLoginPage')})
+					}
+					return { Component: Index, action, loader };
 				},
 			},
 			{
@@ -79,16 +82,41 @@ const router = createBrowserRouter([
 				path: "admin",
 				async lazy() {
 					const LayoutAdmin = (await import("./pages/admin/layout.tsx")).default;
-					return { Component: LayoutAdmin };
+					const authorize = () => authorizer('admin');
+					return { Component: LayoutAdmin, loader: authorize };
 				},
-				children:[
+				children: [
 					{
-                        path: "paslon",
-                        async lazy() {
-                            const PaslonList = (await import("./pages/admin/count.tsx")).default;
-                            return { Component: PaslonList };
-                        },
-                    }
+						path: "paslon",
+						async lazy() {
+								const PaslonList = (await import("./pages/admin/count.tsx")).default;
+								return { Component: PaslonList };
+						},
+					}
+				]
+			},
+			{
+				path: 'panitia',
+				async lazy() {
+					const LayoutPanitia = (await import("./pages/panitia/layout.tsx")).default;
+					const loadDetailVote = (await import("./utils/loader/detailVote.ts")).default;
+					return { Component: LayoutPanitia, loader: loadDetailVote };
+				},
+				children: [
+					{
+						index: true,
+						async lazy() {
+							const ChartVote = (await import("./pages/panitia/index.tsx")).default;
+							return { Component: ChartVote };
+						},
+					},
+					{
+						path: 'detail-vote',
+						async lazy() {
+							const DetailVote = (await import("./pages/panitia/detailVote.tsx")).default;
+							return { Component: DetailVote };
+						}
+					}
 				]
 			}
 		],

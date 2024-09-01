@@ -57,7 +57,7 @@ export default async function <T = any>({
 				Authorization: 'Bearer ' + cache.get('accessToken')
 			},
          ...axiosOptions,
-      }).then(async res => {
+      }).then(async (res: AxiosResponse<T>) => {
 			if (tryAgainWhenStatus.includes(res.status)) {
 				limitCounter++;
 				if (limitCounter <= limit)

@@ -2,23 +2,23 @@ import { IChart, ILogout, IThumbsUp } from "@components/icons";
 import Popup from "@components/popup";
 import cache from "@utils/cache";
 import axios from "axios";
-import { AnimatePresence, m } from "framer-motion";
 import { cloneElement, useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate, useOutlet } from "react-router-dom";
 import { Bounce, toast, ToastContainer } from "react-toastify";
 import decorations from '@assets/svg/decorations.svg'
+import { AnimatePresence, m } from "framer-motion";
 
 const origin = import.meta.env.VITE_HOST_BACKEND;
 
 //? this list will be show with the same ordered
 const allSidebarMenu: { [key: string]: { name: string; icon: JSX.Element } } = {
-	'/admin': {
-		name: 'admin',
-		icon: <IThumbsUp width="30" height="30" className="inline lg:mr-4" />
+	'/panitia': {
+		name: 'grafik vote',
+		icon: <IChart width="30" height="30" className="inline lg:mr-4" />
 	},
-	'/admin/paslon' : {
-		name: 'paslon',
-		icon: <IChart width="25" height="25" className="inline lg:mr-4" />
+	'/panitia/detail-vote' : {
+		name: 'detail vote',
+		icon: <IThumbsUp width="25" height="25" className="inline lg:mr-4" />
 	},
 }
 
@@ -64,7 +64,7 @@ function Sidebar() {
 				pending: 'Sedang logout, mohon tunggu',
 			},
 			{
-				containerId: 'layout-admin'
+				containerId: 'layout-panitia'
 			}
 		)
 	}
@@ -105,9 +105,9 @@ function Sidebar() {
 						>
 							<Link
 								className={`${
-                                    currentUrl == menu
-                                    ? "lg:pl-4 pointer-events-none"
-                                    : "lg:hover:pl-4 cursor-pointer"
+                           currentUrl == menu
+                           ? "lg:pl-4 pointer-events-none"
+                           : "lg:hover:pl-4 cursor-pointer"
 								} block w-full h-full lg:py-3 transition-[padding] duration-200`}
 								to={menu}
 							>
@@ -130,7 +130,7 @@ function Sidebar() {
 			</div>
 
 			<ToastContainer
-				containerId='layout-admin'
+				containerId='layout-panitia'
 				key='layout'
 				className='z-10'
 				position="top-center"
@@ -149,9 +149,8 @@ function Sidebar() {
 	);
 }
 
-
-export default function LayoutAdmin () {
-    const { pathname } = useLocation();
+export default function LayoutPanitia() {
+   const { pathname } = useLocation();
 	const element = useOutlet();
 
 	return (

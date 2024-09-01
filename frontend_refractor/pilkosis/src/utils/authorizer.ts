@@ -14,10 +14,14 @@ interface ResponseRequest {
 	data: UserData
 }
 
-export default async function authorizer (type: ('user' | 'admin') = 'user', onPageLogin?: 'onLoginPage') {
+export default async function authorizer (type: ('user' | 'admin' | 'panitia' | '*') = 'user', onPageLogin?: 'onLoginPage') {
 	if (cache.has('accessToken') && cache.has('userData')) {
-		if (type === 'admin' && cache.get('userData')?.role !== 'admin')
-			return redirect('/not-found')
+		if (type !== '*') {
+			if (type === 'admin' && cache.get('userData')?.role !== 'admin')
+				return redirect('/not-found')
+			if (type === 'panitia' && cache.get('userData')?.role !== 'khusus')
+				return redirect('/not-found')
+		}
 
 		return [cache.get('accessToken'), cache.get('userData')]
 	}
@@ -26,12 +30,18 @@ export default async function authorizer (type: ('user' | 'admin') = 'user', onP
 		.then(({ data }: { data: ResponseRequest }) => {
 			cache.set('accessToken', data.accessToken)
 			cache.set('userData', data.data)
-			if (type === 'admin' && cache.get('userData')?.role !== 'admin')
-				return redirect('/not-found')
+			console.log(data.data);
+
+			if (type !== '*') {
+				if (type === 'admin' && cache.get('userData')?.role !== 'admin')
+					return redirect('/not-found')
+				if (type === 'panitia' && cache.get('userData')?.role !== 'khusus')
+					return redirect('/not-found')
+			}
 
 			return [cache.get('accessToken'), cache.get('userData')]
 		})
-		.catch((err: Error) => { //? this section will be called if the user is not logged in or the refresh token is expired
+		.catch(() => { //? this section will be called if the user is not logged in or the refresh token is expired
 			if (onPageLogin) return false
 			return redirect('/')
 		})

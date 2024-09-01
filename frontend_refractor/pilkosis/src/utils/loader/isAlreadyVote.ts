@@ -1,3 +1,4 @@
+import authorizer from "@utils/authorizer";
 import cache from "@utils/cache";
 import tryRequest from "@utils/tryRequest";
 
@@ -16,6 +17,13 @@ export default async function isAlreadyVote(): Promise<ApiResponseData | Error> 
       apiEndPoint: '/api/checkUserVote',
       axiosOptions: {
          method: 'get',
+      },
+      async tryAgainCallback(_, tryAgain) {
+         cache.delete('accessToken')
+         const auth = await authorizer('user')
+         if (Array.isArray(auth)) //? if the authorizer is successfull the return value will be an array
+            return tryAgain()
+         return auth
       },
       onSucceed(res) {
          const result = (res.data as ApiResponse).data

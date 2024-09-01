@@ -24,8 +24,17 @@ export default function LoginPage () {
 	const authResult = (useLoaderData() as {auth: Promise<any>}).auth;
 	const actionData = useActionData();
 	useEffect(() => {
-		authResult.then(() => {
-			navigate('/voting')
+		authResult.then((res) => {
+			if (Array.isArray(res)) {
+				switch (res[1].role) {
+					case 'admin':
+						return navigate('/admin')
+					case 'khusus': //? panitia
+						return navigate('/panitia')
+					default: //? user
+						return navigate('/voting')
+				}
+			}
 		})
 		document.title = "Web Pilkosis - Login";
 	}, []);

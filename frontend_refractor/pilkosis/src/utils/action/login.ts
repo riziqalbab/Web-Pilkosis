@@ -1,3 +1,4 @@
+import authorizer from "@utils/authorizer";
 import axios from "axios";
 import { redirect } from "react-router-dom";
 const origin = import.meta.env.VITE_HOST_BACKEND
@@ -20,7 +21,19 @@ export default async function requestLogin ({ request }: { request: Request }) {
          },
          validateStatus: (status) => status <= 200 && status < 400
       })
-      return redirect('/voting')
+
+      const auth = await authorizer('*', 'onLoginPage')
+      if (Array.isArray(auth)) {
+         switch (auth[1].role) {
+            case 'admin':
+               return redirect('/admin')
+            case 'khusus': //? panitia
+               return redirect('/panitia')
+            default: //? user
+               return redirect('/voting')
+         }
+      } else
+         return auth
    } catch (err: any) {
       if (typeof err.response?.data === 'object')
          response = new Error(err.response.data.message)
