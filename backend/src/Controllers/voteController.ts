@@ -49,12 +49,13 @@ router.post("/vote", AuthorizationMiddleware, async (req: CustomRequest, res: Re
         }
 
         if (existingVote.length > 0) {
-            
             await votedModel.update(updateData, userId);
         } else {
  
             await votedModel.insert({ user_id: userId, ...updateData });
         }
+
+        await votedModel.updateTotalInCalon(paslonId)
 
         return res.status(200).json({
             message: `Vote for ${voteType} cast successfully`
