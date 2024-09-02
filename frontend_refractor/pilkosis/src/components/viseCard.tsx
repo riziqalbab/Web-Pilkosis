@@ -25,7 +25,7 @@ export default function ViseCard ({ data, isLoadingVote, handdleVote, isAlreadyV
          <Cpopup>
             <CImage src={data.img} alt={data.nama} className="aspect-square w-screen object-cover" />
          </Cpopup>
-         <div className="md:max-w-72 h-auto bg-thirdtiary-light overflow-hidden md:rounded-xl rounded-t-xl shadow-md flex flex-col">
+         <div className="md:max-w-72 md:min-w-72 h-auto bg-thirdtiary-light overflow-hidden md:rounded-xl rounded-t-xl shadow-md flex flex-col">
             <div className="sm:w-72 w-full cursor-pointer self-stretch sm:self-center md:self-stretch mt-0 sm:mt-4 md:mt-0" onClick={() => trigertPopup()}>
                <CImage src={data.img} alt={data.nama} className="aspect-square w-full h-full object-cover cursor-pointer rounded-none sm:rounded-xl md:stroke-none" />
             </div>
@@ -56,7 +56,7 @@ export default function ViseCard ({ data, isLoadingVote, handdleVote, isAlreadyV
                   </ul>
                </div>
             </div>
-            {Number.isInteger(isAlreadyVoted) && 
+            {!Number.isInteger(isAlreadyVoted) && 
                <CButton isLoading={isLoadingVote} onClick={() => handdleVote()} type="submit" className="py-2 mt-auto m-4 mb-4 z-30 block">Vote!</CButton>
             }
          </div>
@@ -65,14 +65,32 @@ export default function ViseCard ({ data, isLoadingVote, handdleVote, isAlreadyV
             <div className="bg-thirdtiary-light md:shadow-md p-4 md:rounded-xl">
                <h1 className="mb-2 font-bold text-lg">Visi</h1>
                <div dangerouslySetInnerHTML={{ __html: data.visi }} id="displayer" />
+               Lorem ipsum dolor sit amet consectetur adipisicing elit. Deleniti obcaecati ipsa provident sunt animi pariatur, ipsam labore consequatur voluptatem dolore! Eos libero sint qui sed hic excepturi optio velit provident!
+               Lorem ipsum dolor sit amet consectetur adipisicing elit. Deleniti obcaecati ipsa provident sunt animi pariatur, ipsam labore consequatur voluptatem dolore! Eos libero sint qui sed hic excepturi optio velit provident!
+               Lorem ipsum dolor sit amet consectetur adipisicing elit. Deleniti obcaecati ipsa provident sunt animi pariatur, ipsam labore consequatur voluptatem dolore! Eos libero sint qui sed hic excepturi optio velit provident!
+               Lorem ipsum dolor sit amet consectetur adipisicing elit. Deleniti obcaecati ipsa provident sunt animi pariatur, ipsam labore consequatur voluptatem dolore! Eos libero sint qui sed hic excepturi optio velit provident!
+               Lorem ipsum dolor sit amet consectetur adipisicing elit. Deleniti obcaecati ipsa provident sunt animi pariatur, ipsam labore consequatur voluptatem dolore! Eos libero sint qui sed hic excepturi optio velit provident!
+               Lorem ipsum dolor sit amet consectetur adipisicing elit. Deleniti obcaecati ipsa provident sunt animi pariatur, ipsam labore consequatur voluptatem dolore! Eos libero sint qui sed hic excepturi optio velit provident!
             </div>
             <div className="bg-thirdtiary-light md:shadow-md p-4 md:rounded-xl">
                <h1 className="mb-2 font-bold text-lg">Misi</h1>
                <div dangerouslySetInnerHTML={{ __html: data.misi }} id="displayer" />
+               Lorem ipsum dolor sit amet consectetur adipisicing elit. Deleniti obcaecati ipsa provident sunt animi pariatur, ipsam labore consequatur voluptatem dolore! Eos libero sint qui sed hic excepturi optio velit provident!
+               Lorem ipsum dolor sit amet consectetur adipisicing elit. Deleniti obcaecati ipsa provident sunt animi pariatur, ipsam labore consequatur voluptatem dolore! Eos libero sint qui sed hic excepturi optio velit provident!
+               Lorem ipsum dolor sit amet consectetur adipisicing elit. Deleniti obcaecati ipsa provident sunt animi pariatur, ipsam labore consequatur voluptatem dolore! Eos libero sint qui sed hic excepturi optio velit provident!
+               Lorem ipsum dolor sit amet consectetur adipisicing elit. Deleniti obcaecati ipsa provident sunt animi pariatur, ipsam labore consequatur voluptatem dolore! Eos libero sint qui sed hic excepturi optio velit provident!
+               Lorem ipsum dolor sit amet consectetur adipisicing elit. Deleniti obcaecati ipsa provident sunt animi pariatur, ipsam labore consequatur voluptatem dolore! Eos libero sint qui sed hic excepturi optio velit provident!
+               Lorem ipsum dolor sit amet consectetur adipisicing elit. Deleniti obcaecati ipsa provident sunt animi pariatur, ipsam labore consequatur voluptatem dolore! Eos libero sint qui sed hic excepturi optio velit provident!
             </div>
             <div className="bg-thirdtiary-light md:shadow-md p-4 md:rounded-xl rounded-b-xl">
                <h1 className="mb-2 font-bold text-lg">Program Kerja</h1>
                <div dangerouslySetInnerHTML={{ __html: data.program_kerja }} id="displayer" />
+               Lorem ipsum dolor sit amet consectetur adipisicing elit. Deleniti obcaecati ipsa provident sunt animi pariatur, ipsam labore consequatur voluptatem dolore! Eos libero sint qui sed hic excepturi optio velit provident!
+               Lorem ipsum dolor sit amet consectetur adipisicing elit. Deleniti obcaecati ipsa provident sunt animi pariatur, ipsam labore consequatur voluptatem dolore! Eos libero sint qui sed hic excepturi optio velit provident!
+               Lorem ipsum dolor sit amet consectetur adipisicing elit. Deleniti obcaecati ipsa provident sunt animi pariatur, ipsam labore consequatur voluptatem dolore! Eos libero sint qui sed hic excepturi optio velit provident!
+               Lorem ipsum dolor sit amet consectetur adipisicing elit. Deleniti obcaecati ipsa provident sunt animi pariatur, ipsam labore consequatur voluptatem dolore! Eos libero sint qui sed hic excepturi optio velit provident!
+               Lorem ipsum dolor sit amet consectetur adipisicing elit. Deleniti obcaecati ipsa provident sunt animi pariatur, ipsam labore consequatur voluptatem dolore! Eos libero sint qui sed hic excepturi optio velit provident!
+               Lorem ipsum dolor sit amet consectetur adipisicing elit. Deleniti obcaecati ipsa provident sunt animi pariatur, ipsam labore consequatur voluptatem dolore! Eos libero sint qui sed hic excepturi optio velit provident!
             </div>
          </div>
       </div>
