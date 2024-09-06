@@ -85,9 +85,10 @@ router.get("/voted", [AuthorizationMiddleware, RoleMiddleware(['admin', 'khusus'
     }
 
 });
-router.delete("/voted/:id", [AuthorizationMiddleware, RoleMiddleware(['admin', 'khusus'])], async (req: CustomRequest, res: Response) => {
+router.delete("/voted", [AuthorizationMiddleware, RoleMiddleware(['admin', 'khusus'])], async (req: CustomRequest, res: Response) => {
     try {
-        const voteId = parseInt(req.params.id, 10); 
+        console.log('endpoint hitted');
+        const voteId = parseInt(String(req.query.id || '-1'), 10); 
 
         if (isNaN(voteId)) {
             return res.status(400).json({

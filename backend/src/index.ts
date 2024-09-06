@@ -21,7 +21,7 @@ const server = http.createServer(app);
 const io = new Server(server, {
     cors: {
         origin: 'http://localhost:5173', // Replace with your frontend's origin or keep '*' for all origins
-        methods: ['GET', 'POST'],
+        methods: ['GET', 'POST', 'DELETE', 'PUT'],
         credentials: true,
         
     }
@@ -30,7 +30,7 @@ const io = new Server(server, {
 app.use(bodyParser.json());
 app.use(cors({
     origin: 'http://localhost:5173', // Replace with your frontend's origin or keep '*' for all origins
-    methods: ['GET', 'POST'],
+    methods: ['GET', 'POST', 'DELETE', 'PUT'],
     credentials: true,
     
 }));
