@@ -11,10 +11,11 @@ import { Bounce, ToastContainer, toast } from "react-toastify";
 import "@toastifyCss";
 
 import { useEffect, useState } from "react";
-import { Form, useActionData, useLoaderData, useNavigate } from "react-router-dom";
+import { Form, Link, useActionData, useLoaderData, useNavigate } from "react-router-dom";
 import CInput from "@components/input";
 import CButton from "@components/button";
 import Popup from "@components/popup";
+import { IChat } from "@components/icons";
 
 
 const noWa = import.meta.env.VITE_NO_WA_CHATBOT; //? chatbot
@@ -108,7 +109,14 @@ export default function LoginPage () {
 			{/*//? DECORATIONS */}
 			<img src={decorations} className="absolute bottom-0 left-0 pointer-events-none" />
 			<img src={decorations} className="absolute top-0 -left-10 lg:block hidden -rotate-90 scale-[-1] pointer-events-none" />
-		
+
+			<Link to="/umpan-balik" className="gap-4 absolute bottom-16 w-auto h-14 rounded-full flex justify-center items-center">
+				<div className="rounded-full bg-secondary shadow-md flex justify-center items-center p-3">
+					<IChat width="30" height="30" color="white" />
+				</div>
+				<p>Feedback</p>
+			</Link>
+
 			<ToastContainer
 				position="top-center"
 				autoClose={5000}

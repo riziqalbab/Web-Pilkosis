@@ -30,7 +30,6 @@ export default function IndexVote () {
    //? the cache as a fallback value is necessary to keep the content shows up when animate exit is runing
    const isUserAlreadyVote = (cache.get('isUserAlreadyVote') as {voted_caksis?: number, voted_cawaksis?: number})
    const { dataCaksis } = (useLoaderData() as {dataCaksis: Array<DataCaksis>}) || {dataCaksis: cache.get('dataCaksis')} 
-
    const [isSuccessVote, setIsSuccessVote] = useState<number|undefined>(isUserAlreadyVote.voted_cawaksis)
    const [loadingVote, setLoadingVote] = useState(false)
    const toastyId = useRef<Id>()

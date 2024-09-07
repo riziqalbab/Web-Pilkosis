@@ -1,4 +1,4 @@
-import { IChart, ILogout, IThumbsUp } from "@components/icons";
+import { IAdd, IChart, IChat, IInfo, ILogout, IThumbsUp } from "@components/icons";
 import Popup from "@components/popup";
 import cache from "@utils/cache";
 import axios from "axios";
@@ -12,14 +12,23 @@ const origin = import.meta.env.VITE_HOST_BACKEND;
 
 //? this list will be show with the same ordered
 const allSidebarMenu: { [key: string]: { name: string; icon: JSX.Element } } = {
-	'/admin': {
-		name: 'admin',
-		icon: <IThumbsUp width="30" height="30" className="inline lg:mr-4" />
-	},
-	'/admin/paslon' : {
-		name: 'paslon',
+	'/admin' : {
+		name: 'grafik voting',
 		icon: <IChart width="25" height="25" className="inline lg:mr-4" />
 	},
+	'/admin/lihat-umpan-balik' : {
+		name: 'lihat umpan balik',
+		icon: <IChat width="25" height="25" className="inline lg:mr-4" />
+	},
+	'/admin/tambah-calon' : {
+		name: 'tambah calon',
+		icon: <IAdd width="25" height="25" className="inline lg:mr-4" />
+	},
+	'/panitia' : {
+		name: 'halaman panitia',
+		icon: <IInfo width="25" height="25" className="inline lg:mr-4" />
+	},
+	
 }
 
 function Sidebar() {
@@ -78,6 +87,7 @@ function Sidebar() {
 					E-Voting Pilkosis
 				</h1>
 				<hr className="border-accent-primary my-4 border-[1.5px] lg:block hidden" />
+				<p className="mt-2 text-lg">Level Admin</p>
 
 				{/*//? MENUS POINTER */}
 				<div
@@ -151,8 +161,9 @@ function Sidebar() {
 
 
 export default function LayoutAdmin () {
-    const { pathname } = useLocation();
-	const element = useOutlet();
+	const { pathname } = useLocation();
+	const intervalRef = useRef(null)
+	const element = useOutlet({ intervalRef });
 
 	return (
 		<div className="lg:pl-80 lg:mb-0 mb-16">

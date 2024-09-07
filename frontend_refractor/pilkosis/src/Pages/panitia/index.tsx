@@ -3,8 +3,12 @@ import 'chart.js/auto';
 import { ChartData, ChartOptions } from 'chart.js/auto';
 import CTitle from '@components/title';
 import { IChart } from '@components/icons';
-import { useEffect, useState } from 'react';
-import cache from '@utils/cache';
+import { MutableRefObject, useEffect, useState } from 'react';
+import axios from 'axios';
+import FallbackLoadContent from '@components/contentLoadFallback';
+import { useOutletContext } from 'react-router-dom';
+
+const origin = import.meta.env.VITE_HOST_BACKEND
 
 interface ApiDataResponse {
    id: number
@@ -15,31 +19,79 @@ interface ApiDataResponse {
    voted_cawaksis?: number
 }
 
-export default function ChartVote() {
-   const cache_dataVote = (cache.get('detailVote') as ApiDataResponse[] | undefined);
-   const [dataVote, setDataVote] = useState<{caksis: number[], cawaksis: number[]} | undefined>(undefined);
-   useEffect(() => {
-      if (cache_dataVote) {
-			if (cache.has('transformedVoteData')) {
-				setDataVote(cache.get('transformedVoteData'));
-			} else {
-				console.log(cache_dataVote);
-				const transformedData = {
-					caksis: cache_dataVote.map((item) => item.voted_caksis || 0),
-					cawaksis: cache_dataVote.map((item) => item.voted_cawaksis || 0),
-				};
-				cache.set('transformedVoteData', transformedData);
-				setDataVote(transformedData);
-			}
-      }
-   }, [cache_dataVote])
+interface DataVise {
+   id: string;
+   nomor_urut: string;
+   nama: string;
+   calon_jabatan:string;
+   visi: string;
+   misi: string;
+   program_kerja: string;
+   img: string;
+   ttl: string;
+   motto: string;
+   alamat: string;
+   kelas: string;
+	total: number;
+}
 
-   const data: ChartData = {
-		labels: ["January", "February", "March", "April", "May", "June", "July"],
+export default function ChartVote() {
+	const outletContext = useOutletContext() as { intervalRef: MutableRefObject<any> }
+	const [dataCaksis, setDataCaksis] = useState<DataVise[] | Error | null>(null)
+	const [dataCawaksis, setDataCawaksis] = useState<DataVise[] | Error | null>(null)
+
+	const [isLoading, setIsLoading] = useState(true)
+
+	useEffect(() => {
+		const updateDataVoting = () => {
+			axios.get(`${origin}/api/caksis`, { validateStatus: (status) => status >= 200 && status < 400, withCredentials: true })
+			.then(res => {
+				setDataCaksis(res.data.data)
+			})
+			.catch(() => {
+				setDataCaksis(new Error())
+			})
+			axios.get(`${origin}/api/cawaksis`, { validateStatus: (status) => status >= 200 && status < 400, withCredentials: true })
+			.then(res => {
+				setDataCawaksis(res.data.data)
+			})
+			.catch(() => {
+				setDataCawaksis(new Error())
+			})
+		}
+
+		updateDataVoting()
+		setTimeout(() => {
+			outletContext.intervalRef.current = setInterval(updateDataVoting, 10000);
+		}, 1000);
+	}, [])
+
+	useEffect(() => {
+		setIsLoading(
+			dataCaksis != null && 
+			dataCawaksis != null
+		)
+	}, [dataCaksis, dataCawaksis])
+
+
+   const dataSetCaksis: ChartData = {
+		labels: (Array.isArray(dataCaksis)) ? dataCaksis.map(item => item.nama) : [],
 		datasets: [
 			{
 				label: "Caksis",
-				data: [65, 59, 80, 81, 56, 55, 40],
+				data: (Array.isArray(dataCaksis)) ? dataCaksis.map(item => item.total || 0) : [],
+				backgroundColor: "#FFC78840",
+				borderColor: "#FFB765",
+				borderWidth: 1,
+			},
+		],
+	};
+   const dataSetCawaksis: ChartData = {
+		labels: (Array.isArray(dataCawaksis)) ? dataCawaksis.map(item => item.nama) : [],
+		datasets: [
+			{
+				label: "Caksis",
+				data: (Array.isArray(dataCawaksis)) ? dataCawaksis.map(item => item.total || 0) : [],
 				backgroundColor: "rgba(75,192,192,0.4)",
 				borderColor: "rgba(75,192,192,1)",
 				borderWidth: 1,
@@ -58,7 +110,20 @@ export default function ChartVote() {
 	return (
       <div>
          <CTitle text='Jumlah Suara' logo={<IChart width='27' height='27' />} />
-         <Bar data={(data as any)} options={(options as any)} />
+			{isLoading ? 
+				(
+					<>
+						<div>
+							<Bar data={(dataSetCaksis as any)} options={(options as any)} />
+						</div>
+						<div className='mt-20'>
+							<Bar data={(dataSetCawaksis as any)} options={(options as any)} />
+						</div>
+					</>
+				) 
+				:
+				<FallbackLoadContent />
+			}
       </div>
    )
 }

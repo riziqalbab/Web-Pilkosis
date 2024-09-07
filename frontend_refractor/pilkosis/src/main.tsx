@@ -66,16 +66,7 @@ const router = createBrowserRouter([
 							const getGithubProfiles = (await import("./utils/loader/githubProfiles.ts")).default;
 							return { Component: AboutVote, loader: getGithubProfiles };
 						},
-					},
-					{
-						path: "umpan-balik",
-						async lazy() {
-							const FeedbackVote = (await import("./pages/voting/feedback.tsx")).default;
-							const feedbcack = (await import("./utils/action/feedback.ts")).default;
-							return { Component: FeedbackVote, action: feedbcack};
-							
-						},
-					},
+					}
 				],
 			},
 			{
@@ -87,11 +78,26 @@ const router = createBrowserRouter([
 				},
 				children: [
 					{
-						path: "paslon",
+						index: true,
 						async lazy() {
-								const PaslonList = (await import("./pages/admin/count.tsx")).default;
+								const PaslonList = (await import("./pages/panitia/index.tsx")).default;
 								return { Component: PaslonList };
 						},
+					},
+					{
+						path: 'lihat-umpan-balik',
+						async lazy() {
+							const ViewFeedback = (await import("./pages/admin/viewFeedback.tsx")).default;
+							const getAllFeedback = (await import("./utils/loader/allFeedback.ts")).default;
+							return { Component: ViewFeedback, loader: getAllFeedback };
+						}
+					},
+					{
+						path: 'tambah-calon',
+						async lazy() {
+							const AddPaslon = (await import("./pages/admin/addpaslon.tsx")).default;
+							return { Component: AddPaslon };
+						}
 					}
 				]
 			},
@@ -116,9 +122,26 @@ const router = createBrowserRouter([
 							const DetailVote = (await import("./pages/panitia/detailVote.tsx")).default;
 							return { Component: DetailVote };
 						}
+					},
+					{
+						path: 'lihat-umpan-balik',
+						async lazy() {
+							const ViewFeedback = (await import("./pages/admin/viewFeedback.tsx")).default;
+							const getAllFeedback = (await import("./utils/loader/allFeedback.ts")).default;
+							return { Component: ViewFeedback, loader: getAllFeedback };
+						}
 					}
 				]
-			}
+			},
+			{
+				path: "umpan-balik",
+				async lazy() {
+					const FeedbackVote = (await import("./pages/voting/feedback.tsx")).default;
+					const feedbcack = (await import("./utils/action/feedback.ts")).default;
+					return { Component: FeedbackVote, action: feedbcack};
+					
+				},
+			},
 		],
 	},
 	{

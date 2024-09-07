@@ -3,7 +3,9 @@ import { IInfo, ILoading } from "./icons"
 
 const LoadingFallback = ({ className }: { className: string }) => {
    return (
-      <div className={`animate-pulse flex justify-center items-center ${className}`}></div>
+      <div className={`flex justify-center items-center ${className}`}>
+         <ILoading className="aspect-square w-full" />
+      </div>
    )
 }
 
