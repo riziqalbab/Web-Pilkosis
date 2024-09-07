@@ -21,7 +21,7 @@ const server = http.createServer(app);
 const io = new Server(server, {
     cors: {
         origin: 'http://localhost:5173', // Replace with your frontend's origin or keep '*' for all origins
-        methods: ['GET', 'POST'],
+        methods: ['GET', 'POST', 'DELETE', 'PUT'],
         credentials: true,
         
     }
@@ -30,7 +30,7 @@ const io = new Server(server, {
 app.use(bodyParser.json());
 app.use(cors({
     origin: 'http://localhost:5173', // Replace with your frontend's origin or keep '*' for all origins
-    methods: ['GET', 'POST'],
+    methods: ['GET', 'POST', 'DELETE', 'PUT'],
     credentials: true,
     
 }));
@@ -63,7 +63,7 @@ interface PaslonData {
     misi: string;
     program_kerja: string;
     img: string;
-    total?: number; // Tambahkan jika 'total' adalah bagian dari data paslon
+    total?: number; 
 }
 
 io.on('connection', (socket) => {
@@ -81,10 +81,10 @@ io.on('connection', (socket) => {
         }
     };
 
-    // Emit data awal saat user terhubung
+
     emitPaslonData();
 
-    // Emit data secara berkala (misalnya setiap 5 detik)
+    
     const intervalId = setInterval(emitPaslonData, 60000);
 
     socket.on('disconnect', () => {

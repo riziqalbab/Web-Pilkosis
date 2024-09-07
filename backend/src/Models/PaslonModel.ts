@@ -35,6 +35,6 @@ class PaslonModel extends BaseModel {
             connection.release(); 
         }
     }
-}
 
+}
 export default PaslonModel;
