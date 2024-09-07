@@ -1,4 +1,4 @@
-import { IChart, ILogout, IThumbsUp } from "@components/icons";
+import { IChart, IChat, ILogout, IThumbsUp } from "@components/icons";
 import Popup from "@components/popup";
 import cache from "@utils/cache";
 import axios from "axios";
@@ -17,8 +17,12 @@ const allSidebarMenu: { [key: string]: { name: string; icon: JSX.Element } } = {
 		icon: <IChart width="30" height="30" className="inline lg:mr-4" />
 	},
 	'/panitia/detail-vote' : {
-		name: 'detail vote',
+		name: 'detail pemilih',
 		icon: <IThumbsUp width="25" height="25" className="inline lg:mr-4" />
+	},
+	'/panitia/lihat-umpan-balik' : {
+		name: 'lihat umpan balik',
+		icon: <IChat width="25" height="25" className="inline lg:mr-4" />
 	},
 }
 
@@ -78,6 +82,7 @@ function Sidebar() {
 					E-Voting Pilkosis
 				</h1>
 				<hr className="border-accent-primary my-4 border-[1.5px] lg:block hidden" />
+				<p className="mt-2 text-lg">Level Panitia</p>
 
 				{/*//? MENUS POINTER */}
 				<div
@@ -151,7 +156,8 @@ function Sidebar() {
 
 export default function LayoutPanitia() {
    const { pathname } = useLocation();
-	const element = useOutlet();
+	const intervalRef = useRef(null)
+	const element = useOutlet({ intervalRef });
 
 	return (
 		<div className="lg:pl-80 lg:mb-0 mb-16">
@@ -167,6 +173,7 @@ export default function LayoutPanitia() {
 								// toast.dismiss()
 							}}
 							onAnimationComplete={() => {
+								intervalRef.current && clearInterval(intervalRef.current)
 								// document.body.style.overflowY = 'auto'
 								document.body.style.pointerEvents = 'auto'
 							}}

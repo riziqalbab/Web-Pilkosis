@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@types/react-rte": "^0.16.8",
     "@types/socket.io-client": "^1.4.36",
     "axios": "^1.7.2",
     "chart.js": "^4.4.4",

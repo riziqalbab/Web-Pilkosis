@@ -21,7 +21,6 @@ export default function detailVote() {
          return 0
       },
       onFailed(err) {
-         console.error(err)
          try {
             cache.set('detailVote', new Error(err.response.data.message))
          } catch {

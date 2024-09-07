@@ -20,11 +20,7 @@ const allSidebarMenu: { [key: string]: { name: string; icon: JSX.Element } } = {
 	'/voting/tentang' : {
 		name: 'Tentang',
 		icon: <IAbout width="25" height="25" className="inline lg:mr-4" />
-	},
-	'/voting/umpan-balik' : {
-		name: 'Umpan Balik',
-		icon: <IFeedback width="25" height="25" className="inline lg:mr-4" />
-	},
+	}
 }
 
 function Sidebar() {

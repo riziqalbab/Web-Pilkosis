@@ -164,7 +164,7 @@ export default function AboutVote() {
 							/>
 						</div>
 
-						<span title="klik Melihat Profilnya di Github.com" className="self-center text-accent-secondary underline underline-offset-4 font-bold mt-24">@AlbabRiziq</span>
+						<a target="_blank" href="https://albabriziq.vercel.app/" title="klik Melihat Profilnya di Github.com" className="self-center text-accent-secondary underline underline-offset-4 font-bold mt-24">@AlbabRiziq</a>
 						<p className="self-center px-4 py-1 rounded-full border border-accent-primary mt-2">Riziq Lili Ulil Albab</p>
 						
 						<p className="px-6 mt-5">

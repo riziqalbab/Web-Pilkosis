@@ -16,7 +16,7 @@ interface ResponseRequest {
 
 export default async function authorizer (type: ('user' | 'admin' | 'panitia' | '*') = 'user', onPageLogin?: 'onLoginPage') {
 	if (cache.has('accessToken') && cache.has('userData')) {
-		if (type !== '*') {
+		if (type !== '*' && cache.get('userData')?.role !== 'admin') {
 			if (type === 'admin' && cache.get('userData')?.role !== 'admin')
 				return redirect('/not-found')
 			if (type === 'panitia' && cache.get('userData')?.role !== 'khusus')
@@ -32,7 +32,7 @@ export default async function authorizer (type: ('user' | 'admin' | 'panitia' | 
 			cache.set('userData', data.data)
 			console.log(data.data);
 
-			if (type !== '*') {
+			if (type !== '*' && cache.get('userData')?.role !== 'admin') {
 				if (type === 'admin' && cache.get('userData')?.role !== 'admin')
 					return redirect('/not-found')
 				if (type === 'panitia' && cache.get('userData')?.role !== 'khusus')

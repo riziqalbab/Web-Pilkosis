@@ -6,9 +6,10 @@ export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
    type?: string,
    placeholder?: string,
    className?: string,
+   onChange?: (ev: ChangeEvent<HTMLInputElement>) => void
 }
 
-const CInput = ({ type = 'text', name, placeholder = 'input', className = '', ...props }: InputProps) => {
+const CInput = ({ type = 'text', name, placeholder = 'input', className = '', onChange, ...props }: InputProps) => {
    const [onFocus, setOnFocus] = useState(false)
    const [onFill, setOnFill] = useState(false)
 
@@ -20,7 +21,7 @@ const CInput = ({ type = 'text', name, placeholder = 'input', className = '', ..
       setOnFocus(false)
    }
 
-   const handdleChange = (ev: ChangeEvent) => {
+   const handdleChange = (ev: ChangeEvent<HTMLInputElement>) => {
       if ((ev.target as HTMLInputElement).value) {
          setOnFill(true)
       } else {
@@ -45,7 +46,7 @@ const CInput = ({ type = 'text', name, placeholder = 'input', className = '', ..
          >
             <label htmlFor={name}>{ placeholder }</label>
          </m.div>
-         <input onChange={handdleChange} className="focus-visible:outline-none text-base border-accent-secondary text-black focus:border-2 px-4 py-3 shadow-md bg-primary rounded-full w-full" onBlur={handdleBlur} onFocus={handdleFocus} type={type} name={name} id={name} {...props} />
+         <input onChange={ev => {handdleChange(ev); onChange && onChange(ev)}} className="focus-visible:outline-none text-base border-accent-secondary text-black focus:border-2 px-4 py-3 shadow-md bg-primary rounded-full w-full" onBlur={handdleBlur} onFocus={handdleFocus} type={type} name={name} id={name} {...props} />
       </div>
    )
 }
