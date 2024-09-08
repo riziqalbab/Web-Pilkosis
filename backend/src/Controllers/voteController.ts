@@ -6,7 +6,6 @@ import RoleMiddleware from '../Middleware/RoleMiddleware';
 
 import cookieParser from 'cookie-parser';
 
-const paslon = new PaslonModel();
 const votedModel = new VotedModel();
 const router = express.Router();
 router.use(cookieParser());
@@ -57,6 +56,7 @@ router.post("/vote", AuthorizationMiddleware, async (req: CustomRequest, res: Re
 
         await votedModel.updateTotalInCalon(paslonId)
 
+        
         return res.status(200).json({
             message: `Vote for ${voteType} cast successfully`
         });

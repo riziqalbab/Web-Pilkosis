@@ -35,7 +35,7 @@ router.post("/login", async (req, res) => {
         return res.status(400).json({ message: "Invalid request" });
     }
     try {
-        const result = await user.Find({ nama: username, paswd: password });
+        const result = await user.Find({ nis: username, paswd: password });
         if (result.length > 0) {
             const userId = result[0].id;
             const roleUser = result[0].role_user;
