@@ -56,7 +56,7 @@ export default function AddPaslon() {
                "Authorization": `Bearer ${cache.get('accessToken')}`
             },
          },
-         tryAgainCallback: async (res, tryAgain) => {
+         tryAgainCallback: async (_, tryAgain) => {
             cache.delete('accessToken')
             if (Array.isArray(await authorizer('admin'))) //? if the authorizer is successfull the return value will be an array
                return tryAgain()
