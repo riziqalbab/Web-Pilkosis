@@ -18,8 +18,8 @@ export default function IndexVote () {
          <h1 className="my-8 text-2xl text-accent-primary">
             {
                (!isUserAlreadyVote?.voted_cawaksis && !isUserAlreadyVote?.voted_caksis) ? 'Tentukan Pilihanmu' :
-               !isUserAlreadyVote?.voted_caksis ? 'Kamu belum memilih caksis' :
-               !isUserAlreadyVote?.voted_cawaksis ? 'Kamu belum memilih Cawaksis' :
+               !isUserAlreadyVote?.voted_caksis ? 'Kamu belum memilih Calon Ketua Osis' :
+               !isUserAlreadyVote?.voted_cawaksis ? 'Kamu belum memilih Calon Wakil Ketua Osis' :
                (isUserAlreadyVote?.voted_cawaksis && isUserAlreadyVote?.voted_caksis) && 'Terimakasih Telah Berpartisipasi'
             }
             <span className="font-bold">, {dataUser?.nama}!</span>

@@ -89,7 +89,7 @@ export default function IndexVote () {
          <h1 className="my-8 text-2xl text-accent-primary">
             {isSuccessVote ? 'Terimakasih Atas Dukungan Mu!' : 
                <>
-                  Dukung <span className="font-bold"> Caksis </span> Pilihan mu!
+                  Dukung <span className="font-bold"> Calon Ketua Osis SMK Negeri 1 Kebumen </span> Pilihan mu!
                </>
             }
          </h1>
