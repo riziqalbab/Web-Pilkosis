@@ -1,6 +1,7 @@
 import CButton from "./button";
 import CImage from "./loadImage";
 import Popup from "./popup";
+const origin = import.meta.env.VITE_HOST_BACKEND
 
 interface DataVise {
    id: string;
@@ -19,15 +20,14 @@ interface DataVise {
 
 export default function ViseCard ({ data, isLoadingVote, handdleVote, isAlreadyVoted }: { isAlreadyVoted?: number, data: DataVise, isLoadingVote: boolean, handdleVote: () => void }) {
    const [Cpopup, trigertPopup] = Popup()
-
    return (
       <div className="flex md:gap-4 gap-0 md:flex-row flex-col">
          <Cpopup>
-            <CImage src={data.img} alt={data.nama} className="aspect-square w-screen object-cover" />
+            <CImage src={`${origin}/uploads/${data.img}`} alt={data.nama} className="aspect-square w-screen object-cover" />
          </Cpopup>
          <div className="md:max-w-72 md:min-w-72 h-auto bg-thirdtiary-light overflow-hidden md:rounded-xl rounded-t-xl shadow-md flex flex-col">
             <div className="sm:w-72 w-full cursor-pointer self-stretch sm:self-center md:self-stretch mt-0 sm:mt-4 md:mt-0" onClick={() => trigertPopup()}>
-               <CImage src={data.img} alt={data.nama} className="aspect-square w-full h-full object-cover cursor-pointer rounded-none sm:rounded-xl md:stroke-none" />
+               <CImage src={`${origin}/uploads/${data.img}`} alt={data.nama} className="aspect-square w-full h-full object-cover cursor-pointer rounded-none sm:rounded-xl md:stroke-none" />
             </div>
             <div className="w-full-2xl p-4 relative z-20 h-fit md:h-fit sm:h-72 mb-4">
                <div className="bg-thirdtiary-light absolute w-[185%] h-[150%] -top-4 rounded-t-[5rem] -left-[65%] -z-10 -rotate-12 md:block block sm:hidden" />

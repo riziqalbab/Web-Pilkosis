@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@types/react-rte':
+        specifier: ^0.16.8
+        version: 0.16.8
       '@types/socket.io-client':
         specifier: ^1.4.36
         version: 1.4.36
@@ -535,6 +538,9 @@ packages:
   '@types/cors@2.8.17':
     resolution: {integrity: sha512-8CGDvrBj1zgo2qE+oS3pOCyYNqCPryMWY2bGfwA0dcfopWGgxs+78df0Rs3rc9THP4JkOhLsAa+15VdpAqkcUA==}
 
+  '@types/draft-js@0.11.18':
+    resolution: {integrity: sha512-lP6yJ+EKv5tcG1dflWgDKeezdwBa8wJ7KkiNrrHqXuXhl/VGes1SKjEfKHDZqOz19KQbrAhFvNhDPWwnQXYZGQ==}
+
   '@types/estree@1.0.5':
     resolution: {integrity: sha512-/kYRxGDLWzHOB7q+wtSUQlFrtcdUccpfy+X+9iMBpHK8QLLhx2wIPYuS5DYtR9Wa/YlZAbIovy7qVdB1Aq6Lyw==}
 
@@ -549,6 +555,9 @@ packages:
 
   '@types/react-dom@18.3.0':
     resolution: {integrity: sha512-EhwApuTmMBmXuFOikhQLIBUn6uFg81SwLMOAUgodJF14SOBOCMdU04gDoYi0WOJJHD144TL32z4yDqCW3dnkQg==}
+
+  '@types/react-rte@0.16.8':
+    resolution: {integrity: sha512-mH2JsS7clP5abrMDME5MmLLLCdaGgrNitIJgaJx/1Nw6ZlWnXNMtEAYHt188pLr8Giuz1fQ9nzb65/0e4jld/w==}
 
   '@types/react@18.3.3':
     resolution: {integrity: sha512-hti/R0pS0q1/xx+TsI73XIqk26eBsISZ2R0wUijXIngRK9R/e7Xw/cXVxQK7R5JjW+SV4zGcn5hXjudkN/pLIw==}
@@ -2492,6 +2501,11 @@ snapshots:
     dependencies:
       '@types/node': 22.4.1
 
+  '@types/draft-js@0.11.18':
+    dependencies:
+      '@types/react': 18.3.3
+      immutable: 3.7.6
+
   '@types/estree@1.0.5': {}
 
   '@types/json5@0.0.29': {}
@@ -2504,6 +2518,11 @@ snapshots:
 
   '@types/react-dom@18.3.0':
     dependencies:
+      '@types/react': 18.3.3
+
+  '@types/react-rte@0.16.8':
+    dependencies:
+      '@types/draft-js': 0.11.18
       '@types/react': 18.3.3
 
   '@types/react@18.3.3':

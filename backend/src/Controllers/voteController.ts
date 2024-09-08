@@ -6,7 +6,6 @@ import RoleMiddleware from '../Middleware/RoleMiddleware';
 
 import cookieParser from 'cookie-parser';
 
-const paslon = new PaslonModel();
 const votedModel = new VotedModel();
 const router = express.Router();
 router.use(cookieParser());
@@ -57,6 +56,7 @@ router.post("/vote", AuthorizationMiddleware, async (req: CustomRequest, res: Re
 
         await votedModel.updateTotalInCalon(paslonId)
 
+        
         return res.status(200).json({
             message: `Vote for ${voteType} cast successfully`
         });
@@ -85,9 +85,10 @@ router.get("/voted", [AuthorizationMiddleware, RoleMiddleware(['admin', 'khusus'
     }
 
 });
-router.delete("/voted/:id", [AuthorizationMiddleware, RoleMiddleware(['admin', 'khusus'])], async (req: CustomRequest, res: Response) => {
+router.delete("/voted", [AuthorizationMiddleware, RoleMiddleware(['admin', 'khusus'])], async (req: CustomRequest, res: Response) => {
     try {
-        const voteId = parseInt(req.params.id, 10); 
+        console.log('endpoint hitted');
+        const voteId = parseInt(String(req.query.id || '-1'), 10); 
 
         if (isNaN(voteId)) {
             return res.status(400).json({
