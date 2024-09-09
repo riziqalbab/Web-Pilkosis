@@ -7,7 +7,7 @@ dotenv.config();
 export interface CustomRequest extends Request {
     user?: {
         id: string; 
-        username: string;
+        nis: string;
         role:string
     };
 }
@@ -27,7 +27,7 @@ function AuthorizationMiddleware(req: CustomRequest, res: Response, next: NextFu
         const decoded = jwt.verify(token, process.env.SECRET_KEY as string, { algorithms: ["HS256"] }) as jwt.JwtPayload;
         req.user = { 
             id: decoded.id as string,
-            username: decoded.username as string ,
+            nis: decoded.nis as string ,
             role: decoded.role as string  
         };
         next(); 

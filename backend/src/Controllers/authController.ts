@@ -14,7 +14,7 @@ const tokenModel = new TokenModel();
 const expire = 1000 * 60 * 60 * 24 * 30;
 
 interface Payload {
-    username: string;
+    nis: string;
     id: number;
     role_user: string;
 }
@@ -39,7 +39,7 @@ router.post("/login", async (req, res) => {
         if (result.length > 0) {
             const userId = result[0].id;
             const roleUser = result[0].role_user;
-            const refreshToken = generateRefreshToken({ username, id: userId, role_user: roleUser });
+            const refreshToken = generateRefreshToken({ nis: username, id: userId, role_user: roleUser });
             res.cookie("rfrsh", refreshToken, { httpOnly: true, maxAge: expire });
             res.json({ message: "Login berhasil" });
         } else {

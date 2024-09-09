@@ -28,7 +28,7 @@ router.get("/token", async (req: Request, res: Response) => {
         const verify = jwt.verify(token, process.env.SECRET_KEY as string, { algorithms: ["HS256"] }) as JwtPayload;
         const username = verify.username;
 
-        const user = await usermodel.Find({ nama: username });
+        const user = await usermodel.Find({ nis: username });
 
         if (user.length === 0) {
             return res.status(401).json({ message: "Unauthorized" });
