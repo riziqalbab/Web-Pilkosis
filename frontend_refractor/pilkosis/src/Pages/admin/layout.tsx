@@ -1,4 +1,4 @@
-import { IAdd, IChart, IChat, IInfo, ILogout, IThumbsUp } from "@components/icons";
+import { IAdd, IChart, IChat, IInfo, ILogout } from "@components/icons";
 import Popup from "@components/popup";
 import cache from "@utils/cache";
 import axios from "axios";

@@ -1,5 +1,5 @@
 import decorations from "@assets/svg/decorations.svg";
-import { IAbout, IFeedback, ILogout, IThumbsUp } from "@components/icons";
+import { IAbout, ILogout, IThumbsUp } from "@components/icons";
 import { AnimatePresence, m } from "framer-motion";
 import { cloneElement, useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate, useOutlet } from "react-router-dom";

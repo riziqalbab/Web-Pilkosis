@@ -10,15 +10,6 @@ import { useOutletContext } from 'react-router-dom';
 
 const origin = import.meta.env.VITE_HOST_BACKEND
 
-interface ApiDataResponse {
-   id: number
-   user_id: number
-   paslon_id?: string
-   created_at: string
-   voted_caksis?: number
-   voted_cawaksis?: number
-}
-
 interface DataVise {
    id: string;
    nomor_urut: string;
