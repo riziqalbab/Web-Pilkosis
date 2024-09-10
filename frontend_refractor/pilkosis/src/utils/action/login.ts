@@ -19,7 +19,7 @@ export default async function requestLogin ({ request }: { request: Request }) {
          headers: {
             "Content-Type": "application/json",
          },
-         validateStatus: (status) => status <= 200 && status < 400
+         validateStatus: (status) => status <= 200
       })
 
       const auth = await authorizer('*', 'onLoginPage')
