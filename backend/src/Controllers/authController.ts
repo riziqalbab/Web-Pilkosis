@@ -40,7 +40,13 @@ router.post("/login", async (req, res) => {
             const userId = result[0].id;
             const roleUser = result[0].role_user;
             const refreshToken = generateRefreshToken({ nis: username, id: userId, role_user: roleUser });
-            res.cookie("rfrsh", refreshToken, { httpOnly: true, maxAge: expire });
+            res.cookie("rfrsh", refreshToken, {
+                httpOnly: true,
+                maxAge: expire,
+                sameSite: 'none', // Mengizinkan cross-origin requests
+                secure: true      // Mengharuskan HTTPS
+            });
+
             res.json({ message: "Login berhasil" });
         } else {
             res.status(404).json({ message: "Username atau password salah" });
@@ -64,7 +70,11 @@ router.post('/logout', async (req: Request, res: Response) => {
 
         if (result.length > 0) {
             await tokenModel.drop({ token });
-            res.clearCookie('rfrsh');
+            res.clearCookie('rfrsh', {
+                httpOnly: true,
+                sameSite: 'none', // Harus sama dengan pengaturan saat membuat cookie
+                secure: true // Harus sama dengan pengaturan saat membuat cookie
+            });
             res.json({ message: "Logout berhasil" });
         } else {
             res.status(401).json({ message: "Token tidak valid" });
