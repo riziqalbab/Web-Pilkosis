@@ -14,10 +14,10 @@ async function AuthorizationMiddleware(req: Request, res: Response, next: NextFu
 
     try {
         const decoded = jwt.verify(token, process.env.SECRET_KEY as string, { algorithms: ["HS256"] });
-        const username = (decoded as any)["username"];
+        const nis = (decoded as any)["nis"];
     
         const user = new UserModel();
-        const userDetail = await user.Find({ nama: username});
+        const userDetail = await user.Find({ nis });
         
         // cek role ,mbok udu admin
         if (userDetail.length > 0 && userDetail[0].role_user === "admin") {
