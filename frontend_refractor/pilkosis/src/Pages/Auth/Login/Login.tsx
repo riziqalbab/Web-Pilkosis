@@ -6,6 +6,7 @@ import primaryBg from "@assets/images/login-bg.png";
 import decorations from "@assets/svg/decorations.svg";
 import loginText from "@assets/svg/login-text.svg";
 import secondaryBg from "@assets/svg/login-bg-Secondary.svg";
+import secondaryBg2 from "@assets/svg/login-bg-Secondary-2.svg";
 
 import { Bounce, ToastContainer, toast } from "react-toastify";
 import "@toastifyCss";
@@ -77,19 +78,22 @@ export default function LoginPage () {
 			</CPopup>
 			{/*//? BACKGROUNDS */}
 			<img src={primaryBg} className="w-full h-screen -z-10 absolute top-0 left-0 object-cover pointer-events-none" loading="lazy" />
-			<img src={secondaryBg} className="w-full h-screen -z-10 absolute top-0 left-0 object-cover pointer-events-none" />
+			{/* bg on moblie */}
+			<img src={secondaryBg} className="block lg:hidden w-full h-screen -z-10 absolute top-0 left-0 object-cover pointer-events-none" />
+			{/* bg on desktop */}
+			<img src={secondaryBg2} className="hidden lg:block w-full h-screen -z-10 absolute top-0 left-0 object-cover pointer-events-none" />
 
 			{/*//? LOGO */}
-			<img src={logoSmk} className="md:h-20 h-16 -z-10 absolute lg:translate-x-0 translate-x-3/4 top-10 lg:right-40 bg-white rounded-full object-cover" loading="lazy" />
-			<img src={logoOsis} className="md:h-20 h-16 -z-10 absolute lg:translate-x-0 -translate-x-3/4 top-10 lg:right-14 object-cover" loading="lazy" />
+			<img src={logoSmk} className="md:h-20 h-16 -z-10 absolute lg:translate-x-0 -translate-x-3/4 top-10 lg:right-40 bg-white rounded-full object-cover" loading="lazy" />
+			<img src={logoOsis} className="md:h-20 h-16 -z-10 absolute lg:translate-x-0 translate-x-3/4 top-10 lg:right-14 object-cover" loading="lazy" />
 
 			<Form onSubmit={() => setLoading(true)} className="z-10 flex flex-col items-stretch" method="post" action=""> {/*//? action to this route it self */}
 				<img src={loginText} className="pointer-events-none self-center lg:block hidden" />
 				<h1 className="lg:hidden block text-center text-3xl text-white font-bold" style={{textShadow: '5px 5px 10px rgba(0, 0, 0, .5)'}}>Login</h1>
 				<hr className="border-accent-primary lg:block hidden border-[1.5px] mt-8 mb-5" />
 
-				<CInput name="username" placeholder="nomor NIS mu" className="lg:w-[30vw] w-[80vw] max" />
-				<CInput name="password" placeholder="password" type="password" className="lg:w-[30vw] w-[80vw] mb-10" />
+				<CInput name="username" placeholder="Nomor NIS" className="lg:w-[30vw] w-[80vw] max" />
+				<CInput name="password" placeholder="Password" type="password" className="lg:w-[30vw] w-[80vw] mb-10" />
 
 				<div className="flex items-center justify-between">
 					<div className="">
@@ -102,7 +106,7 @@ export default function LoginPage () {
 
 			{/*//? TITLE */}
 			<div className="lg:order-last order-first lg:text-right text-center lg:mb-0 mb-10">
-				<h1 className="3xl:text-8xl 2xl:text-7xl xl:text-6xl lg:max-w-[50vw] lg:text-5xl md:text-4xl text-3xl mb-4 font-bold text-white" style={{textShadow: '5px 5px 10px rgba(0, 0, 0, .8)'}}>Selamat Datang Di Web Pilkosis 2024</h1>
+				<h1 className="3xl:text-8xl 2xl:text-7xl xl:text-6xl lg:max-w-[50vw] lg:text-5xl md:text-4xl text-3xl mb-4 font-bold text-white" style={{textShadow: '5px 5px 10px rgba(0, 0, 0, .8)'}}>Selamat Datang di <br className="lg:hidden" /> Web Pilkosis 2024</h1>
 				<h2 className="xl:text-3xl lg:text-2xl md:text-xl text-lg font-bold text-white" style={{textShadow: '5px 5px 10px rgba(0, 0, 0, .8)'}}>SMK Negeri 1 Kebumen</h2>
 			</div>
 

@@ -87,7 +87,7 @@ function Sidebar() {
 					E-Voting Pilkosis
 				</h1>
 				<hr className="border-accent-primary my-4 border-[1.5px] lg:block hidden" />
-				<p className="mt-2 text-lg">Level Admin</p>
+				<p className="mt-2 text-lg lg:block hidden">Level Admin</p>
 
 				{/*//? MENUS POINTER */}
 				<div
@@ -126,7 +126,7 @@ function Sidebar() {
 							</Link>
 						</li>
 					))}
-					<li onClick={() => triggerPopup()} className="text-red-500 mb-4 lg:hover:pl-4 cursor-pointer block lg:w-full lg:h-full lg:py-3 transition-[padding] duration-200">
+					<li onClick={() => triggerPopup()} className="text-red-500 mb-4 lg:hover:pl-4 cursor-pointer block lg:w-full lg:py-3 transition-[padding] duration-200">
 						<ILogout width="25" height="25" className="inline lg:mr-4" />
 						<span className="lg:inline hidden">Keluar</span>
 					</li>

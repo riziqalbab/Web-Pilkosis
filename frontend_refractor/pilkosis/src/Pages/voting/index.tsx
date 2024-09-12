@@ -27,14 +27,14 @@ export default function IndexVote () {
 
          {/* //? CONTENTS */}
          <div className="grid sm:grid-cols-2 grid-cols-1 gap-10">
-            <Link to={`${pathname.includes('admin') ? '/admin/daftar-calon/caksis' : '/voting/caksis'}`} className="group shadow-sm hover:shadow-lg hover:bg-thirdtiary/80 transition-all duration-500 bg-thirdtiary-light z-0 text-accent-primary p-4 rounded-3xl h-96 text-center relative overflow-hidden">
-               <h2 className="text-3xl leading-[24rem] group-hover:scale-150 transition-transform duration-300 z-10 font-bold">Caksis</h2>
+            <Link to={`${pathname.includes('admin') ? '/admin/daftar-calon/caksis' : '/voting/caksis'}`} className="flex items-center justify-center group shadow-sm hover:shadow-lg hover:bg-thirdtiary/80 transition-all duration-500 bg-thirdtiary-light z-0 text-accent-primary p-4 rounded-3xl h-96 text-center relative overflow-hidden">
+               <h2 className="text-3xl z-10 font-bold">Calon Ketua Osis <br /> SMK Negeri 1 Kebumen </h2>
                <CImage src={decoration} alt="decoration" className="group-hover:opacity-60 group-hover:-translate-y-4 translate-x-4 transition-all duration-500 -z-10 opacity-45 absolute top-0 right-0 w-full h-full" />
                <CImage src={decoration2} alt="decoration" className="opacity-0 group-hover:opacity-40 group-hover:-translate-y-10 delay-100 translate-x-20 transition-all duration-700 -z-10 rotate-[170deg] absolute top-0 right-0 w-3/4 h-3/4" />
                <CImage src={decoration2} alt="decoration" className="opacity-0 group-hover:opacity-40 group-hover:-translate-y-5 delay-300 translate-x-4 transition-all duration-700 -z-10 absolute top-0 right-0 w-full h-full" />
             </Link>
-            <Link to={`${pathname.includes('admin') ? '/admin/daftar-calon/cawaksis' : '/voting/cawaksis'}`} className="group shadow-sm hover:shadow-lg hover:bg-thirdtiary/80 transition-all duration-500 bg-thirdtiary-light z-0 text-accent-primary p-4 rounded-3xl h-96 text-center relative overflow-hidden">
-               <h2 className="text-3xl leading-[24rem] group-hover:scale-150 transition-transform duration-300 z-10 font-bold">Cawaksis</h2>
+            <Link to={`${pathname.includes('admin') ? '/admin/daftar-calon/cawaksis' : '/voting/cawaksis'}`} className="flex items-center justify-center group shadow-sm hover:shadow-lg hover:bg-thirdtiary/80 transition-all duration-500 bg-thirdtiary-light z-0 text-accent-primary p-4 rounded-3xl h-96 text-center relative overflow-hidden">
+               <h2 className="text-3xl z-10 font-bold">Calon <br /> Wakil Ketua Osis <br /> SMK Negeri 1 Kebumen</h2>
                <CImage src={decoration} alt="decoration" className="group-hover:opacity-60 group-hover:-translate-y-4 transition-all duration-500 -z-10 opacity-45 absolute top-0 right-0 w-full h-full rotate-45 translate-x-40" />
                <CImage src={decoration2} alt="decoration" className="opacity-0 group-hover:opacity-40 group-hover:-translate-y-10 delay-100 transition-all duration-700 -z-10 absolute top-0 right-0 w-full h-full rotate-[-80deg] -translate-x-40" />
                <CImage src={decoration2} alt="decoration" className="opacity-0 group-hover:opacity-40 group-hover:-translate-y-5 delay-300 transition-all duration-700 -z-10 absolute top-0 right-0 w-full h-full rotate-45 translate-x-40" />

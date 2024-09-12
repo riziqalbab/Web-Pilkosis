@@ -4,7 +4,7 @@ import cache from "./cache"
 const origin = import.meta.env.VITE_HOST_BACKEND
 
 interface UserData { 
-	nama: string
+	name: string
 	username: string
 	role: string
 }
@@ -26,11 +26,10 @@ export default async function authorizer (type: ('user' | 'admin' | 'panitia' | 
 		return [cache.get('accessToken'), cache.get('userData')]
 	}
 
-	return await axios.get(`${origin}/api/token`, { validateStatus: (status) => status >= 200 && status < 400, withCredentials: true })
+	return await axios.get(`${origin}/api/token`, { validateStatus: (status) => status <= 200, withCredentials: true })
 		.then(({ data }: { data: ResponseRequest }) => {
 			cache.set('accessToken', data.accessToken)
 			cache.set('userData', data.data)
-			console.log(data.data);
 
 			if (type !== '*' && cache.get('userData')?.role !== 'admin') {
 				if (type === 'admin' && cache.get('userData')?.role !== 'admin')
@@ -41,8 +40,9 @@ export default async function authorizer (type: ('user' | 'admin' | 'panitia' | 
 
 			return [cache.get('accessToken'), cache.get('userData')]
 		})
-		.catch(() => { //? this section will be called if the user is not logged in or the refresh token is expired
-			if (onPageLogin) return false
+		.catch((err) => { //? this section will be called if the user is not logged in or the refresh token is expired
+			console.log(err);
+			if (onPageLogin) return new Error('Gagal mengAuthorisasi')
 			return redirect('/')
 		})
 }
