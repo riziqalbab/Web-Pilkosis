@@ -15,7 +15,7 @@ body {
 
 #displayer ol, 
 #displayer ul { 
-   list-style-type: lower-latin; 
+   list-style-type: decimal; 
    list-style-position: inside; 
    margin-left: 15px; 
 }

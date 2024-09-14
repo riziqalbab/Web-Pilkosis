@@ -2,10 +2,9 @@ import { IThumbsUp } from "@components/icons"
 import Popup from "@components/popup"
 import CTitle from "@components/title"
 import authorizer from "@utils/authorizer"
-import cache from "@utils/cache"
 import tryRequest from "@utils/tryRequest"
-import { useEffect, useState } from "react"
-import { useNavigate } from "react-router-dom"
+import { Dispatch } from "react"
+import { useNavigate, useOutletContext } from "react-router-dom"
 import { Bounce, toast, ToastContainer } from "react-toastify"
 import "@toastifyCss"
 
@@ -23,15 +22,8 @@ interface DetailVote {
 
 export default function DetailVote () {
    const navigate = useNavigate()
-   const cacheDetailVote = cache.get('detailVote')
-   const [dataDetailVote, setDataDetailVote] = useState<DetailVote[]|undefined>(cacheDetailVote)
+   const [dataDetailVote, setDataDetailVote] = useOutletContext<{detailVote: [dataDetailVote: DetailVote[] | undefined, setDataDetailVote: Dispatch<DetailVote[] | undefined>]}>().detailVote
    const [CPopup, triggerPopup] = Popup()
-   
-   useEffect(() => {
-      if (cacheDetailVote) {
-         setDataDetailVote(cacheDetailVote)
-      }
-   }, [cacheDetailVote])
 
    const handdleDelete = (id: number) => {
       tryRequest({
@@ -62,11 +54,13 @@ export default function DetailVote () {
          <CTitle text="Detail Pemilih" logo={<IThumbsUp width="30" height="30" />} />
          <table className="w-full">
             <thead className="h-10">
-               <th>Nama Pemilih</th>
-               <th>Tanggal Memilih</th>
-               <th>Sudah Memilih Caksis</th>
-               <th>Sudah Memilih Cawaksis</th>
-               <th>Aksi</th>
+               <tr>
+                  <th>Nama Pemilih</th>
+                  <th>Tanggal Memilih</th>
+                  <th>Sudah Memilih Caksis</th>
+                  <th>Sudah Memilih Cawaksis</th>
+                  <th>Aksi</th>
+               </tr>
             </thead>
             <tbody>
                {dataDetailVote?.map((data, index) => (

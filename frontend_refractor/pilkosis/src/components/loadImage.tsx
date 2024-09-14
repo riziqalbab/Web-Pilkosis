@@ -13,7 +13,7 @@ const ErrorFallback = ({ className }: { className: string }) => {
    return (
       <div className={`flex flex-col justify-center items-center gap-3 p-4 ${className}`}>
          <IInfo color="red" />
-         <p className="text-sm text-center">Failed to load this image</p>
+         <p className="text-sm text-center">Gagal memuat gambar ini</p>
       </div>
    )
 }

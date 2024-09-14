@@ -10,6 +10,10 @@ import {
 import NotFound from "@pages/notFound.tsx";
 import authorizer from "@utils/authorizer.ts";
 import PageErrorFallback from "@components/pageErrorFallback.tsx";
+import axios from "axios";
+import cache from "@utils/cache.ts";
+
+const origin = import.meta.env.VITE_HOST_BACKEND
 
 const router = createBrowserRouter([
 	{
@@ -33,7 +37,17 @@ const router = createBrowserRouter([
 				async lazy() {
 					const LayoutVote = (await import("./pages/voting/layout.tsx")).default;
 					const checkUserVote = (await import("./utils/loader/isAlreadyVote.ts")).default;
-					return { Component: LayoutVote, loader: checkUserVote };
+					const loader = () => {
+						axios.get(`${origin}/api/countdown`)
+						.then(res => {
+							cache.set('countdown', res.data)
+						})
+						.catch(() => {
+							cache.set('countdown', new Error())
+						})
+						return checkUserVote()
+					}
+					return { Component: LayoutVote, loader };
 				},
 				children: [
 					{

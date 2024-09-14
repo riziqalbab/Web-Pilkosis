@@ -5,6 +5,7 @@ import decoration from "@assets/svg/decorations.svg";
 import decoration2 from "@assets/svg/decorations-2.svg";
 import CImage from "@components/loadImage";
 import cache from "@utils/cache";
+import Timer from "@components/timer";
 
 
 export default function IndexVote () {
@@ -27,6 +28,9 @@ export default function IndexVote () {
 
          {/* //? CONTENTS */}
          <div className="grid sm:grid-cols-2 grid-cols-1 gap-10">
+            <div className="col-span-2 place-self-center">
+               <Timer />
+            </div>
             <Link to={`${pathname.includes('admin') ? '/admin/daftar-calon/caksis' : '/voting/caksis'}`} className="flex items-center justify-center group shadow-sm hover:shadow-lg hover:bg-thirdtiary/80 transition-all duration-500 bg-thirdtiary-light z-0 text-accent-primary p-4 rounded-3xl h-96 text-center relative overflow-hidden">
                <h2 className="text-3xl z-10 font-bold">Calon Ketua Osis <br /> SMK Negeri 1 Kebumen </h2>
                <CImage src={decoration} alt="decoration" className="group-hover:opacity-60 group-hover:-translate-y-4 translate-x-4 transition-all duration-500 -z-10 opacity-45 absolute top-0 right-0 w-full h-full" />

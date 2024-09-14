@@ -48,7 +48,7 @@ export default function IndexVote () {
          axiosOptions: { method: 'post', params: { id, type: 'cawaksis' } },
          onFailed: err => {
             if (typeof err.response?.data === 'object')
-               toastyId.current = toast.error('Anda sudah memilih sebelumnya', { containerId: 'cawaksis' })
+               toastyId.current = toast.error(err.response.data.message, { containerId: 'cawaksis' })
             else 
             toastyId.current = toast.error('Terjadi kesalahan, silahkan coba lagi atau kirim umpan balik', { containerId: 'cawaksis' })
          setLoadingVote(false)
@@ -103,7 +103,7 @@ export default function IndexVote () {
                   errorElement={<FallbackErrorContent />}
                   children={(data: Array<DataCawaksis>) => (
                      <div className="flex flex-col gap-10">
-                        {data?.map((paslon: DataCawaksis, index: number) => (
+                        {data?.sort(dPaslon => parseInt(dPaslon.nomor_urut)).map((paslon: DataCawaksis, index: number) => (
                            <ViseCard data={paslon} isAlreadyVoted={isSuccessVote} isLoadingVote={loadingVote} handdleVote={() => triggerPopup({onConfirm: () => handdleVote(paslon.id) })} key={index} />
                         ))}
                      </div>
