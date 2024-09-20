@@ -1,4 +1,4 @@
-import { IAdd, IChart, IChat, IInfo } from "@components/icons";
+import { IChart, IChat, IInfo, IThumbsUp } from "@components/icons";
 import { AnimatePresence, m } from "framer-motion";
 import { cloneElement, useRef } from "react";
 import { Link, useLocation, useOutlet } from "react-router-dom";
@@ -14,9 +14,9 @@ const allSidebarMenu: { [key: string]: { name: string; icon: JSX.Element } } = {
 		name: 'lihat umpan balik',
 		icon: <IChat width="25" height="25" className="inline lg:mr-4" />
 	},
-	'/admin/tambah-calon' : {
-		name: 'tambah calon',
-		icon: <IAdd width="25" height="25" className="inline lg:mr-4" />
+	'/admin/calon' : {
+		name: 'daftar calon',
+		icon: <IThumbsUp width="30" height="30" className="inline lg:mr-4" />
 	},
 	'/panitia' : {
 		name: 'halaman panitia',

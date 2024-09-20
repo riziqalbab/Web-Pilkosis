@@ -75,7 +75,7 @@ export default function Sidebar ({ allSidebarMenu, levelUser, forEachMenuLink }:
 					E-Voting Pilkosis
 				</h1>
 				<hr className="border-accent-primary my-4 border-[1.5px] lg:block hidden" />
-				<p className="mt-2 text-lg lg:block hidden">{ levelUser }</p>
+				<p className="mt-2 lg:block hidden italic text-accent-primary">{ levelUser }</p>
 
 				{/*//? MENUS POINTER */}
 				<div

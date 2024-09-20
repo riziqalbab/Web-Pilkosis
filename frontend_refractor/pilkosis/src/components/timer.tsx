@@ -1,5 +1,5 @@
 import cache from "@utils/cache"
-import { useEffect, useState } from "react"
+import { useEffect,  useState } from "react"
 
 
 export default function Timer () {
@@ -27,25 +27,34 @@ export default function Timer () {
    }
    const [time, setTime] = useState<string>()
    useEffect(() => {
+      const interval = setInterval(() => {
+         if (endDate) {
+            const duration = variant.hoursAndMinutes().hours;
+            if (duration > 24) {
+               setTime(`${variant.daysOnly()} hari`)
+            } else if (duration <= 24 && duration > 1) {
+               const { hours, minutes } = variant.hoursAndMinutes()
+               setTime(`${hours} jam, ${minutes} menit`)
+            } else if (duration >= 0) {
+               const { minutes, seconds } = variant.minutesAndSeconds()
+               setTime(`${minutes} menit, ${seconds} detik`)
+            } else {
+               setTime('Sudah Habis')
+            }
+         }
+      }, 1000);
+
+      return () => {
+         clearInterval(interval);
+      };
+   }, [endDate]);
+
+   useEffect(() => {
       if (cacheCountdown) {
          if (cacheCountdown instanceof Error) {
             setTime('--, --')
          } else {
             setEndDate(new Date(cacheCountdown).getTime())
-            setInterval(() => {
-               const duration = variant.hoursAndMinutes().hours;
-               if (duration > 24) {
-                  setTime(`${variant.daysOnly()} hari`)
-               } else if (duration <= 24 && duration > 1) {
-                  const { hours, minutes } = variant.hoursAndMinutes()
-                  setTime(`${hours} jam, ${minutes} menit`)
-               } else if (duration >= 0) {
-                  const { minutes, seconds } = variant.minutesAndSeconds()
-                  setTime(`${minutes} menit, ${seconds} detik`)
-               } else {
-                  setTime('Sudah Habis')
-               }
-            }, 1000);
          }
       }
    }, [cacheCountdown])

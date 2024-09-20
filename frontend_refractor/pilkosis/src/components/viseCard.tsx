@@ -18,7 +18,7 @@ interface DataVise {
    kelas: string
 }
 
-export default function ViseCard ({ data, isLoadingVote, handdleVote, isAlreadyVoted }: { isAlreadyVoted?: number, data: DataVise, isLoadingVote: boolean, handdleVote: () => void }) {
+export default function ViseCard ({ data, isLoadingVote, handdleVote, isAlreadyVoted, voteTimeLeft }: { isAlreadyVoted?: number, voteTimeLeft: number, data: DataVise, isLoadingVote: boolean, handdleVote: () => void }) {
    const [Cpopup, trigertPopup] = Popup()
    return (
       <div className="flex md:gap-4 gap-0 md:flex-row flex-col">
@@ -56,7 +56,7 @@ export default function ViseCard ({ data, isLoadingVote, handdleVote, isAlreadyV
                   </ul>
                </div>
             </div>
-            {!Number.isInteger(isAlreadyVoted) && 
+            {(!Number.isInteger(isAlreadyVoted) && voteTimeLeft > 0) &&
                <CButton isLoading={isLoadingVote} onClick={() => handdleVote()} type="submit" className="py-2 mt-auto m-4 mb-4 z-30 block">Vote!</CButton>
             }
          </div>

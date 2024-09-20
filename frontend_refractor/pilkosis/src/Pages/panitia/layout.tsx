@@ -14,7 +14,7 @@ const allSidebarMenu: { [key: string]: { name: string; icon: JSX.Element } } = {
 	},
 	'/panitia/detail-vote' : {
 		name: 'detail pemilih',
-		icon: <IThumbsUp width="25" height="25" className="inline lg:mr-4" />
+		icon: <IThumbsUp width="30" height="30" className="inline lg:mr-4" />
 	},
 	'/panitia/lihat-umpan-balik' : {
 		name: 'lihat umpan balik',

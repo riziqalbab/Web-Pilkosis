@@ -31,9 +31,22 @@ export default function IndexVote () {
    const isUserAlreadyVote = (cache.get('isUserAlreadyVote') as {voted_caksis?: number, voted_cawaksis?: number})
    const { dataCawaksis } = (useLoaderData() as {dataCawaksis: Array<DataCawaksis>}) || {dataCawaksis: cache.get('dataCawaksis')} 
    
+   const cacheVoteTimeLeft = cache.get('countdown')
+   const [voteTimeLeft, setVoteTimeLeft] = useState<number>(1)
+   
    const [isSuccessVote, setIsSuccessVote] = useState<number|undefined>(1)
    const [loadingVote, setLoadingVote] = useState(false)
    const toastyId = useRef<Id>()
+
+   useEffect(() => {
+      if (cacheVoteTimeLeft) {
+         if (cacheVoteTimeLeft instanceof Error) {
+            setVoteTimeLeft(0)
+         } else {
+            setVoteTimeLeft(new Date(cacheVoteTimeLeft).getTime() - Date.now())
+         }
+      }
+   }, [cacheVoteTimeLeft])
 
    useEffect(() => {
       setIsSuccessVote(isUserAlreadyVote.voted_cawaksis)
@@ -46,18 +59,19 @@ export default function IndexVote () {
       tryRequest({
          apiEndPoint: '/api/vote',
          axiosOptions: { method: 'post', params: { id, type: 'cawaksis' } },
-         onFailed: err => {
-            if (typeof err.response?.data === 'object')
-               toastyId.current = toast.error(err.response.data.message, { containerId: 'cawaksis' })
-            else 
-            toastyId.current = toast.error('Terjadi kesalahan, silahkan coba lagi atau kirim umpan balik', { containerId: 'cawaksis' })
-         setLoadingVote(false)
-      },
-      onSucceed: () => {
+         onSucceed: () => {
             setIsSuccessVote(parseInt(id))
             cache.set('isUserAlreadyVote', {...isUserAlreadyVote, voted_cawaksis: parseInt(id)})
             toastyId.current = toast.success('Terimakasih sudah memilih', { containerId: 'cawaksis' })
             setLoadingVote(false)
+         },
+         onFailed: err => {
+            if (typeof err.response?.data === 'object')
+               toastyId.current = toast.error(err.response.data.message, { containerId: 'cawaksis' })
+            else 
+               toastyId.current = toast.error('Terjadi kesalahan, silahkan coba lagi atau kirim umpan balik', { containerId: 'cawaksis' })
+            setLoadingVote(false)
+            setTimeout(() => window.location.reload(), 1500);
          }
       })
    }
@@ -88,7 +102,9 @@ export default function IndexVote () {
          <Link to='/voting' className="px-6 py-2 rounded-md hover:shadow-lg transition-shadow duration-300 border-2 border-thirdtiary">👈Kembali</Link>
 
          <h1 className="my-8 text-2xl text-accent-primary">
-            {isSuccessVote ? 'Terimakasih Atas Dukungan Mu!' : 
+            {
+               isSuccessVote ? 'Terimakasih Atas Dukungan Mu!' : 
+               voteTimeLeft <= 0 ? 'Waktu Voting Sudah Habis' :
                <>
                   Pilih <span className="font-bold"> Calon Wakil Ketua Osis SMK Negeri 1 Kebumen</span>
                </>
@@ -104,7 +120,7 @@ export default function IndexVote () {
                   children={(data: Array<DataCawaksis>) => (
                      <div className="flex flex-col gap-10">
                         {data?.sort(dPaslon => parseInt(dPaslon.nomor_urut)).map((paslon: DataCawaksis, index: number) => (
-                           <ViseCard data={paslon} isAlreadyVoted={isSuccessVote} isLoadingVote={loadingVote} handdleVote={() => triggerPopup({onConfirm: () => handdleVote(paslon.id) })} key={index} />
+                           <ViseCard voteTimeLeft={voteTimeLeft} data={paslon} isAlreadyVoted={isSuccessVote} isLoadingVote={loadingVote} handdleVote={() => triggerPopup({onConfirm: () => handdleVote(paslon.id) })} key={index} />
                         ))}
                      </div>
                   )}

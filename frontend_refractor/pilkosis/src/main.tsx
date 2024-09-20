@@ -37,12 +37,13 @@ const router = createBrowserRouter([
 				async lazy() {
 					const LayoutVote = (await import("./pages/voting/layout.tsx")).default;
 					const checkUserVote = (await import("./utils/loader/isAlreadyVote.ts")).default;
-					const loader = () => {
-						axios.get(`${origin}/api/countdown`)
+					const loader = async () => {
+						await axios.get(`${origin}/api/countdown`, { validateStatus: status => status <= 200, withCredentials: true })
 						.then(res => {
-							cache.set('countdown', res.data)
+							cache.set('countdown', res.data.data)
 						})
-						.catch(() => {
+						.catch(err => {
+							console.log(err);
 							cache.set('countdown', new Error())
 						})
 						return checkUserVote()
@@ -100,16 +101,24 @@ const router = createBrowserRouter([
 					},
 					{
 						path: 'lihat-umpan-balik',
-						async lazy() {
+						async lazy () {
 							const ViewFeedback = (await import("./pages/admin/viewFeedback.tsx")).default;
 							const getAllFeedback = (await import("./utils/loader/allFeedback.ts")).default;
 							return { Component: ViewFeedback, loader: getAllFeedback };
 						}
 					},
 					{
-						path: 'tambah-calon',
+						path: 'calon',
+						async lazy () {
+							const PaslonList = (await import("./pages/admin/listCalon.tsx")).default;
+							const loader = (await import("./utils/loader/allCalomOnAdmin.ts")).default;
+							return { Component: PaslonList, loader };
+						}
+					},
+					{
+						path: 'calon/tambah',
 						async lazy() {
-							const AddPaslon = (await import("./pages/admin/addpaslon.tsx")).default;
+							const AddPaslon = (await import("./pages/admin/addCalon.tsx")).default;
 							return { Component: AddPaslon };
 						}
 					}

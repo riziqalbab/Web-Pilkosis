@@ -8,7 +8,7 @@ import authorizer from "@utils/authorizer";
 import cache from "@utils/cache";
 import tryRequest from "@utils/tryRequest";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import '@toastifyCss'
 import { Bounce, toast, ToastContainer } from "react-toastify";
@@ -133,6 +133,8 @@ export default function AddPaslon() {
 	return (
 		<>
 			<CTitle text="Tambah Calon" logo={<IAdd width="30" height="30" />} />
+         <Link to='/admin/calon' className="px-6 py-2 rounded-md hover:shadow-lg transition-shadow duration-300 border-2 border-thirdtiary">👈Kembali</Link>
+			
 			<div className="flex flex-col items-stretch">
 				<CImageInput
 					name="img"
