@@ -43,18 +43,18 @@ class BaseModel {
                 i++;
             }
     
-            console.log('Executing query:', query); // Debugging line
-            console.log('With values:', values);    // Debugging line
+            console.log('Executing query:', query); 
+            console.log('With values:', values);    
             
             const [ rows ] = await this.client.query(query, values);
             
             return rows;
         } catch (err) {
-            console.error('Error executing query:', err); // Debugging line
-            throw new Error('Database query failed'); // Consider rethrowing or handling the error properly
+            console.error('Error executing query:', err); 
+            throw new Error('Database query failed'); 
         }
     }
-    
+
     public async insert(data: {[key: string] : any }): Promise<any> { 
         try {
             let query = `INSERT INTO ${this.tableName} (`;
@@ -81,6 +81,33 @@ class BaseModel {
         } catch (err) {
             console.log(err);
             return err;
+        }
+    }
+
+    // Method untuk memperbarui data berdasarkan ID
+    public async updateById(id: number, data: { [key: string]: any }): Promise<any> {
+        try {
+            let query = `UPDATE ${this.tableName} SET `;
+            const values = [];
+            let i = 0;
+
+            for (const key in data) {
+                if (i > 0) {
+                    query += ", ";
+                }
+                query += `${key} = ?`;
+                values.push(data[key]);
+                i++;
+            }
+
+            query += ` WHERE ${this.primaryKey} = ?`;
+            values.push(id);
+
+            const [result] = await this.client.query(query, values);
+            return result;
+        } catch (err) {
+            console.error('Error updating record:', err);
+            throw new Error('Failed to update record');
         }
     }
 
