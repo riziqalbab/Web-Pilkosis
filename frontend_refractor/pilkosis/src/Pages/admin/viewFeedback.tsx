@@ -13,12 +13,23 @@ interface FeedbackData {
 	saran: string;
 }
 
+const colorVariants = [
+	"bg-cyan-50 text-cyan-800",
+	"bg-green-50 text-green-800",
+	"bg-indigo-50 text-indigo-800",
+	"bg-purple-50 text-purple-800",
+	"bg-pink-50 text-pink-800",
+	"bg-red-50 text-red-800",
+	"bg-fuchsia-50 text-fuchsia-800",
+	"bg-teal-50 text-teal-800"
+]
+
 export default function ViewFeedback() {
 	const { dataFeedback } = (useLoaderData() as { dataFeedback: Promise<FeedbackData[]> }) || {dataFeedback: cache.get('dataFeedback')};
 	return (
 		<div>
 			<CTitle
-				text="Lihat Umpan Balik"
+				text="Umpan Balik Pengguna"
 				logo={<IChat width="30" height="30" />}
 			/>
 
@@ -32,21 +43,21 @@ export default function ViewFeedback() {
 						if (Array.isArray(data)) {
 							if (data.length !== 0)
 								return data.map((feedback: FeedbackData, index: number) => (
-                           <div key={index} className="pb-4 border-b border-gray-400 mt-5">
-                              <h3 className="text-xl">
+                           <div key={index} className={`${colorVariants[Math.round(Math.random() * (colorVariants.length - 1))]} pb-4 mt-5 p-6 shadow-sm rounded-xl`}>
+                              <h3 className="text-xl font-bold mb-3">
                                  Dari: {feedback.nama}
                               </h3>
-                              <div className="mt-2">
-                                 <strong>Kritik</strong>
-                                 <p>
-                                    {feedback.kritik}
-                                 </p>
+                              <div className="mt-3">
+                                 <span className="font-semibold">Kritik</span>
+                                 <code className="block mt-1">
+                                    "{feedback.kritik}"
+                                 </code>
                               </div>
-                              <div className="mt-2">
-                                 <strong>Saran</strong>
-                                 <p>
-                                    {feedback.saran}
-                                 </p>
+                              <div className="mt-3">
+                                 <span className="font-semibold">Saran</span>
+                                 <code className="block mt-1">
+                                    "{feedback.saran}"
+                                 </code>
                               </div>
                            </div>
                         ));

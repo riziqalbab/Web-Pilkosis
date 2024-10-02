@@ -28,11 +28,24 @@ interface DataCaksis {
 
 export default function IndexVote () {
    //? the cache as a fallback value is necessary to keep the content shows up when animate exit is runing
+   const cacheVoteTimeLeft = cache.get('countdown')
+   const [voteTimeLeft, setVoteTimeLeft] = useState<number>(1)
+   
    const isUserAlreadyVote = (cache.get('isUserAlreadyVote') as {voted_caksis?: number, voted_cawaksis?: number})
    const { dataCaksis } = (useLoaderData() as {dataCaksis: Array<DataCaksis>}) || {dataCaksis: cache.get('dataCaksis')} 
    const [isSuccessVote, setIsSuccessVote] = useState<number|undefined>(isUserAlreadyVote.voted_cawaksis)
    const [loadingVote, setLoadingVote] = useState(false)
    const toastyId = useRef<Id>()
+   
+   useEffect(() => {
+      if (cacheVoteTimeLeft) {
+         if (cacheVoteTimeLeft instanceof Error) {
+            setVoteTimeLeft(0)
+         } else {
+            setVoteTimeLeft(new Date(cacheVoteTimeLeft).getTime() - Date.now())
+         }
+      }
+   }, [cacheVoteTimeLeft])
 
    useEffect(() => {
       setIsSuccessVote(isUserAlreadyVote.voted_caksis)
@@ -45,18 +58,19 @@ export default function IndexVote () {
       tryRequest({
          apiEndPoint: '/api/vote',
          axiosOptions: { method: 'post', params: { id, type: 'caksis' } },
-         onFailed: (err) => {
-            if (typeof err.response?.data === 'object')
-               toastyId.current = toast.error('Anda sudah memilih sebelumnya', {containerId: 'caksis'})
-            else 
-            toastyId.current = toast.error('Terjadi kesalahan, silahkan coba lagi atau kirim umpan balik', {containerId: 'caksis'})
-         setLoadingVote(false)
-      },
          onSucceed: () => {
             setIsSuccessVote(parseInt(id))
             cache.set('isUserAlreadyVote', {...isUserAlreadyVote, voted_caksis: parseInt(id)})
             toastyId.current = toast.success('Terimakasih sudah memilih', {containerId: 'caksis'})
             setLoadingVote(false)
+         },
+         onFailed: (err) => {
+            if (typeof err.response?.data === 'object')
+               toastyId.current = toast.error(err.response.data.message, {containerId: 'caksis'})
+            else 
+               toastyId.current = toast.error('Terjadi kesalahan, silahkan coba lagi atau kirim umpan balik', {containerId: 'caksis'})
+            setLoadingVote(false)
+            setTimeout(() => window.location.reload(), 1500);
          }
       })
    }
@@ -87,7 +101,9 @@ export default function IndexVote () {
          <Link to='/voting' className="px-6 py-2 rounded-md hover:shadow-lg transition-shadow duration-300 border-2 border-thirdtiary">👈Kembali</Link>
 
          <h1 className="my-8 text-2xl text-accent-primary">
-            {isSuccessVote ? 'Terimakasih Atas Dukungan Mu!' : 
+            {
+               isSuccessVote ? 'Terimakasih Atas Dukungan Mu!' : 
+               voteTimeLeft <= 0 ? 'Waktu Voting Sudah Habis' :
                <>
                   Pilih <span className="font-bold"> Calon Ketua Osis SMK Negeri 1 Kebumen</span>
                </>
@@ -102,8 +118,8 @@ export default function IndexVote () {
                   errorElement={<FallbackErrorContent />}
                   children={(data: Array<DataCaksis>) => (
                      <div className="flex flex-col gap-10">
-                        {data?.map((paslon: DataCaksis, index: number) => (
-                           <ViseCard data={paslon} isAlreadyVoted={isSuccessVote} isLoadingVote={loadingVote} handdleVote={() => triggerPopup({onConfirm: () => handdleVote(paslon.id)})} key={index} />
+                        {data?.sort(dPaslon => parseInt(dPaslon.nomor_urut)).map((paslon: DataCaksis, index: number) => (
+                           <ViseCard data={paslon} voteTimeLeft={voteTimeLeft} isAlreadyVoted={isSuccessVote} isLoadingVote={loadingVote} handdleVote={() => triggerPopup({onConfirm: () => handdleVote(paslon.id)})} key={index} />
                         ))}
                      </div>
                   )}

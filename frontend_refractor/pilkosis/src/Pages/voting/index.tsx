@@ -5,6 +5,8 @@ import decoration from "@assets/svg/decorations.svg";
 import decoration2 from "@assets/svg/decorations-2.svg";
 import CImage from "@components/loadImage";
 import cache from "@utils/cache";
+import Timer from "@components/timer";
+import { useEffect, useState } from "react";
 
 
 export default function IndexVote () {
@@ -12,20 +14,36 @@ export default function IndexVote () {
    const dataUser = cache.get('userData')
    const { pathname } = useLocation()
 
+   const cacheVoteTimeLeft = cache.get('countdown')
+   const [voteTimeLeft, setVoteTimeLeft] = useState<number>(1)
+   useEffect(() => {
+      if (cacheVoteTimeLeft) {
+         if (cacheVoteTimeLeft instanceof Error) {
+            setVoteTimeLeft(0)
+         } else {
+            setVoteTimeLeft(new Date(cacheVoteTimeLeft).getTime() - Date.now())
+         }
+      }
+   }, [cacheVoteTimeLeft])
+
    return (
       <div>
          <CTitle className="mb-0" text="Voting" logo={<IThumbsUp width="40" height="40" />} />
          <h1 className="my-8 text-2xl text-accent-primary">
             {
+               (isUserAlreadyVote?.voted_cawaksis && isUserAlreadyVote?.voted_caksis) ? 'Terimakasih Telah Berpartisipasi' :
+               voteTimeLeft <= 0 ? 'Waktu Voting Sudah Habis' :
                (!isUserAlreadyVote?.voted_cawaksis && !isUserAlreadyVote?.voted_caksis) ? 'Tentukan Pilihanmu' :
                !isUserAlreadyVote?.voted_caksis ? 'Kamu belum memilih Calon Ketua Osis' :
-               !isUserAlreadyVote?.voted_cawaksis ? 'Kamu belum memilih Calon Wakil Ketua Osis' :
-               (isUserAlreadyVote?.voted_cawaksis && isUserAlreadyVote?.voted_caksis) && 'Terimakasih Telah Berpartisipasi'
+               !isUserAlreadyVote?.voted_cawaksis && 'Kamu belum memilih Calon Wakil Ketua Osis'
             }
             <span className="font-bold">, {dataUser?.nama}!</span>
          </h1>
 
          {/* //? CONTENTS */}
+         <div className="flex justify-center mb-8">
+            <Timer />
+         </div>
          <div className="grid sm:grid-cols-2 grid-cols-1 gap-10">
             <Link to={`${pathname.includes('admin') ? '/admin/daftar-calon/caksis' : '/voting/caksis'}`} className="flex items-center justify-center group shadow-sm hover:shadow-lg hover:bg-thirdtiary/80 transition-all duration-500 bg-thirdtiary-light z-0 text-accent-primary p-4 rounded-3xl h-96 text-center relative overflow-hidden">
                <h2 className="text-3xl z-10 font-bold">Calon Ketua Osis <br /> SMK Negeri 1 Kebumen </h2>

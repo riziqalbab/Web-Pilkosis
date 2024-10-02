@@ -1,13 +1,13 @@
-import { IThumbsUp } from "@components/icons"
+import { Isearch, IThumbsUp } from "@components/icons"
 import Popup from "@components/popup"
 import CTitle from "@components/title"
 import authorizer from "@utils/authorizer"
-import cache from "@utils/cache"
 import tryRequest from "@utils/tryRequest"
-import { useEffect, useState } from "react"
-import { useNavigate } from "react-router-dom"
+import { Dispatch, useEffect, useState } from "react"
+import { useNavigate, useOutletContext } from "react-router-dom"
 import { Bounce, toast, ToastContainer } from "react-toastify"
 import "@toastifyCss"
+import CInput from "@components/input"
 
 
 interface DetailVote {
@@ -20,18 +20,13 @@ interface DetailVote {
    voted_cawaksis?: number
 }
 
+let dataDetailVote_absolute: DetailVote[] | undefined;
+
 
 export default function DetailVote () {
    const navigate = useNavigate()
-   const cacheDetailVote = cache.get('detailVote')
-   const [dataDetailVote, setDataDetailVote] = useState<DetailVote[]|undefined>(cacheDetailVote)
+   const [dataDetailVote, setDataDetailVote] = useOutletContext<{detailVote: [dataDetailVote: DetailVote[] | undefined, setDataDetailVote: Dispatch<DetailVote[] | undefined>]}>().detailVote
    const [CPopup, triggerPopup] = Popup()
-   
-   useEffect(() => {
-      if (cacheDetailVote) {
-         setDataDetailVote(cacheDetailVote)
-      }
-   }, [cacheDetailVote])
 
    const handdleDelete = (id: number) => {
       tryRequest({
@@ -57,39 +52,55 @@ export default function DetailVote () {
       })
    }
 
+   useEffect(() => { dataDetailVote_absolute = dataDetailVote }, [])
+   const [searchText, setSearchText] = useState('')
+   const handdleSearch = (ev: any) => {
+      ev.preventDefault()
+      
+      if (searchText.length === 0) return setDataDetailVote(dataDetailVote_absolute)
+
+      const searchResult = dataDetailVote?.filter(data => data.pemilih.toLowerCase().includes(searchText.toLowerCase()))
+      if (searchResult) setDataDetailVote(searchResult)
+   }
+
    return (
       <>
          <CTitle text="Detail Pemilih" logo={<IThumbsUp width="30" height="30" />} />
+
+         <form onSubmit={handdleSearch} className="flex gap-4 justify-center items-end mb-10">
+            <CInput value={searchText} onChange={ev => setSearchText(ev.target.value)} name="searchPemilih" placeholder="Cari Nama Pemilih" type="text"  />
+            <button type="submit" className="w-fit p-1.5 shadow-sm rounded-full bg-primary hover:bg-primary/75 transition-colors duration-200">
+               <Isearch width="37" height="37" color="white" />
+            </button>
+         </form>
+
          <table className="w-full">
-            <thead className="h-10">
-               <th>Nama Pemilih</th>
-               <th>Tanggal Memilih</th>
-               <th>Sudah Memilih Caksis</th>
-               <th>Sudah Memilih Cawaksis</th>
-               <th>Aksi</th>
+            <thead className="h-10 text-accent-primary">
+               <tr>
+                  <th className="border border-primary">Nama Pemilih</th>
+                  <th className="border border-primary">Waktu Memilih</th>
+                  <th className="border border-primary">Sudah Memilih Caksis</th>
+                  <th className="border border-primary">Sudah Memilih Cawaksis</th>
+                  <th className="border border-primary">Aksi</th>
+               </tr>
             </thead>
             <tbody>
                {dataDetailVote?.map((data, index) => (
-                  <tr key={index} className="h-16 border-b border-gray-400">
-                     <td className="text-center">{ data.pemilih }</td>
-                     <td className="text-center">{ new Date(data.created_at).toLocaleString('id', {dateStyle: 'medium', timeStyle: 'medium'}) }</td>
-                     <td className="text-center">
+                  <tr key={index} className="h-14">
+                     <td className="text-center min-w-52 border border-primary">{ data.pemilih }</td>
+                     <td className="text-center min-w-52 border border-primary">{ new Date(data.created_at).toLocaleString('id', {dateStyle: 'medium', timeStyle: 'medium'}) }</td>
+                     <td className="text-center min-w-52 border border-primary">
                         <span className={`${data.voted_caksis ? 'bg-green-200 text-green-800' : 'bg-red-200 text-red-800'} text-sm px-3 py-[0.1rem] text-center rounded-full`}>
                            { data.voted_caksis ? 'Sudah' : 'Belum' }
                         </span>
                      </td>
-                     <td className="text-center">
+                     <td className="text-center min-w-52 border border-primary">
                         <span className={`${data.voted_cawaksis ? 'bg-green-200 text-green-800' : 'bg-red-200 text-red-800'} text-sm px-3 py-[0.1rem] text-center rounded-full`}>
                            { data.voted_cawaksis ? 'Sudah' : 'Belum' }
                         </span>
                      </td>
-                     <td className="text-center">
-                        <button onClick={() => triggerPopup({message: `Yakin ingin menghapus pilihan dari ${data.pemilih}`, onConfirm: () => handdleDelete(data.id)})} className="group relative inline-block text-sm font-medium text-white focus:outline-none focus:ring rounded-full">
-                           <span className="rounded-full absolute inset-0 border border-red-600"></span>
-                           <span className="rounded-full block border border-red-600 bg-red-600 px-6 py-2 transition-transform group-hover:translate-x-0 -translate-x-1 group-hover:translate-y-0 -translate-y-1">
-                              Hapus
-                           </span>
-                        </button>
+                     <td className="text-center min-w-52 border border-primary">
+                        <button onClick={() => triggerPopup({message: `Yakin ingin menghapus pilihan dari ${data.pemilih}`, onConfirm: () => handdleDelete(data.id)})} className="py-1 px-4 rounded-full text-red-800 border border-red-500 text-sm shadow-sm cursor-pointer hover:bg-red-500 hover:text-white transition-colors duration-200">hapus</button>
                      </td>
                   </tr>
                ))}

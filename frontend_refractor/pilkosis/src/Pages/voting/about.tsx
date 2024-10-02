@@ -136,7 +136,7 @@ export default function AboutVote() {
 								</p>
 
 								<p className="px-6 pb-6 mt-3">
-									<strong>Tentang Saya : </strong>
+									<strong>Bio : </strong>
 									<code className="mt-2 block">"{profile.bio}"</code>
 								</p>
 							</div>
