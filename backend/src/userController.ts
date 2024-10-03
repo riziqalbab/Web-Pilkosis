@@ -8,6 +8,7 @@ import fs from 'fs';
 const router = express.Router();
 const user = new UserModel();
 
+
 interface Siswa {
     id?: number; 
     nama: string;
@@ -28,7 +29,7 @@ router.post('/siswa', AdminMiddleware, upload.single('file'), async (req: Reques
         }
 
         const filePath = req.file.path;
-        const siswaData: Siswa[] = [];
+        const siswaData: any[] = [];
 
         // Baca file CSV dan proses baris per baris
         fs.createReadStream(filePath)
@@ -54,12 +55,17 @@ router.post('/siswa', AdminMiddleware, upload.single('file'), async (req: Reques
                     // Hapus file setelah diproses
                     fs.unlinkSync(filePath);
                 }
+            })
+            .on('error', (err) => {
+                return res.status(500).json({
+                    message: 'Error processing CSV file',
+                    error: err.message,
+                });
             });
-    } catch (error:any) {
-        console.error('Error uploading CSV:', error);
+    } catch (err: any) {
         return res.status(500).json({
-            message: 'Error processing file',
-            error: error.message,
+            message: 'Failed to create siswa',
+            error: err.message,
         });
     }
 });
